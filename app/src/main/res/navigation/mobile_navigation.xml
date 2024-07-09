@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/propietarioFragment">
+
+    <fragment
+        android:id="@+id/propietarioFragment"
+        android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.Propietario.PropietarioFragment"
+        android:label="fragment_propietario"
+        tools:layout="@layout/fragment_propietario" />
+    <fragment
+        android:id="@+id/vehiculoFragment"
+        android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.Vehiculo.VehiculoFragment"
+        android:label="fragment_vehiculo"
+        tools:layout="@layout/fragment_vehiculo" />
+    <fragment
+        android:id="@+id/oficinaGobFragment"
+        android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.OficinaGob.OficinaGobFragment"
+        android:label="fragment_oficina_gob"
+        tools:layout="@layout/fragment_oficina_gob" />
+    <fragment
+        android:id="@+id/accidenteFragment"
+        android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.Accidente.AccidenteFragment"
+        android:label="fragment_accidente"
+        tools:layout="@layout/fragment_accidente" />
+    <fragment
+        android:id="@+id/infraccionFragment"
+        android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.Infraccion.InfraccionFragment"
+        android:label="fragment_infraccion"
+        tools:layout="@layout/fragment_infraccion" />
+    <fragment
+        android:id="@+id/audienciaFragment"
+        android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.Audiencia.AudienciaFragment"
+        android:label="fragment_audiencia"
+        tools:layout="@layout/fragment_audiencia" />
+    <fragment
+        android:id="@+id/normaDetFragment"
+        android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.NormaDet.NormaDetFragment"
+        android:label="fragment_norma_det"
+        tools:layout="@layout/fragment_norma_det" />
+    <fragment
+        android:id="@+id/agenteFragment"
+        android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.Agente.AgenteFragment"
+        android:label="fragment_agente"
+        tools:layout="@layout/fragment_agente" />
+    <fragment
+        android:id="@+id/actaFragment"
+        android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.Acta.ActaFragment"
+        android:label="fragment_acta"
+        tools:layout="@layout/fragment_acta" />
+    <fragment
+        android:id="@+id/zonaFragment"
+        android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.Zona.ZonaFragment"
+        android:label="fragment_zona"
+        tools:layout="@layout/fragment_zona" />
+    <fragment
+        android:id="@+id/puestoControlFragment"
+        android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.PuestoControl.PuestoControlFragment"
+        android:label="fragment_puesto_control"
+        tools:layout="@layout/fragment_puesto_control" />
+</navigation>

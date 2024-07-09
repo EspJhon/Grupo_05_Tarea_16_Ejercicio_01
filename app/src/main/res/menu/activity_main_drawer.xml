@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/propietarioFragment"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Propietario" />
+        <item
+            android:id="@+id/vehiculoFragment"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Vehiculo" />
+        <item
+            android:id="@+id/oficinaGobFragment"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Oficina" />
+        <item
+            android:id="@+id/accidenteFragment"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Accidente" />
+        <item
+            android:id="@+id/infraccionFragment"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Infraccion" />
+        <item
+            android:id="@+id/audienciaFragment"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Audiencia" />
+        <item
+            android:id="@+id/normaDetFragment"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Norma" />
+        <item
+            android:id="@+id/agenteFragment"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Agente" />
+        <item
+            android:id="@+id/actaFragment"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Acta" />
+        <item
+            android:id="@+id/zonaFragment"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Zona" />
+        <item
+            android:id="@+id/puestoControlFragment"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Puesto de Control" />
+    </group>
+</menu>
