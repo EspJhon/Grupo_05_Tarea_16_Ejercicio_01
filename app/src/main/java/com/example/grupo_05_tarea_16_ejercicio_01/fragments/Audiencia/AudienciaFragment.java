@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.grupo_05_tarea_16_ejercicio_01.R;
+import com.example.grupo_05_tarea_16_ejercicio_01.adapter.AudienciaAdapter;
 import com.example.grupo_05_tarea_16_ejercicio_01.db.DBHelper;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Audiencia;
 
@@ -73,7 +74,7 @@ public class AudienciaFragment extends Fragment {
 
     public void ListarAudiencias() {
         ArrayList<Audiencia> audiencias = dbHelper.get_all_Audiencias();
-        ArrayAdapter<Audiencia> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, audiencias);
+        AudienciaAdapter adapter = new AudienciaAdapter(getActivity(),audiencias);
         lv_audiencias.setAdapter(adapter);
     }
 

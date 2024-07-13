@@ -17,6 +17,7 @@ import android.widget.ListView;
 
 import com.example.grupo_05_tarea_16_ejercicio_01.MainActivity;
 import com.example.grupo_05_tarea_16_ejercicio_01.R;
+import com.example.grupo_05_tarea_16_ejercicio_01.adapter.AccidenteAdapter;
 import com.example.grupo_05_tarea_16_ejercicio_01.db.DBHelper;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Accidente;
 
@@ -76,7 +77,7 @@ public class AccidenteFragment extends Fragment {
 
     public void ListarAccidentes() {
         ArrayList<Accidente> accidentes = dbHelper.get_all_Accidentes();
-        ArrayAdapter<Accidente> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, accidentes);
+        AccidenteAdapter adapter = new AccidenteAdapter(getActivity(),accidentes);
         lv_accidentes.setAdapter(adapter);
     }
 
