@@ -55,7 +55,13 @@ public class LoginFragment extends Fragment {
             }
         });
 
-
+        // Implementar OnBackPressedCallback
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                // No hacer nada para deshabilitar el botón de retroceso
+            }
+        });
         return root;
     }
 

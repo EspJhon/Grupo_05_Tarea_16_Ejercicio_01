@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,16 +8,18 @@
     android:padding="10dp"
     tools:context=".fragments.Zona.ZonaFragment">
 
-    <EditText
-        android:id="@+id/edt_ubicacion_zon"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/lvl_lista_zona"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:textSize="16sp"/>
-    <Button
-        android:id="@+id/btn_registrar_zona"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="REGISTRAR"/>
+        android:layout_height="wrap_content"/>
 
-</LinearLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btn_agregar_zona"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:layout_marginEnd="15dp"
+        android:src="@drawable/ic_zon_agregar"
+        android:layout_gravity="bottom|end"/>
+
+</FrameLayout>

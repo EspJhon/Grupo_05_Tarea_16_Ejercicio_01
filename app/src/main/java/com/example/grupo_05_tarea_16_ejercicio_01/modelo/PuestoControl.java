@@ -3,14 +3,20 @@ package com.example.grupo_05_tarea_16_ejercicio_01.modelo;
 public class PuestoControl {
     private int IdPuestoControl;
     private int IdZona;
-    private String ubicacion;
+    private String referencia;
+    private String latitud;
+    private String longitud;
+    private String titulo;
 
     public PuestoControl() {
     }
 
-    public PuestoControl(int idZona, String ubicacion) {
-        this.IdZona = idZona;
-        this.ubicacion = ubicacion;
+    public PuestoControl(int idZona, String referencia, String latitud, String longitud, String titulo) {
+        IdZona = idZona;
+        this.referencia = referencia;
+        this.latitud = latitud;
+        this.longitud = longitud;
+        this.titulo = titulo;
     }
 
     public int getIdPuestoControl() {
@@ -18,7 +24,7 @@ public class PuestoControl {
     }
 
     public void setIdPuestoControl(int idPuestoControl) {
-        this.IdPuestoControl = idPuestoControl;
+        IdPuestoControl = idPuestoControl;
     }
 
     public int getIdZona() {
@@ -26,14 +32,38 @@ public class PuestoControl {
     }
 
     public void setIdZona(int idZona) {
-        this.IdZona = idZona;
+        IdZona = idZona;
     }
 
-    public String getUbicacion() {
-        return ubicacion;
+    public String getReferencia() {
+        return referencia;
     }
 
-    public void setUbicacion(String ubicacion) {
-        this.ubicacion = ubicacion;
+    public void setReferencia(String referencia) {
+        referencia = referencia;
+    }
+
+    public String getLatitud() {
+        return latitud;
+    }
+
+    public void setLatitud(String latitud) {
+        this.latitud = latitud;
+    }
+
+    public String getLongitud() {
+        return longitud;
+    }
+
+    public void setLongitud(String longitud) {
+        this.longitud = longitud;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
     }
 }
