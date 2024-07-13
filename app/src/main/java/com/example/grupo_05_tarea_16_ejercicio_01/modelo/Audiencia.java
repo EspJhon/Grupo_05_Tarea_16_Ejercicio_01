@@ -1,5 +1,7 @@
 package com.example.grupo_05_tarea_16_ejercicio_01.modelo;
 
+import androidx.annotation.NonNull;
+
 public class Audiencia {
     private int IdAudiencia;
     private int codigo;
@@ -55,5 +57,12 @@ public class Audiencia {
 
     public void setHora(String hora) {
         this.hora = hora;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return getIdAudiencia() + " ----  " + getCodigo() + " ------ " + getLugar() + " ------ " +
+                getFecha() + " ------ " + getHora();
     }
 }
