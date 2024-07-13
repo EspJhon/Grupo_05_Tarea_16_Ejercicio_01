@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@id/propietarioFragment">
+    app:startDestination="@id/loginFragment">
 
     <fragment
         android:id="@+id/propietarioFragment"
@@ -53,13 +53,26 @@
     <fragment
         android:id="@+id/zonaFragment"
         android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.Zona.ZonaFragment"
-        android:label="fragment_zona"
-        tools:layout="@layout/fragment_zona" />
+        android:label="Zona"
+        tools:layout="@layout/fragment_zona">
+        <action
+            android:id="@+id/action_zonaFragment_to_actualizarZonaFragment"
+            app:destination="@id/actualizarZonaFragment" />
+        <action
+            android:id="@+id/action_zonaFragment_to_mapsZona2"
+            app:destination="@id/mapsZona" />
+    </fragment>
     <fragment
         android:id="@+id/puestoControlFragment"
         android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.PuestoControl.PuestoControlFragment"
-        android:label="fragment_puesto_control"
-        tools:layout="@layout/fragment_puesto_control" />
+        android:label="Puesto de Control"
+        tools:layout="@layout/fragment_puesto_control" >
+        <action
+            android:id="@+id/action_puestoControlFragment_to_registerPuestoControlFragment"
+            app:destination="@id/registerPuestoControlFragment" />
+    </fragment>
+
+
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.Login.LoginFragment"
@@ -70,4 +83,19 @@
         android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.Register.RegisterFragment"
         android:label="fragment_register"
         tools:layout="@layout/fragment_register" />
+    <fragment
+        android:id="@+id/actualizarZonaFragment"
+        android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.Zona.ActualizarZonaFragment"
+        android:label="fragment_actualizar_zona"
+        tools:layout="@layout/fragment_actualizar_zona" />
+    <fragment
+        android:id="@+id/registerPuestoControlFragment"
+        android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.PuestoControl.RegisterPuestoControlFragment"
+        android:label="fragment_register_puesto_control"
+        tools:layout="@layout/fragment_register_puesto_control" />
+    <activity
+        android:id="@+id/mapsZona"
+        android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.Zona.MapsZona"
+        android:label="activity_maps_zona"
+        tools:layout="@layout/activity_maps_zona" />
 </navigation>

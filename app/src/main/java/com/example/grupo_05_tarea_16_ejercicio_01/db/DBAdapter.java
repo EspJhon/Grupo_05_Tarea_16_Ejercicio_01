@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Accidente;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Audiencia;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Propietario;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.PuestoControl;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Usuario;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Vehiculo;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Zona;
@@ -20,7 +21,7 @@ import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Zona;
 import java.util.ArrayList;
 
 public class DBAdapter {
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "DB_Grupo_05_Tarea_16_Ejercicio_01";
 
     //tabla propietario
@@ -105,13 +106,21 @@ public class DBAdapter {
     private static final class Table_Zona {
         public static final String TABLE = "table_zona";
         public static final String ID = "IdZona";
-        public static final String UBICACION = "ubicacion";
+        public static final String DEPARTAMENTO = "departamento";
+        public static final String PROVINCIA = "provincia";
+        public static final String DISTRITO = "distrito";
+        public static final String LATITUD = "latitud";
+        public static final String LONGITUD = "longitud";
+        public static final String TITULO = "titulo";
     }
 
     private static final class Table_Puesto_Control {
         public static final String TABLE = "table_puesto_control";
         public static final String ID = "IdPuestoControl";
-        public static final String UBICACION = "ubicacion";
+        public static final String REFERENCIA = "referencia";
+        public static final String LATITUD = "latitud";
+        public static final String LONGITUD = "longitud";
+        public static final String TITULO = "titulo";
     }
 
     private static final class Table_Usuario {
@@ -186,7 +195,12 @@ public class DBAdapter {
     private static final String CREATE_ZONA =
             "create table " + Table_Zona.TABLE + " (" +
                     Table_Zona.ID + " integer primary key autoincrement, " +
-                    Table_Zona.UBICACION + " text not null );";
+                    Table_Zona.DEPARTAMENTO + " text not null, " +
+                    Table_Zona.PROVINCIA + " text not null, " +
+                    Table_Zona.DISTRITO + " text not null, " +
+                    Table_Zona.LATITUD + " text not null, " +
+                    Table_Zona.LONGITUD + " text not null, " +
+                    Table_Zona.TITULO + " text not null );";
     private static final String CREATE_ACTA =
             "create table " + Table_Acta.TABLE + " (" +
                     Table_Acta.ID + " integer primary key autoincrement, " +
@@ -204,7 +218,10 @@ public class DBAdapter {
             "create table " + Table_Puesto_Control.TABLE + " (" +
                     Table_Puesto_Control.ID + " integer primary key autoincrement, " +
                     Table_Zona.ID + " integer not null, " +
-                    Table_Puesto_Control.UBICACION + " text not null, " +
+                    Table_Puesto_Control.REFERENCIA + " text not null, " +
+                    Table_Puesto_Control.LATITUD + " text not null, " +
+                    Table_Puesto_Control.LONGITUD + " text not null, " +
+                    Table_Puesto_Control.TITULO + " text not null, " +
                     "FOREIGN KEY (" + Table_Zona.ID + ") REFERENCES " + Table_Zona.TABLE + "(" + Table_Zona.ID + ") );";
     private static final String CREATE_AGENTE =
             "create table " + Table_Agente.TABLE + " (" +
@@ -300,12 +317,6 @@ public class DBAdapter {
     public void close() {
         databaseHelper.close();
         db.close();
-    }
-
-    public void Insertar_Zona(Zona zona) {
-        ContentValues values = new ContentValues();
-        values.put(Table_Zona.UBICACION, zona.getUbicacion());
-        db.insert(Table_Zona.TABLE, null, values);
     }
 
 
@@ -662,6 +673,110 @@ public class DBAdapter {
             return null;
         }
         return vehiculos;
+    }
+
+    public void Insertar_Zona(Zona zona) {
+        ContentValues values = new ContentValues();
+        values.put(Table_Zona.DEPARTAMENTO, zona.getDepartamento());
+        values.put(Table_Zona.PROVINCIA, zona.getProvincia());
+        values.put(Table_Zona.DISTRITO, zona.getDistrito());
+        values.put(Table_Zona.LATITUD, zona.getLatitud());
+        values.put(Table_Zona.LONGITUD, zona.getLongitud());
+        values.put(Table_Zona.TITULO, zona.getTitulo());
+        db.insert(Table_Zona.TABLE, null, values);
+    }
+    public ArrayList<Zona> get_all_Zonas(){
+        ArrayList<Zona> zonas = new ArrayList<>();
+        try {
+            String query = "select * from " + Table_Zona.TABLE;
+            Cursor cursor = db.rawQuery(query,null);
+            if (cursor.moveToFirst()){
+                do {
+                    Zona zona = new Zona();
+                    zona.setIdZona(cursor.getInt(0));
+                    zona.setDepartamento(cursor.getString(1));
+                    zona.setProvincia(cursor.getString(2));
+                    zona.setDistrito(cursor.getString(3));
+                    zona.setLatitud(cursor.getString(4));
+                    zona.setLongitud(cursor.getString(5));
+                    zona.setTitulo(cursor.getString(6));
+                    zonas.add(zona);
+                }while (cursor.moveToNext());
+            }
+        } catch (Exception ex){
+            return null;
+        }
+        return zonas;
+    }
+    public Zona get_Zona(String latitud, String longitud) {
+        try {
+            String query = "SELECT * FROM " + Table_Zona.TABLE +
+                    " WHERE " + Table_Zona.LATITUD + " = ? AND " + Table_Zona.LONGITUD + " = ?";
+            Cursor cursor = db.rawQuery(query, new String[]{latitud, longitud});
+            Zona zona = null;
+            if (cursor.moveToFirst()){
+                do {
+                    zona = new Zona();
+                    zona.setIdZona(cursor.getInt(0));
+                    zona.setDepartamento(cursor.getString(1));
+                    zona.setProvincia(cursor.getString(2));
+                    zona.setDistrito(cursor.getString(3));
+                    zona.setLatitud(cursor.getString(4));
+                    zona.setLongitud(cursor.getString(5));
+                    zona.setTitulo(cursor.getString(6));
+                }while (cursor.moveToNext());
+            }
+            cursor.close();
+            return zona;
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+    public void Actualizar_Zona(Zona zona) {
+        ContentValues values = new ContentValues();
+        values.put(Table_Zona.DEPARTAMENTO, zona.getDepartamento());
+        values.put(Table_Zona.PROVINCIA, zona.getProvincia());
+        values.put(Table_Zona.DISTRITO, zona.getDistrito());
+        values.put(Table_Zona.LATITUD, zona.getLatitud());
+        values.put(Table_Zona.LONGITUD, zona.getLongitud());
+        values.put(Table_Zona.TITULO, zona.getTitulo());
+        db.update(Table_Zona.TABLE, values,Table_Zona.ID + " = " + zona.getIdZona(),null);
+    }
+    public void Eliminar_Zona(Zona zona) {
+        ContentValues values = new ContentValues();
+        db.delete(Table_Zona.TABLE,Table_Zona.ID + " = " + zona.getIdZona(),null);
+    }
+
+    public void Insertar_Puesto_Control(PuestoControl puestoControl) {
+        ContentValues values = new ContentValues();
+        values.put(Table_Zona.ID, puestoControl.getIdZona());
+        values.put(Table_Puesto_Control.REFERENCIA, puestoControl.getReferencia());
+        values.put(Table_Puesto_Control.LATITUD, puestoControl.getLatitud());
+        values.put(Table_Puesto_Control.LONGITUD, puestoControl.getLongitud());
+        values.put(Table_Puesto_Control.TITULO, puestoControl.getTitulo());
+        db.insert(Table_Puesto_Control.TABLE, null, values);
+    }
+    public ArrayList<PuestoControl> get_all_Puesto_Controls(){
+        ArrayList<PuestoControl> puestoControls = new ArrayList<>();
+        try {
+            String query = "select * from " + Table_Puesto_Control.TABLE;
+            Cursor cursor = db.rawQuery(query,null);
+            if (cursor.moveToFirst()){
+                do {
+                    PuestoControl puestoControl = new PuestoControl();
+                    puestoControl.setIdPuestoControl(cursor.getInt(0));
+                    puestoControl.setIdZona(cursor.getInt(1));
+                    puestoControl.setReferencia(cursor.getString(2));
+                    puestoControl.setLatitud(cursor.getString(3));
+                    puestoControl.setLongitud(cursor.getString(4));
+                    puestoControl.setTitulo(cursor.getString(5));
+                    puestoControls.add(puestoControl);
+                }while (cursor.moveToNext());
+            }
+        } catch (Exception ex){
+            return null;
+        }
+        return puestoControls;
     }
 
 }
