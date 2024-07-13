@@ -2,6 +2,7 @@ package com.example.grupo_05_tarea_16_ejercicio_01.db;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -9,7 +10,11 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Accidente;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Audiencia;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Zona;
+
+import java.util.ArrayList;
 
 public class DBAdapter {
     private static final int DATABASE_VERSION = 1;
@@ -48,6 +53,10 @@ public class DBAdapter {
         public static final String HORA = "hora";
         public static final String FECHA = "fecha";
         public static final String DESCRIPCION = "descripcion";
+        public static final String URL = "URLimagen";
+        public static final String NOMBRE_LUGAR = "nombreLugar";
+        public static final String LATITUD = "latitud";
+        public static final String LONGITUD = "longitud";
     }
 
     private static final class Table_Infraccion {
@@ -134,6 +143,10 @@ public class DBAdapter {
                     Table_Accidente.HORA + " text not null, " +
                     Table_Accidente.FECHA + " text not null, " +
                     Table_Accidente.DESCRIPCION + " text not null, " +
+                    Table_Accidente.URL + " text not null, " +
+                    Table_Accidente.NOMBRE_LUGAR + " text not null, " +
+                    Table_Accidente.LATITUD + " decimal(6,2) not null, " +
+                    Table_Accidente.LONGITUD + " decimal(6,2) not null, " +
                     "FOREIGN KEY (" + Table_Vehiculo.ID + ") REFERENCES " + Table_Vehiculo.TABLE + "(" + Table_Vehiculo.ID + "), " +
                     "FOREIGN KEY (" + Table_Agente.ID + ") REFERENCES " + Table_Agente.TABLE + "(" + Table_Agente.ID + ") );";
     private static final String CREATE_INFRACCION =
@@ -275,4 +288,165 @@ public class DBAdapter {
         values.put(Table_Zona.UBICACION, zona.getUbicacion());
         db.insert(Table_Zona.TABLE, null, values);
     }
+
+
+    //MÉTODOS TABLA ACCIDENTE
+    public void Insertar_Accidente(Accidente accidente) {
+        ContentValues values = new ContentValues();
+        values.put(Table_Vehiculo.ID, accidente.getIdVehiculo());
+        values.put(Table_Agente.ID, accidente.getIdagente());
+        values.put(Table_Accidente.HORA, accidente.getHora());
+        values.put(Table_Accidente.FECHA, accidente.getFecha());
+        values.put(Table_Accidente.DESCRIPCION, accidente.getDescripcion());
+        values.put(Table_Accidente.URL, accidente.getURLimagen());
+        values.put(Table_Accidente.NOMBRE_LUGAR, accidente.getNombreLugar());
+        values.put(Table_Accidente.LATITUD, accidente.getLatitud());
+        values.put(Table_Accidente.LONGITUD, accidente.getLongitud());
+        db.insert(Table_Accidente.TABLE, null, values);
+    }
+
+    public void Actualizar_Accidente(Accidente accidente) {
+        ContentValues values = new ContentValues();
+        values.put(Table_Vehiculo.ID, accidente.getIdVehiculo());
+        values.put(Table_Agente.ID, accidente.getIdagente());
+        values.put(Table_Accidente.HORA, accidente.getHora());
+        values.put(Table_Accidente.FECHA, accidente.getFecha());
+        values.put(Table_Accidente.DESCRIPCION, accidente.getDescripcion());
+        values.put(Table_Accidente.URL, accidente.getURLimagen());
+        values.put(Table_Accidente.NOMBRE_LUGAR, accidente.getNombreLugar());
+        values.put(Table_Accidente.LATITUD, accidente.getLatitud());
+        values.put(Table_Accidente.LONGITUD, accidente.getLongitud());
+        db.update(Table_Accidente.TABLE, values, Table_Accidente.ID + " = " + accidente.getIdaccidente(), null);
+    }
+
+    public void Eliminar_Accidente(Accidente accidente) {
+        db.delete(Table_Accidente.TABLE, Table_Accidente.ID + " = " + accidente.getIdaccidente(), null);
+    }
+
+    public Accidente get_Accidente(int id) {
+        try {
+            String query = "SELECT * FROM " + Table_Accidente.TABLE +
+                    " WHERE " + Table_Accidente.ID + " = " + id;
+            Cursor cursor = db.rawQuery(query, null);
+            Accidente accidente = null;
+            if (cursor.moveToFirst()) {
+                do {
+                    accidente = new Accidente();
+                    accidente.setIdaccidente(cursor.getInt(0));
+                    accidente.setIdVehiculo(cursor.getInt(1));
+                    accidente.setIdagente(cursor.getInt(2));
+                    accidente.setHora(cursor.getString(3));
+                    accidente.setFecha(cursor.getString(4));
+                    accidente.setDescripcion(cursor.getString(5));
+                    accidente.setURLimagen(cursor.getString(6));
+                    accidente.setNombreLugar(cursor.getString(7));
+                    accidente.setLatitud(cursor.getDouble(8));
+                    accidente.setLongitud(cursor.getDouble(9));
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            return accidente;
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public ArrayList<Accidente> get_all_Accidente() {
+        ArrayList<Accidente> accidentes = new ArrayList<>();
+        try {
+            String query = "SELECT * FROM " + Table_Accidente.TABLE;
+            Cursor cursor = db.rawQuery(query, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    Accidente accidente = new Accidente();
+                    accidente.setIdaccidente(cursor.getInt(0));
+                    accidente.setIdVehiculo(cursor.getInt(1));
+                    accidente.setIdagente(cursor.getInt(2));
+                    accidente.setHora(cursor.getString(3));
+                    accidente.setFecha(cursor.getString(4));
+                    accidente.setDescripcion(cursor.getString(5));
+                    accidente.setURLimagen(cursor.getString(6));
+                    accidente.setNombreLugar(cursor.getString(7));
+                    accidente.setLatitud(cursor.getDouble(8));
+                    accidente.setLongitud(cursor.getDouble(9));
+                    accidentes.add(accidente);
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+        } catch (Exception ex) {
+            return null;
+        }
+        return accidentes;
+    }
+
+
+    //MÉTODOS TABLA AUDIENCIA
+    public void Insertar_Audiencia(Audiencia audiencia) {
+        ContentValues values = new ContentValues();
+        values.put(Table_Audiencia.CODIGO, audiencia.getCodigo());
+        values.put(Table_Audiencia.LUGAR, audiencia.getLugar());
+        values.put(Table_Audiencia.FECHA, audiencia.getFecha());
+        values.put(Table_Audiencia.HORA, audiencia.getHora());
+        db.insert(Table_Audiencia.TABLE, null, values);
+    }
+
+    public void Actualizar_Audiencia(Audiencia audiencia) {
+        ContentValues values = new ContentValues();
+        values.put(Table_Audiencia.CODIGO, audiencia.getCodigo());
+        values.put(Table_Audiencia.LUGAR, audiencia.getLugar());
+        values.put(Table_Audiencia.FECHA, audiencia.getFecha());
+        values.put(Table_Audiencia.HORA, audiencia.getHora());
+        db.update(Table_Audiencia.TABLE, values, Table_Audiencia.ID + " = " + audiencia.getIdAudiencia(), null);
+    }
+
+    public void Eliminar_Audiencia(Audiencia audiencia) {
+        db.delete(Table_Audiencia.TABLE, Table_Audiencia.ID + " = " + audiencia.getIdAudiencia(), null);
+    }
+
+    public Audiencia get_Audiencia(int id) {
+        try {
+            String query = "SELECT * FROM " + Table_Audiencia.TABLE +
+                    " WHERE " + Table_Audiencia.ID + " = " + id;
+            Cursor cursor = db.rawQuery(query, null);
+            Audiencia audiencia = null;
+            if (cursor.moveToFirst()) {
+                do {
+                    audiencia = new Audiencia();
+                    audiencia.setIdAudiencia(cursor.getInt(0));
+                    audiencia.setCodigo(cursor.getInt(1));
+                    audiencia.setLugar(cursor.getString(2));
+                    audiencia.setFecha(cursor.getString(3));
+                    audiencia.setHora(cursor.getString(4));
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            return audiencia;
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public ArrayList<Audiencia> get_all_Audiencia() {
+        ArrayList<Audiencia> audiencias = new ArrayList<>();
+        try {
+            String query = "SELECT * FROM " + Table_Audiencia.TABLE;
+            Cursor cursor = db.rawQuery(query, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    Audiencia audiencia = new Audiencia();
+                    audiencia.setIdAudiencia(cursor.getInt(0));
+                    audiencia.setCodigo(cursor.getInt(1));
+                    audiencia.setLugar(cursor.getString(2));
+                    audiencia.setFecha(cursor.getString(3));
+                    audiencia.setHora(cursor.getString(4));
+                    audiencias.add(audiencia);
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+        } catch (Exception ex) {
+            return null;
+        }
+        return audiencias;
+    }
+
 }

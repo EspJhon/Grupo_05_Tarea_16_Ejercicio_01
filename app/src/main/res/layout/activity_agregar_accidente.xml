@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.Accidente.AgregarAccidenteActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/et_placa"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Número de placa"/>
+
+            <EditText
+                android:id="@+id/et_agente"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="ID Agente"/>
+
+            <EditText
+                android:id="@+id/et_hora"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="time"
+                android:hint="Hora"/>
+
+            <EditText
+                android:id="@+id/et_fecha"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="date"
+                android:hint="Fecha"/>
+
+            <EditText
+                android:id="@+id/et_descripcion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Descripción"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_tomarFoto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tomar Foto" />
+
+                <ImageView
+                    android:id="@+id/iv_imagenAccidente"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"/>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/et_nombreLugar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Nombre del lugar" />
+
+                <EditText
+                    android:id="@+id/et_latitud"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Latitud" />
+
+                <EditText
+                    android:id="@+id/et_longitud"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Longitud" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_agregarAccidente"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Añadir"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
