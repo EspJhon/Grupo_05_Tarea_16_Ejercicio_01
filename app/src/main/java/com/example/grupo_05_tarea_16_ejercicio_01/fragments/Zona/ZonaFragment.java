@@ -1,10 +1,17 @@
 package com.example.grupo_05_tarea_16_ejercicio_01.fragments.Zona;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,14 +20,17 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.grupo_05_tarea_16_ejercicio_01.R;
+import com.example.grupo_05_tarea_16_ejercicio_01.adapter.ZonaAdapter;
 import com.example.grupo_05_tarea_16_ejercicio_01.db.DBHelper;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Zona;
+
+import java.util.ArrayList;
 
 
 public class ZonaFragment extends Fragment {
 
-    private EditText edt_ubicacion_zona;
-    private Button btn_registrar_zona;
+    private RecyclerView lvl_lista_zona;
+    private ZonaAdapter adapter;
     DBHelper dbHelper;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -55,8 +65,10 @@ public class ZonaFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_zona, container, false);
-        edt_ubicacion_zona = view.findViewById(R.id.edt_ubicacion_zon);
-        btn_registrar_zona = view.findViewById(R.id.btn_registrar_zona);
+        dbHelper = new DBHelper(getActivity());
+        lvl_lista_zona = view.findViewById(R.id.lvl_lista_zona);
+        lvl_lista_zona.setLayoutManager(new LinearLayoutManager(getContext()));
+        Listar_Zonas();
         return view;
     }
 
@@ -64,13 +76,27 @@ public class ZonaFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         dbHelper = new DBHelper(getActivity());
-        btn_registrar_zona.setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.btn_agregar_zona).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String ubi = edt_ubicacion_zona.getText().toString();
-                Zona zona = new Zona(ubi);
-                dbHelper.Insertar_Zonas(zona);
+                NavController navController = Navigation.findNavController(v);
+                navController.navigate(R.id.action_zonaFragment_to_mapsZona);
             }
         });
+    }
+    public void Listar_Zonas() {
+        ArrayList<Zona> zonas = dbHelper.get_all_Zonas();
+        adapter = new ZonaAdapter(getActivity(), zonas, new ZonaAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Zona zona) {
+                Bundle bundle = new Bundle();
+                bundle.putString("ztitulo", zona.getTitulo());
+                bundle.putString("zlatitud", zona.getLatitud());
+                bundle.putString("zlongitud", zona.getLongitud());
+                NavController navController = Navigation.findNavController(getView());
+                navController.navigate(R.id.action_zonaFragment_to_actualizaZonaFragment, bundle);
+            }
+        });
+        lvl_lista_zona.setAdapter(adapter);
     }
 }
