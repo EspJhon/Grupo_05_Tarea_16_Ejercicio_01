@@ -59,8 +59,8 @@
             android:id="@+id/action_zonaFragment_to_actualizarZonaFragment"
             app:destination="@id/actualizarZonaFragment" />
         <action
-            android:id="@+id/action_zonaFragment_to_mapsZona2"
-            app:destination="@id/mapsZona" />
+            android:id="@+id/action_zonaFragment_to_mapsZonaFragment"
+            app:destination="@id/mapsZonaFragment" />
     </fragment>
     <fragment
         android:id="@+id/puestoControlFragment"
@@ -93,9 +93,9 @@
         android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.PuestoControl.RegisterPuestoControlFragment"
         android:label="fragment_register_puesto_control"
         tools:layout="@layout/fragment_register_puesto_control" />
-    <activity
-        android:id="@+id/mapsZona"
-        android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.Zona.MapsZona"
-        android:label="activity_maps_zona"
-        tools:layout="@layout/activity_maps_zona" />
+    <fragment
+        android:id="@+id/mapsZonaFragment"
+        android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.Zona.MapsZonaFragment"
+        android:label="Mapa"
+        tools:layout="@layout/fragment_maps_zona" />
 </navigation>
