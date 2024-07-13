@@ -60,4 +60,14 @@
         android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.PuestoControl.PuestoControlFragment"
         android:label="fragment_puesto_control"
         tools:layout="@layout/fragment_puesto_control" />
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.Login.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" />
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.Register.RegisterFragment"
+        android:label="fragment_register"
+        tools:layout="@layout/fragment_register" />
 </navigation>

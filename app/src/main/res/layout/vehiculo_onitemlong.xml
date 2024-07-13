@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@android:color/white">
+
+    <TextView
+        android:id="@+id/tv_dialog_numeroPlaca"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:text="Placa"
+        android:padding="8dp"/>
+
+    <TextView
+        android:id="@+id/tv_dialog_Marca"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="22sp"
+        android:textColor="@color/black"
+        android:text="Marca"
+        android:padding="8dp"/>
+
+    <LinearLayout
+        android:id="@+id/layout_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end"
+        android:paddingTop="16dp"
+        android:weightSum="3">
+
+        <Button
+            android:id="@+id/btn_eliminar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            android:background="@color/purple_500"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:text="borrar"
+            android:textColor="@android:color/white" />
+
+        <Button
+            android:id="@+id/btn_actualizar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            android:background="@color/purple_500"
+            android:textColor="@android:color/white"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:text="EDITAR" />
+
+        <Button
+            android:id="@+id/btn_volver"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/purple_500"
+            android:textColor="@android:color/white"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:text="volver" />
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,14 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.Vehiculo.VehiculoFragment">
+    android:orientation="vertical"
+    android:padding="10dp"
+    tools:context=".MainActivity">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <Button
+        android:id="@+id/btn_registrar_vehiculo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="10dp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:backgroundTint="@color/purple_500"
+        android:text="Registrar Vehículo"/>
+
+    <ListView
+        android:id="@+id/lv_vehiculos"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:choiceMode="singleChoice"
+        android:listSelector="@android:color/transparent"/>
 
-</FrameLayout>
+
+
+</LinearLayout>

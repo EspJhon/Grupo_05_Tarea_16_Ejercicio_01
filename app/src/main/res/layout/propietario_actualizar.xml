@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@android:color/white">
+
+    <EditText
+        android:id="@+id/et_actualizar_cedula"
+        android:layout_width="228dp"
+        android:layout_height="wrap_content"
+        android:hint="Nueva Cédula"
+        android:inputType="number"
+        android:padding="8dp"
+        android:textSize="18sp"/>
+
+    <EditText
+        android:id="@+id/et_actualizar_nombre"
+        android:layout_width="228dp"
+        android:layout_height="wrap_content"
+        android:hint="Nombre"
+        android:inputType="text"
+        android:padding="8dp"
+        android:textSize="18sp"/>
+
+    <EditText
+        android:id="@+id/et_actualizar_ciudad"
+        android:layout_width="228dp"
+        android:layout_height="wrap_content"
+        android:hint="Nueva Ciudad"
+        android:inputType="text"
+        android:padding="8dp"
+        android:textSize="18sp" />
+
+
+</LinearLayout>

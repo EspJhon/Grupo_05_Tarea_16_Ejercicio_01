@@ -12,6 +12,9 @@ import androidx.annotation.Nullable;
 
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Accidente;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Audiencia;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Propietario;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Usuario;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Vehiculo;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Zona;
 
 import java.util.ArrayList;
@@ -111,6 +114,13 @@ public class DBAdapter {
         public static final String UBICACION = "ubicacion";
     }
 
+    private static final class Table_Usuario {
+        public static final String TABLE = "table_usuario";
+        public static final String ID = "IdUsuario";
+        public static final String USERNAME = "username";
+        public static final String PASSWORD = "password";
+    }
+
     private static final String CREATE_PROPIETARIO =
             "create table " + Table_Propietario.TABLE + " (" +
                     Table_Propietario.ID + " integer primary key autoincrement, " +
@@ -205,6 +215,12 @@ public class DBAdapter {
                     Table_Agente.RANGO + " text not null, " +
                     "FOREIGN KEY (" + Table_Puesto_Control.ID + ") REFERENCES " + Table_Puesto_Control.TABLE + "(" + Table_Puesto_Control.ID + ") );";
 
+    private static final String CREATE_USUARIO =
+            "create table " + Table_Usuario.TABLE + " (" +
+                    Table_Usuario.ID + " integer primary key autoincrement, " +
+                    Table_Usuario.USERNAME + " text not null unique, " +
+                    Table_Usuario.PASSWORD + " text not null );";
+
     private DatabaseHelper databaseHelper;
     private SQLiteDatabase db;
     private static Context context;
@@ -233,6 +249,7 @@ public class DBAdapter {
             db.execSQL(CREATE_AGENTE);
             db.execSQL(CREATE_ZONA);
             db.execSQL(CREATE_PUESTO_CONTROL);
+            db.execSQL(CREATE_USUARIO);
         }
 
         @Override
@@ -259,6 +276,8 @@ public class DBAdapter {
             db.execSQL(CREATE_ZONA);
             db.execSQL("drop table if exists " + Table_Puesto_Control.TABLE);
             db.execSQL(CREATE_PUESTO_CONTROL);
+            db.execSQL("drop table if exists " + Table_Usuario.TABLE);
+            db.execSQL(CREATE_USUARIO);
         }
     }
 
@@ -447,6 +466,202 @@ public class DBAdapter {
             return null;
         }
         return audiencias;
+    }
+
+
+    //MÉTODOS DE INICIO DE SESIÓN
+
+    public void insertarUsuario(Usuario usuario) {
+        ContentValues values = new ContentValues();
+        values.put(Table_Usuario.USERNAME, usuario.getUsername());
+        values.put(Table_Usuario.PASSWORD, usuario.getPassword());
+        db.insert(Table_Usuario.TABLE, null, values);
+    }
+
+    public boolean validarUsuario(Usuario usuario) {
+        Cursor cursor = db.query(Table_Usuario.TABLE,
+                new String[]{Table_Usuario.ID},
+                Table_Usuario.USERNAME + "=? AND " + Table_Usuario.PASSWORD + "=?",
+                new String[]{usuario.getUsername(), usuario.getPassword()},
+                null, null, null);
+        boolean existe = cursor.getCount() > 0;
+        cursor.close();
+        return existe;
+    }
+
+    public int obtenerIdUsuario(Usuario usuario) {
+        Cursor cursor = db.query(Table_Usuario.TABLE,
+                new String[]{Table_Usuario.ID},
+                Table_Usuario.USERNAME + "=? AND " + Table_Usuario.PASSWORD + "=?",
+                new String[]{usuario.getUsername(), usuario.getPassword()},
+                null, null, null);
+        int userId = -1;
+        if (cursor.moveToFirst()) {
+            userId = cursor.getInt(0);
+        }
+        cursor.close();
+        return userId;
+    }
+
+
+    //PROPIETARIO
+
+    public void insertarPropietario(Propietario propietario) {
+        ContentValues values = new ContentValues();
+        values.put(Table_Propietario.CEDULA, propietario.getCedulap());
+        values.put(Table_Propietario.NOMBRE, propietario.getNombre());
+        values.put(Table_Propietario.CIUDAD, propietario.getCiudad());
+        db.insert(Table_Propietario.TABLE, null, values);
+    }
+
+    public void actualizarPropietario(Propietario propietario) {
+        ContentValues values = new ContentValues();
+        values.put(Table_Propietario.CEDULA, propietario.getCedulap());
+        values.put(Table_Propietario.NOMBRE, propietario.getNombre());
+        values.put(Table_Propietario.CIUDAD, propietario.getCiudad());
+        db.update(Table_Propietario.TABLE,values,Table_Propietario.ID + " = " + propietario.getIdPropietario(),null);
+    }
+
+    public void Eliminar_Propietario (Propietario propietario){
+        ContentValues values = new ContentValues();
+        db.delete(Table_Propietario.TABLE,Table_Propietario.ID + " = " + propietario.getIdPropietario(),null);
+    }
+
+    public ArrayList<Propietario> get_all_Propietarios(){
+
+        ArrayList<Propietario> propietarios = new ArrayList<>();
+        try{
+            String query = "select * from " + Table_Propietario.TABLE;
+            Cursor cursor = db.rawQuery(query,null);
+            if(cursor.moveToFirst()){
+                do{
+                    Propietario propietario = new Propietario();
+                    propietario.setIdPropietario(cursor.getInt(0));
+                    propietario.setCedulap(cursor.getInt(1));
+                    propietario.setNombre(cursor.getString(2));
+                    propietario.setCiudad(cursor.getString(3));
+                    propietarios.add(propietario);
+                }while(cursor.moveToNext());
+            }
+        }catch (Exception ex){
+            return null;
+        }
+        return propietarios;
+    }
+
+    public Propietario get_Propietario(int id){
+
+        ArrayList<Propietario> propietarios = new ArrayList<>();
+        try{
+            String query = "select * from " + Table_Propietario.TABLE +
+                    " where " + Table_Propietario.ID + " = " + id;
+            Cursor cursor = db.rawQuery(query,null);
+            Propietario propietario = null;
+
+            if(cursor.moveToFirst()){
+                do{
+                    propietario = new Propietario();
+                    propietario.setIdPropietario(cursor.getInt(0));
+                    propietario.setCedulap(cursor.getInt(1));
+                    propietario.setNombre(cursor.getString(2));
+                    propietario.setCiudad(cursor.getString(3));
+                    propietarios.add(propietario);
+                }while(cursor.moveToNext());
+            }
+            cursor.close();
+            return propietario;
+
+        }catch (Exception ex){
+            return null;
+        }
+
+    }
+
+
+    //VEHÍCULO
+
+    public void Insertar_Vehiculo(Vehiculo vehiculo) {
+        ContentValues values = new ContentValues();
+        values.put(Table_Vehiculo.NUMERO_PLACA, vehiculo.getNumplaca());
+        values.put(Table_Vehiculo.MARCA, vehiculo.getMarca());
+        values.put(Table_Vehiculo.MODELO, vehiculo.getModelo());
+        values.put(Table_Vehiculo.MOTOR, vehiculo.getMotor());
+        values.put(Table_Vehiculo.FECHA_ANO, vehiculo.getF_ano());
+        values.put(Table_Propietario.ID, vehiculo.getIdPropietario());
+
+        db.insert(Table_Vehiculo.TABLE, null, values);
+    }
+
+    public void Actualizar_Vehiculo(Vehiculo vehiculo) {
+        ContentValues values = new ContentValues();
+        values.put(Table_Vehiculo.NUMERO_PLACA, vehiculo.getNumplaca());
+        values.put(Table_Vehiculo.MARCA, vehiculo.getMarca());
+        values.put(Table_Vehiculo.MODELO, vehiculo.getModelo());
+        values.put(Table_Vehiculo.MOTOR, vehiculo.getMotor());
+        values.put(Table_Vehiculo.FECHA_ANO, vehiculo.getF_ano());
+        values.put(Table_Propietario.ID, vehiculo.getIdPropietario());
+        db.update(Table_Vehiculo.TABLE, values, Table_Vehiculo.ID + " = " + vehiculo.getIdVehiculo(), null);
+    }
+
+    public void Eliminar_Vehiculo(Vehiculo vehiculo) {
+        ContentValues values = new ContentValues();
+        db.delete(Table_Vehiculo.TABLE, Table_Vehiculo.ID + " = " + vehiculo.getIdVehiculo(), null);
+    }
+
+    public Vehiculo get_Vehiculo(int id) {
+        try {
+
+            String query = "select * from " + Table_Vehiculo.TABLE +
+                    " where " + Table_Vehiculo.ID + " = " + id;
+            Cursor cursor = db.rawQuery(query, null);
+            Vehiculo vehiculo = null;
+            if (cursor.moveToFirst()) {
+                do {
+                    vehiculo = new Vehiculo();
+                    vehiculo.setIdVehiculo(cursor.getInt(0));
+                    vehiculo.setNumplaca(cursor.getInt(1));
+                    vehiculo.setMarca(cursor.getString(2));
+                    vehiculo.setModelo(cursor.getString(3));
+                    vehiculo.setMotor(cursor.getString(4));
+                    vehiculo.setF_ano(cursor.getString(5));
+                    vehiculo.setIdPropietario(cursor.getInt(6));
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            return vehiculo;
+
+        } catch (Exception ex) {
+            return null;
+        }
+
+
+    }
+
+    public ArrayList<Vehiculo> get_all_Vehiculos() {
+
+        ArrayList<Vehiculo> vehiculos = new ArrayList<>();
+        try {
+
+            String query = "select * from " + Table_Vehiculo.TABLE;
+            Cursor cursor = db.rawQuery(query, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    Vehiculo vehiculo = new Vehiculo();
+                    vehiculo.setIdVehiculo(cursor.getInt(0));
+                    vehiculo.setNumplaca(cursor.getInt(1));
+                    vehiculo.setMarca(cursor.getString(2));
+                    vehiculo.setModelo(cursor.getString(3));
+                    vehiculo.setMotor(cursor.getString(4));
+                    vehiculo.setF_ano(cursor.getString(5));
+                    vehiculo.setIdPropietario(cursor.getInt(6));
+                    vehiculos.add(vehiculo);
+                } while (cursor.moveToNext());
+            }
+
+        } catch (Exception ex) {
+            return null;
+        }
+        return vehiculos;
     }
 
 }
