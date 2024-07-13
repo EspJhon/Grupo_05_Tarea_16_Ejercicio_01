@@ -4,6 +4,9 @@ import android.content.Context;
 
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Accidente;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Audiencia;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Propietario;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Usuario;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Vehiculo;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Zona;
 
 import java.util.ArrayList;
@@ -90,5 +93,88 @@ public class DBHelper {
         ArrayList<Audiencia> audiencias = dbAdapter.get_all_Audiencia();
         dbAdapter.close();
         return audiencias;
+    }
+
+    //USUARIO
+
+    public void insertarUsuario(Usuario usuario) {
+        dbAdapter.open();
+        dbAdapter.insertarUsuario(usuario);
+        dbAdapter.close();
+    }
+
+    public boolean validarUsuario(Usuario usuario) {
+        dbAdapter.open();
+        boolean valido = dbAdapter.validarUsuario(usuario);
+        dbAdapter.close();
+        return valido;
+    }
+
+    //PROPIETARIO
+
+    public void Insertar_Propietario(Propietario propietario) {
+        dbAdapter.open();
+        dbAdapter.insertarPropietario(propietario);
+        dbAdapter.close();
+    }
+
+    public ArrayList<Propietario> get_all_Propietarios() {
+        dbAdapter.open();
+        ArrayList<Propietario> propietarios = dbAdapter.get_all_Propietarios();
+        dbAdapter.close();
+        return propietarios;
+    }
+
+    public void Actualizar_Propietario(Propietario propietario) {
+        dbAdapter.open();
+        dbAdapter.actualizarPropietario(propietario);
+        dbAdapter.close();
+    }
+
+    public void Eliminar_Propietario(Propietario propietario) {
+        dbAdapter.open();
+        dbAdapter.Eliminar_Propietario(propietario);
+        dbAdapter.close();
+    }
+
+    public Propietario get_Propietario(int id) {
+        dbAdapter.open();
+        Propietario propietario = dbAdapter.get_Propietario(id);
+        dbAdapter.close();
+        return propietario;
+    }
+
+    // VEHICULO
+
+    public void Insertar_Vehiculo(Vehiculo vehiculo) {
+        dbAdapter.open();
+        dbAdapter.Insertar_Vehiculo(vehiculo);
+        dbAdapter.close();
+    }
+
+    public ArrayList<Vehiculo> get_all_Vehiculos() {
+        dbAdapter.open();
+        ArrayList<Vehiculo> vehiculos = dbAdapter.get_all_Vehiculos();
+        dbAdapter.close();
+        return vehiculos;
+    }
+
+    public void Actualizar_Vehiculo(Vehiculo vehiculo) {
+        dbAdapter.open();
+        dbAdapter.Actualizar_Vehiculo(vehiculo);
+        dbAdapter.close();
+    }
+
+    public void Eliminar_Vehiculo(Vehiculo vehiculo) {
+        dbAdapter.open();
+        dbAdapter.Eliminar_Vehiculo(vehiculo);
+        dbAdapter.close();
+    }
+
+    public Vehiculo get_Vehiculo(int id) {
+        dbAdapter.open();
+        Vehiculo vehiculo = dbAdapter.get_Vehiculo(id);
+        dbAdapter.close();
+        return vehiculo;
     }
 }

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@android:color/white">
+
+    <EditText
+        android:id="@+id/et_actualizar_numPlaca"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Número de Placa"
+        android:inputType="number"
+        android:padding="8dp"
+        android:textSize="18sp"/>
+
+    <EditText
+        android:id="@+id/et_actualizar_marca"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nueva Marca"
+        android:inputType="text"
+        android:padding="8dp"
+        android:textSize="18sp"/>
+    <EditText
+        android:id="@+id/et_actualizar_modelo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nuevo Modelo"
+        android:inputType="text"
+        android:padding="8dp"
+        android:textSize="18sp"/>
+    <EditText
+        android:id="@+id/et_actualizar_motor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nuevo Motor"
+        android:inputType="text"
+        android:padding="8dp"
+        android:textSize="18sp"/>
+    <EditText
+        android:id="@+id/et_actualizar_fecha"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nueva Fecha"
+        android:inputType="text"
+        android:padding="8dp"
+        android:textSize="18sp"/>
+    <Spinner
+        android:id="@+id/sp_actualizar_propietario"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"/>
+</LinearLayout>
