@@ -87,7 +87,7 @@ public class ZonaFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 NavController navController = Navigation.findNavController(v);
-                navController.navigate(R.id.action_zonaFragment_to_mapsZona2);
+                navController.navigate(R.id.action_zonaFragment_to_mapsZonaFragment);
             }
         });
     }
