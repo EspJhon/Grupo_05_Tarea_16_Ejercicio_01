@@ -42,11 +42,11 @@
             android:title="Acta" />
         <item
             android:id="@+id/zonaFragment"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_zon_agregar"
             android:title="Zona" />
         <item
             android:id="@+id/puestoControlFragment"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/ic_puesto_control_agregar"
             android:title="Puesto de Control" />
     </group>
 </menu>
