@@ -39,12 +39,14 @@ public class AccidenteAdapter extends ArrayAdapter<Accidente> {
         }
         TextView tv_placa = convertView.findViewById(R.id.tv_placa);
         TextView tv_agente = convertView.findViewById(R.id.tv_agente);
+        TextView tv_lugar = convertView.findViewById(R.id.tv_lugar);
         TextView tv_hora = convertView.findViewById(R.id.tv_hora);
         TextView tv_fecha = convertView.findViewById(R.id.tv_fecha);
         TextView tv_descripcion = convertView.findViewById(R.id.tv_descripcion);
 
         tv_placa.setText("Vehículo: " + accidentes.get(position).getIdVehiculo() + "");
         tv_agente.setText("Agente: " + accidentes.get(position).getIdagente() + "");
+        tv_lugar.setText("Lugar: " + accidentes.get(position).getNombreLugar());
         tv_hora.setText("Hora: " + accidentes.get(position).getHora());
         tv_fecha.setText("Fecha: " + accidentes.get(position).getFecha());
         tv_descripcion.setText("Descripción: " + accidentes.get(position).getDescripcion());

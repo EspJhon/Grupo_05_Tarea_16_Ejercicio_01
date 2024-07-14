@@ -3,6 +3,8 @@ package com.example.grupo_05_tarea_16_ejercicio_01.fragments.Accidente;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
@@ -58,15 +60,20 @@ public class AccidenteFragment extends Fragment {
         lv_accidentes=view.findViewById(R.id.lv_accidentes);
         btn_nuevoAccidente=view.findViewById(R.id.btn_nuevoAccidente);
 
-        btn_nuevoAccidente.setOnClickListener(new View.OnClickListener() {
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        view.findViewById(R.id.btn_nuevoAccidente).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), AgregarAccidenteActivity.class);
-                startActivity(intent);
+                NavController navController = Navigation.findNavController(v);
+                navController.navigate(R.id.action_accidenteFragment_to_agregarAccidenteFragment);
             }
         });
-
-        return view;
     }
 
     @Override
