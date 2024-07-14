@@ -1,5 +1,7 @@
 package com.example.grupo_05_tarea_16_ejercicio_01.fragments.Accidente;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -10,9 +12,11 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -74,6 +78,15 @@ public class AccidenteFragment extends Fragment {
                 navController.navigate(R.id.action_accidenteFragment_to_agregarAccidenteFragment);
             }
         });
+
+        lv_accidentes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Accidente accidente = (Accidente) parent.getItemAtPosition(position);
+                OpcionesDialog(accidente);
+            }
+        });
+
     }
 
     @Override
@@ -86,6 +99,28 @@ public class AccidenteFragment extends Fragment {
         ArrayList<Accidente> accidentes = dbHelper.get_all_Accidentes();
         AccidenteAdapter adapter = new AccidenteAdapter(getActivity(),accidentes);
         lv_accidentes.setAdapter(adapter);
+    }
+
+    public void OpcionesDialog(Accidente accidente){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Seleccione una opción")
+                .setItems(new String[]{"Editar", "Eliminar"}, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable("id", accidente.getIdaccidente());
+                                NavController navController = Navigation.findNavController(getView());
+                                navController.navigate(R.id.action_accidenteFragment_to_actualizarAccidenteFragment,bundle);
+                                break;
+                            case 1:
+                                dbHelper.Eliminar_Accidente(accidente);
+                                ListarAccidentes();
+                                break;
+                        }
+                    }
+                });
+        builder.create().show();
     }
 
 }

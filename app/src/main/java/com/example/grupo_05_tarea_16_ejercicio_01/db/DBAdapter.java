@@ -536,6 +536,7 @@ public class DBAdapter {
         db.update(Table_Propietario.TABLE,values,Table_Propietario.ID + " = " + propietario.getIdPropietario(),null);
     }
 
+
     public void Eliminar_Propietario (Propietario propietario){
         ContentValues values = new ContentValues();
         db.delete(Table_Propietario.TABLE,Table_Propietario.ID + " = " + propietario.getIdPropietario(),null);
