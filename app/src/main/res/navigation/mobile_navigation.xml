@@ -33,16 +33,16 @@
         android:id="@+id/infraccionFragment"
         android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.Infraccion.InfraccionFragment"
         android:label="fragment_infraccion"
-        tools:layout="@layout/fragment_infraccion" />
+        tools:layout="@layout/fragment_infraccion" >
+        <action
+            android:id="@+id/action_infraccionFragment_to_infraccionRegisterFragment"
+            app:destination="@id/infraccionRegisterFragment" />
+    </fragment>
     <fragment
         android:id="@+id/audienciaFragment"
         android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.Audiencia.AudienciaFragment"
         android:label="fragment_audiencia"
-        tools:layout="@layout/fragment_audiencia" >
-        <action
-            android:id="@+id/action_audienciaFragment_to_agregarAudienciaFragment"
-            app:destination="@id/agregarAudienciaFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_audiencia" />
     <fragment
         android:id="@+id/normaDetFragment"
         android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.NormaDet.NormaDetFragment"
@@ -112,8 +112,8 @@
         android:label="fragment_agregar_accidente"
         tools:layout="@layout/fragment_agregar_accidente" />
     <fragment
-        android:id="@+id/agregarAudienciaFragment"
-        android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.Audiencia.AgregarAudienciaFragment"
-        android:label="fragment_agregar_audiencia"
-        tools:layout="@layout/fragment_agregar_audiencia" />
+        android:id="@+id/infraccionRegisterFragment"
+        android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.Infraccion.InfraccionRegisterFragment"
+        android:label="fragment_infraccion_register"
+        tools:layout="@layout/fragment_infraccion_register" />
 </navigation>

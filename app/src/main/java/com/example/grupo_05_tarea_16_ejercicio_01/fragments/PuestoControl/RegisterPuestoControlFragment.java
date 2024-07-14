@@ -92,7 +92,6 @@ public class RegisterPuestoControlFragment extends Fragment implements OnMapRead
         edt_register_latitud_puesto_control = view.findViewById(R.id.edt_register_latitud_puesto_control);
         edt_register_longitud_puesto_control = view.findViewById(R.id.edt_register_longitud_puesto_control);
         edt_register_referencia_puesto_control = view.findViewById(R.id.edt_register_Referencia_puesto_control);
-
         btn_registrar_puesto_control = view.findViewById(R.id.btn_registrar_puesto_control);
         btn_finalizar_puesto_control = view.findViewById(R.id.btn_finalizar_puesto_control);
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map_puesto_control);
