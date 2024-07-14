@@ -77,5 +77,4 @@ public class PuestoControlAdapter extends RecyclerView.Adapter<PuestoControlAdap
         }
 
     }
-
 }

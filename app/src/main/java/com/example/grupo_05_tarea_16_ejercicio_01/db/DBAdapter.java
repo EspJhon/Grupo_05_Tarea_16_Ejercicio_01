@@ -14,6 +14,7 @@ import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Accidente;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Acta;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Agente;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Audiencia;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.NormasDet;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Propietario;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.PuestoControl;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Usuario;
@@ -23,7 +24,7 @@ import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Zona;
 import java.util.ArrayList;
 
 public class DBAdapter {
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
     private static final String DATABASE_NAME = "DB_Grupo_05_Tarea_16_Ejercicio_01";
 
     //tabla propietario
@@ -185,7 +186,7 @@ public class DBAdapter {
     private static final String CREATE_NORMASDET =
             "create table " + Table_Norma.TABLE + " (" +
                     Table_Norma.ID + " integer primary key autoincrement, " +
-                    Table_Norma.NUMERO_NORMA + " integer not null, " +
+                    Table_Norma.NUMERO_NORMA + " text not null, " +
                     Table_Norma.DESCRIPCION + " text not null );";
     private static final String CREATE_AUDIENCIA =
             "create table " + Table_Audiencia.TABLE + " (" +
@@ -950,5 +951,62 @@ public class DBAdapter {
         }
 
         return agentes;
+    }
+
+    //METODOS DE NORMAS DETALLE
+    public void Insertar_Normas_Detalle(NormasDet normasDet) {
+        ContentValues values = new ContentValues();
+        values.put(Table_Norma.NUMERO_NORMA, normasDet.getNumnorma());
+        values.put(Table_Norma.DESCRIPCION, normasDet.getDescripcion());
+        db.insert(Table_Norma.TABLE, null, values);
+    }
+    public ArrayList<NormasDet> get_all_Normas_Detalle(){
+        ArrayList<NormasDet> normasDets = new ArrayList<>();
+        try {
+            String query = "select * from " + Table_Norma.TABLE;
+            Cursor cursor = db.rawQuery(query,null);
+            if (cursor.moveToFirst()){
+                do {
+                    NormasDet normasDet = new NormasDet();
+                    normasDet.setIdnomra(cursor.getInt(0));
+                    normasDet.setNumnorma(cursor.getString(1));
+                    normasDet.setDescripcion(cursor.getString(2));
+                    normasDets.add(normasDet);
+                }while (cursor.moveToNext());
+            }
+        } catch (Exception ex){
+            return null;
+        }
+        return normasDets;
+    }
+    public NormasDet get_Norma_Detalle(int IdNorma) {
+        try {
+            String query = "SELECT * FROM " + Table_Norma.TABLE +
+                    " WHERE " + Table_Norma.ID + " = " + IdNorma;
+            Cursor cursor = db.rawQuery(query, null);
+            NormasDet normasDet = null;
+            if (cursor.moveToFirst()){
+                do {
+                    normasDet = new NormasDet();
+                    normasDet.setIdnomra(cursor.getInt(0));
+                    normasDet.setNumnorma(cursor.getString(1));
+                    normasDet.setDescripcion(cursor.getString(2));
+                }while (cursor.moveToNext());
+            }
+            cursor.close();
+            return normasDet;
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+    public void Actualizar_Norma_Detalle(NormasDet normasDet) {
+        ContentValues values = new ContentValues();
+        values.put(Table_Norma.NUMERO_NORMA, normasDet.getNumnorma());
+        values.put(Table_Norma.DESCRIPCION, normasDet.getDescripcion());
+        db.update(Table_Norma.TABLE, values,Table_Norma.ID + " = " + normasDet.getIdnomra(),null);
+    }
+    public void Eliminar_Norma_Detalle(NormasDet normasDet) {
+        ContentValues values = new ContentValues();
+        db.delete(Table_Norma.TABLE,Table_Norma.ID + " = " + normasDet.getIdnomra(),null);
     }
 }
