@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Registrar Agente"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_gravity="center"
+        android:paddingBottom="16dp"/>
+
+    <EditText
+        android:id="@+id/et_Cedula"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Cédula"
+        android:inputType="number"/>
+
+    <EditText
+        android:id="@+id/et_NombreAgente"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nombre"
+        android:inputType="textPersonName"/>
+
+    <EditText
+        android:id="@+id/et_IdPuestoControl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="ID Puesto de Control"
+        android:inputType="number"/>
+
+    <EditText
+        android:id="@+id/et_Rango"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Rango"
+        android:inputType="text"/>
+
+</LinearLayout>

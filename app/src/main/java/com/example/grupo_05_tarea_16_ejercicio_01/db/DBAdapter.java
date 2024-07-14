@@ -11,6 +11,8 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Accidente;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Acta;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Agente;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Audiencia;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Propietario;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.PuestoControl;
@@ -708,6 +710,30 @@ public class DBAdapter {
         }
         return zonas;
     }
+    public Zona get_Zona_Puesto(String idzona) {
+        try {
+            String query = "SELECT * FROM " + Table_Zona.TABLE +
+                    " WHERE " + Table_Zona.ID + " = " + idzona;
+            Cursor cursor = db.rawQuery(query, null);
+            Zona zona = null;
+            if (cursor.moveToFirst()){
+                do {
+                    zona = new Zona();
+                    zona.setIdZona(cursor.getInt(0));
+                    zona.setDepartamento(cursor.getString(1));
+                    zona.setProvincia(cursor.getString(2));
+                    zona.setDistrito(cursor.getString(3));
+                    zona.setLatitud(cursor.getString(4));
+                    zona.setLongitud(cursor.getString(5));
+                    zona.setTitulo(cursor.getString(6));
+                }while (cursor.moveToNext());
+            }
+            cursor.close();
+            return zona;
+        } catch (Exception ex) {
+            return null;
+        }
+    }
     public Zona get_Zona(String latitud, String longitud) {
         try {
             String query = "SELECT * FROM " + Table_Zona.TABLE +
@@ -778,5 +804,151 @@ public class DBAdapter {
         }
         return puestoControls;
     }
+    public ArrayList<PuestoControl> get_all_Puesto_Controls_Zona(int idZona){
+        ArrayList<PuestoControl> puestoControls = new ArrayList<>();
+        try {
+            String query = "select * from " + Table_Puesto_Control.TABLE +
+                    " WHERE " + Table_Zona.ID + " = " + idZona;
+            Cursor cursor = db.rawQuery(query,null);
+            if (cursor.moveToFirst()){
+                do {
+                    PuestoControl puestoControl = new PuestoControl();
+                    puestoControl.setIdPuestoControl(cursor.getInt(0));
+                    puestoControl.setIdZona(cursor.getInt(1));
+                    puestoControl.setReferencia(cursor.getString(2));
+                    puestoControl.setLatitud(cursor.getString(3));
+                    puestoControl.setLongitud(cursor.getString(4));
+                    puestoControl.setTitulo(cursor.getString(5));
+                    puestoControls.add(puestoControl);
+                }while (cursor.moveToNext());
+            }
+        } catch (Exception ex){
+            return null;
+        }
+        return puestoControls;
+    }
 
+
+    public long addActa(Acta acta) {
+        ContentValues values = new ContentValues();
+        values.put(Table_Acta.CODIGO, acta.getCodigo());
+        values.put(Table_Accidente.ID, acta.getIdaccidente());
+        values.put(Table_Audiencia.ID, acta.getIdAudiencia());
+        values.put(Table_Acta.HORA, acta.getHora());
+        values.put(Table_Zona.ID, acta.getIdZona());
+        values.put(Table_Agente.ID, acta.getIdagente());
+        values.put(Table_Acta.FECHA, acta.getFecha());
+
+        return db.insert(Table_Acta.TABLE, null, values);
+    }
+
+    public ArrayList<Acta> getAllActas() {
+        ArrayList<Acta> actas = new ArrayList<>();
+        try {
+            String query = "SELECT * FROM " + Table_Acta.TABLE;
+            Cursor cursor = db.rawQuery(query, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    Acta acta = new Acta();
+                    acta.setIdActa(cursor.getInt(cursor.getColumnIndexOrThrow(Table_Acta.ID)));
+                    acta.setCodigo(cursor.getInt(cursor.getColumnIndexOrThrow(Table_Acta.CODIGO)));
+                    acta.setIdaccidente(cursor.getInt(cursor.getColumnIndexOrThrow(Table_Accidente.ID)));
+                    acta.setIdAudiencia(cursor.getInt(cursor.getColumnIndexOrThrow(Table_Audiencia.ID)));
+                    acta.setHora(cursor.getString(cursor.getColumnIndexOrThrow(Table_Acta.HORA)));
+                    acta.setIdZona(cursor.getInt(cursor.getColumnIndexOrThrow(Table_Zona.ID)));
+                    acta.setIdagente(cursor.getInt(cursor.getColumnIndexOrThrow(Table_Agente.ID)));
+                    acta.setFecha(cursor.getString(cursor.getColumnIndexOrThrow(Table_Acta.FECHA)));
+
+                    actas.add(acta);
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        return actas;
+    }
+    // Editar Acta
+    public int updateActa(Acta acta) {
+        ContentValues values = new ContentValues();
+        values.put(Table_Acta.CODIGO, acta.getCodigo());
+        values.put(Table_Accidente.ID, acta.getIdaccidente());
+        values.put(Table_Audiencia.ID, acta.getIdAudiencia());
+        values.put(Table_Acta.HORA, acta.getHora());
+        values.put(Table_Zona.ID, acta.getIdZona());
+        values.put(Table_Agente.ID, acta.getIdagente());
+        values.put(Table_Acta.FECHA, acta.getFecha());
+
+        String selection = Table_Acta.ID + " = ?";
+        String[] selectionArgs = { String.valueOf(acta.getIdActa()) };
+
+        return db.update(Table_Acta.TABLE, values, selection, selectionArgs);
+    }
+
+    // Eliminar Acta
+    public int deleteActa(int idActa) {
+        String selection = Table_Acta.ID + " = ?";
+        String[] selectionArgs = { String.valueOf(idActa) };
+
+        return db.delete(Table_Acta.TABLE, selection, selectionArgs);
+    }
+
+    public void addAgente(Agente agente) {
+        ContentValues values = new ContentValues();
+        values.put(Table_Agente.CEDULA, agente.getCedulaa());
+        values.put(Table_Agente.NOMBRE, agente.getNombre());
+        values.put(Table_Puesto_Control.ID, agente.getIdPuestoControl());
+        values.put(Table_Agente.RANGO, agente.getRango());
+
+        db.insert(Table_Agente.TABLE, null, values);
+
+    }
+
+    public int updateAgente(Agente agente) {
+        ContentValues values = new ContentValues();
+        values.put(Table_Agente.CEDULA, agente.getCedulaa());
+        values.put(Table_Agente.NOMBRE, agente.getNombre());
+        values.put(Table_Puesto_Control.ID, agente.getIdPuestoControl());
+        values.put(Table_Agente.RANGO, agente.getRango());
+        SQLiteDatabase db = this.databaseHelper.getWritableDatabase();
+        int rowsAffected = db.update(Table_Agente.TABLE, values, Table_Agente.ID + " = ?",
+                new String[]{String.valueOf(agente.getIdagente())});
+        db.close();
+        return rowsAffected;
+    }
+
+    public void deleteAgente(int idAgente) {
+        SQLiteDatabase db = this.databaseHelper.getWritableDatabase();
+        db.delete(Table_Agente.TABLE, Table_Agente.ID + " = ?",
+                new String[]{String.valueOf(idAgente)});
+        db.close();
+    }
+
+    public ArrayList<Agente> getAllAgentes() {
+        ArrayList<Agente> agentes = new ArrayList<>();
+        try {
+            String query = "SELECT * FROM " + Table_Agente.TABLE;
+            Cursor cursor = db.rawQuery(query, null);
+
+            if (cursor.moveToFirst()) {
+                do {
+                    Agente agente = new Agente();
+                    agente.setIdagente(cursor.getInt(0));
+                    agente.setCedulaa(cursor.getInt(1));
+                    agente.setNombre(cursor.getString(2));
+                    agente.setIdPuestoControl(cursor.getInt(3));
+                    agente.setRango(cursor.getString(4));
+                    agentes.add(agente);
+                } while (cursor.moveToNext());
+            }
+
+            cursor.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return agentes;
+    }
 }

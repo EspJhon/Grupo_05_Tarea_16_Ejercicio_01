@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Acta"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        android:layout_gravity="center"
+        android:paddingBottom="16dp" />
+
+    <EditText
+        android:id="@+id/et_CodigoActa"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Código"
+        android:inputType="number" />
+
+    <EditText
+        android:id="@+id/et_IdAccidente"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="ID Accidente"
+        android:inputType="number" />
+
+    <EditText
+        android:id="@+id/et_IdAudiencia"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="ID Audiencia"
+        android:inputType="number" />
+
+    <EditText
+        android:id="@+id/et_Hora"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Hora"
+        android:inputType="time" />
+
+    <EditText
+        android:id="@+id/et_IdZona"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="ID Zona"
+        android:inputType="number" />
+
+    <EditText
+        android:id="@+id/et_IdAgente"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="ID Agente"
+        android:inputType="number" />
+
+    <EditText
+        android:id="@+id/et_FechaActa"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Fecha"
+        android:inputType="date" />
+
+    <Button
+        android:id="@+id/btn_RegistrarActa"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Registrar"
+        android:layout_marginTop="16dp"/>
+
+</LinearLayout>

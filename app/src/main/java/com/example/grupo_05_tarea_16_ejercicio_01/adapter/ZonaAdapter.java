@@ -59,10 +59,7 @@ public class ZonaAdapter extends RecyclerView.Adapter<ZonaAdapter.ViewHolder> {
     //public ArrayList<Zona> getZonas() {
     //return zonas;
     //}
-    public void setPedidos(ArrayList<Zona> zonas) {
-        this.zonas = zonas;
-        notifyDataSetChanged();
-    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         EditText edt_titulo_zona, edt_departamento_zona, edt_provincia_zona, edt_distrito_zona;
 

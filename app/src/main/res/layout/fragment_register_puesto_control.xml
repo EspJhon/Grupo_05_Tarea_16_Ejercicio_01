@@ -47,6 +47,7 @@
                         android:padding="10dp"
                         android:textSize="14sp" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -70,6 +71,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/layout_edt_registrar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -115,19 +117,22 @@
                         android:textSize="14sp" />
                 </LinearLayout>
             </LinearLayout>
+
             <fragment
                 android:id="@+id/map_puesto_control"
                 android:name="com.google.android.gms.maps.SupportMapFragment"
                 android:layout_width="match_parent"
-                android:layout_height="400dp"/>
+                android:layout_height="400dp" />
         </LinearLayout>
     </ScrollView>
 
     <LinearLayout
+        android:id="@+id/layout_btn_registrar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:orientation="horizontal">
+
         <Button
             android:id="@+id/btn_finalizar_puesto_control"
             android:layout_width="0dp"
@@ -150,31 +155,46 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/layout_btn_actualizar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:visibility="gone">
 
-        <Button
-            android:id="@+id/btn_eliminar_zona"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:padding="10dp"
-            android:text="ELIMINAR"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:orientation="horizontal">
 
+            <Button
+                android:id="@+id/btn_eliminar_zona_puesto_control"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:text="ELIMINAR"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btn_actualizar_puesto_control"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:text="Actualizar"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </LinearLayout>
         <Button
-            android:id="@+id/btn_actualizar_zona"
-            android:layout_width="0dp"
+            android:id="@+id/btn_finalizar_puesto_control_2"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:padding="10dp"
-            android:text="Actualizar"
+            android:text="FINALIZAR"
             android:textSize="16sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"/>
     </LinearLayout>
 
 </FrameLayout>
