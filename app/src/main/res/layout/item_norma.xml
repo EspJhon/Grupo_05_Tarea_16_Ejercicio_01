@@ -18,33 +18,16 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Zona: "
+                android:text="N°: "
                 android:textStyle="bold"
                 android:textSize="16sp"/>
             <EditText
-                android:id="@+id/edt_zona_puesto_control"
+                android:id="@+id/edt_numero_norma"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
-                android:enabled="false"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Total de Puestos: "
-                android:textStyle="bold"
-                android:textSize="16sp"/>
-            <TextView
-                android:id="@+id/txt_total_puestos"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="xxxxxx"
-                android:textSize="14sp"/>
+                android:enabled="false"
+                android:textColor="@color/black"/>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

@@ -24,6 +24,7 @@ public class ZonaAdapter extends RecyclerView.Adapter<ZonaAdapter.ViewHolder> {
         this.zonas = zonas !=null? zonas : new ArrayList<>();
         this.onItemClickListener = onItemClickListener;
     }
+
     public interface OnItemClickListener {
         void onItemClick(Zona zona);
     }
@@ -56,9 +57,6 @@ public class ZonaAdapter extends RecyclerView.Adapter<ZonaAdapter.ViewHolder> {
     public int getItemCount() {
         return zonas !=null ? zonas.size() : 0;
     }
-    //public ArrayList<Zona> getZonas() {
-    //return zonas;
-    //}
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         EditText edt_titulo_zona, edt_departamento_zona, edt_provincia_zona, edt_distrito_zona;

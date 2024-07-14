@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -94,7 +95,12 @@ public class AgenteFragment extends Fragment {
                 mostrarOpcionesEditarEliminar(position);
             }
         });
-
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                // No hacer nada para deshabilitar el botón de retroceso
+            }
+        });
         return view;
     }
     private void mostrarDialogoRegistrarAgente() {

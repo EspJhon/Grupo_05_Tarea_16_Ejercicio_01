@@ -2,13 +2,13 @@ package com.example.grupo_05_tarea_16_ejercicio_01.modelo;
 
 public class NormasDet {
     private int Idnomra;
-    private int numnorma;
+    private String numnorma;
     private String descripcion;
 
     public NormasDet() {
     }
 
-    public NormasDet(int numnorma, String descripcion) {
+    public NormasDet(String numnorma, String descripcion) {
         this.numnorma = numnorma;
         this.descripcion = descripcion;
     }
@@ -21,11 +21,11 @@ public class NormasDet {
         this.Idnomra = idnomra;
     }
 
-    public int getNumnorma() {
+    public String getNumnorma() {
         return numnorma;
     }
 
-    public void setNumnorma(int numnorma) {
+    public void setNumnorma(String numnorma) {
         this.numnorma = numnorma;
     }
 

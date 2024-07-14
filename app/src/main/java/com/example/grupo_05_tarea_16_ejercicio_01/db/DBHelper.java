@@ -6,6 +6,7 @@ import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Accidente;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Acta;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Agente;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Audiencia;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.NormasDet;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Propietario;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.PuestoControl;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Usuario;
@@ -208,6 +209,8 @@ public class DBHelper {
         dbAdapter.Actualizar_Zona(zona);
         dbAdapter.close();
     }
+
+
     public void Insertar_Puesto_Control(PuestoControl puestoControl){
         dbAdapter.open();
         dbAdapter.Insertar_Puesto_Control(puestoControl);
@@ -275,5 +278,33 @@ public class DBHelper {
         ArrayList<Agente> Agente = dbAdapter.getAllAgentes();
         dbAdapter.close();
         return Agente;
+    }
+
+    public void Insertar_Normas_Detalle(NormasDet normasDet){
+        dbAdapter.open();
+        dbAdapter.Insertar_Normas_Detalle(normasDet);
+        dbAdapter.close();
+    }
+    public ArrayList<NormasDet> get_all_Normas_Detalle(){
+        dbAdapter.open();
+        ArrayList<NormasDet> normasDets = dbAdapter.get_all_Normas_Detalle();
+        dbAdapter.close();
+        return normasDets;
+    }
+    public NormasDet get_Zona(int IdNorma){
+        dbAdapter.open();
+        NormasDet normasDet = dbAdapter.get_Norma_Detalle(IdNorma);
+        dbAdapter.close();
+        return normasDet;
+    }
+    public void Eliminar_Norma_Detalle(NormasDet normasDet) {
+        dbAdapter.open();
+        dbAdapter.Eliminar_Norma_Detalle(normasDet);
+        dbAdapter.close();
+    }
+    public void Actualizar_Norma_Detalle(NormasDet normasDet) {
+        dbAdapter.open();
+        dbAdapter.Actualizar_Norma_Detalle(normasDet);
+        dbAdapter.close();
     }
 }
