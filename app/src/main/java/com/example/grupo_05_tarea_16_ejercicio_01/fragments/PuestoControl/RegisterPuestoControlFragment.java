@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -31,10 +32,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
-public class RegisterPuestoControlFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMapClickListener{
+public class RegisterPuestoControlFragment extends Fragment implements OnMapReadyCallback{
 
     private EditText edt_register_titulo_puesto_control, edt_register_latitud_puesto_control,
             edt_register_longitud_puesto_control, edt_register_referencia_puesto_control;
@@ -43,6 +47,8 @@ public class RegisterPuestoControlFragment extends Fragment implements OnMapRead
     Spinner sp_zona;
     GoogleMap mMap;
     Marker currentMarker;
+    private LinearLayout layout_edt_registrar, layout_btn_registrar, layout_btn_actualizar;
+    private Button btn_eliminar_puesto_control, btn_actualizar_puesto_control, btn_finalizar_puesto_control_2;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -76,6 +82,12 @@ public class RegisterPuestoControlFragment extends Fragment implements OnMapRead
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =inflater.inflate(R.layout.fragment_register_puesto_control, container, false);
+        layout_edt_registrar = view.findViewById(R.id.layout_edt_registrar);
+        layout_btn_registrar = view.findViewById(R.id.layout_btn_registrar);
+        layout_btn_actualizar = view.findViewById(R.id.layout_btn_actualizar);
+        btn_actualizar_puesto_control = view.findViewById(R.id.btn_actualizar_puesto_control);
+        btn_eliminar_puesto_control = view.findViewById(R.id.btn_eliminar_zona_puesto_control);
+        btn_finalizar_puesto_control_2 = view.findViewById(R.id.btn_finalizar_puesto_control_2);
         edt_register_titulo_puesto_control = view.findViewById(R.id.edt_register_titulo_puesto_control);
         edt_register_latitud_puesto_control = view.findViewById(R.id.edt_register_latitud_puesto_control);
         edt_register_longitud_puesto_control = view.findViewById(R.id.edt_register_longitud_puesto_control);
@@ -115,6 +127,8 @@ public class RegisterPuestoControlFragment extends Fragment implements OnMapRead
                 titulo = zonaselecionada.getTitulo();
                 if (mMap != null) {
                     updateMarker();
+                    mMap.clear();
+                    Listar_Marcadores(IdZona);
                 }
             }
 
@@ -126,6 +140,7 @@ public class RegisterPuestoControlFragment extends Fragment implements OnMapRead
         btn_registrar_puesto_control.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int id_zon = IdZona;
                 String title = edt_register_titulo_puesto_control.getText().toString();
                 String referencia = edt_register_referencia_puesto_control.getText().toString();
                 String slatitud = edt_register_latitud_puesto_control.getText().toString();
@@ -133,7 +148,7 @@ public class RegisterPuestoControlFragment extends Fragment implements OnMapRead
                 if (TextUtils.isEmpty(title) || TextUtils.isEmpty(slatitud) || TextUtils.isEmpty(slongitud)) {
                     Toast.makeText(getContext(), "Por favor complete los campos", Toast.LENGTH_SHORT).show();
                 } else {
-                    PuestoControl puestoControl = new PuestoControl(IdZona, referencia, slatitud, slongitud, title);
+                    PuestoControl puestoControl = new PuestoControl(id_zon, referencia, slatitud, slongitud, title);
                     dbHelper.Insertar_Puesto_Control(puestoControl);
                     Toast.makeText(getContext(), "Registrado Correctamente", Toast.LENGTH_SHORT).show();
                     edt_register_titulo_puesto_control.setText("");
@@ -151,26 +166,72 @@ public class RegisterPuestoControlFragment extends Fragment implements OnMapRead
                 Toast.makeText(getContext(), "Registros Completados", Toast.LENGTH_SHORT).show();
             }
         });
+        boolean modoEdicion = getArguments() != null && getArguments().getBoolean("modo_edicion", false);
+        if (modoEdicion) {
+            layout_edt_registrar.setVisibility(View.GONE);
+            layout_btn_registrar.setVisibility(View.GONE);
+            layout_btn_actualizar.setVisibility(View.VISIBLE);
+            sp_zona.setEnabled(false);
+            String IdZona = getArguments().getString("IdZona");
+            edt_register_titulo_puesto_control.setText(String.valueOf(IdZona));
+            Zona zona = dbHelper.get_Zona_Puesto(IdZona);
+            String nombre = zona.getTitulo();
+            int spinnerPosition = adapter.getPosition(nombre);
+            sp_zona.setSelection(spinnerPosition);
+            sp_zona.setPadding(16,8,16,8);
+            btn_eliminar_puesto_control.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+            btn_actualizar_puesto_control.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+            btn_finalizar_puesto_control_2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    NavController navController = Navigation.findNavController(v);
+                    navController.navigateUp();
+                    Toast.makeText(getContext(), "Cambios Completados", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
         dbHelper = new DBHelper(getContext());
-        ArrayList<PuestoControl> puestoControls = dbHelper.get_all_Puesto_Controls();
-        for (PuestoControl puestoControl : puestoControls) {
-            LatLng latLng = new LatLng(Double.parseDouble(puestoControl.getLatitud()), Double.parseDouble(puestoControl.getLongitud()));
-            mMap.addMarker(new MarkerOptions().position(latLng).title(puestoControl.getTitulo()));
-        }
         mMap.getUiSettings().setRotateGesturesEnabled(false);
         //mMap.getUiSettings().setScrollGesturesEnabled(false);
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.setMinZoomPreference(16);
         mMap.setMaxZoomPreference(17);
+        Listar_Marcadores(IdZona);
         if (latitud != null && longitud != null) {
             updateMarker();
         }
-        this.mMap.setOnMapClickListener(this);
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(@NonNull LatLng latLng) {
+                edt_register_latitud_puesto_control.setText(String.valueOf(latLng.latitude));
+                edt_register_longitud_puesto_control.setText(String.valueOf(latLng.longitude));
+                mMap.clear();
+                Listar_Marcadores(IdZona);
+                LatLng puestoCon = new LatLng(latLng.latitude,latLng.longitude);
+                mMap.addMarker(new MarkerOptions().position(puestoCon));
+            }
+        });
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(@NonNull Marker marker) {
+                return false;
+            }
+        });
     }
 
     private void updateMarker() {
@@ -190,24 +251,15 @@ public class RegisterPuestoControlFragment extends Fragment implements OnMapRead
                     new LatLng(limlatitud - 0.002, limlongitud - 0.002)  // Noreste
             );
             mMap.setLatLngBoundsForCameraTarget(ADELAIDE);
-            //currentMarker = mMap.addMarker(new MarkerOptions().position(zona).title(titulo));
             mMap.moveCamera(CameraUpdateFactory.newLatLng(zona));
-            Listar_Marcadores();
+
         }
     }
 
-    @Override
-    public void onMapClick(@NonNull LatLng latLng) {
-        edt_register_latitud_puesto_control.setText(String.valueOf(latLng.latitude));
-        edt_register_longitud_puesto_control.setText(String.valueOf(latLng.longitude));
-        mMap.clear();
-        Listar_Marcadores();
-        LatLng puestoCon = new LatLng(latLng.latitude,latLng.longitude);
-        mMap.addMarker(new MarkerOptions().position(puestoCon));
-    }
-    public void Listar_Marcadores(){
+
+    public void Listar_Marcadores(int idZona){
         dbHelper = new DBHelper(getContext());
-        ArrayList<PuestoControl> puestoControls = dbHelper.get_all_Puesto_Controls();
+        ArrayList<PuestoControl> puestoControls = dbHelper.get_all_Puesto_Controls_Zona(idZona);
         for (PuestoControl puestoControl : puestoControls) {
             LatLng latLng = new LatLng(Double.parseDouble(puestoControl.getLatitud()), Double.parseDouble(puestoControl.getLongitud()));
             mMap.addMarker(new MarkerOptions().position(latLng).title(puestoControl.getTitulo()));

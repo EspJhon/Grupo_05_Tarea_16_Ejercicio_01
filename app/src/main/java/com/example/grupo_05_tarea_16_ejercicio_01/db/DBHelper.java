@@ -3,6 +3,8 @@ package com.example.grupo_05_tarea_16_ejercicio_01.db;
 import android.content.Context;
 
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Accidente;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Acta;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Agente;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Audiencia;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Propietario;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.PuestoControl;
@@ -190,6 +192,12 @@ public class DBHelper {
         dbAdapter.close();
         return zona;
     }
+    public Zona get_Zona_Puesto(String idZona){
+        dbAdapter.open();
+        Zona zona = dbAdapter.get_Zona_Puesto(idZona);
+        dbAdapter.close();
+        return zona;
+    }
     public void Eliminar_Zona(Zona zona) {
         dbAdapter.open();
         dbAdapter.Eliminar_Zona(zona);
@@ -210,5 +218,62 @@ public class DBHelper {
         ArrayList<PuestoControl> puestoControls = dbAdapter.get_all_Puesto_Controls();
         dbAdapter.close();
         return puestoControls;
+    }
+    public ArrayList<PuestoControl> get_all_Puesto_Controls_Zona(int idZona){
+        dbAdapter.open();
+        ArrayList<PuestoControl> puestoControls = dbAdapter.get_all_Puesto_Controls_Zona(idZona);
+        dbAdapter.close();
+        return puestoControls;
+    }
+
+    public void insertarActa(Acta acta) {
+        dbAdapter.open();
+        dbAdapter.addActa(acta);
+        dbAdapter.close();
+    }
+
+    public void actualizarActa(Acta acta) {
+        dbAdapter.open();
+        dbAdapter.updateActa(acta);
+        dbAdapter.close();
+    }
+
+    public void eliminarActa(int idActa) {
+        dbAdapter.open();
+        dbAdapter.deleteActa(idActa);
+        dbAdapter.close();
+    }
+
+    public ArrayList<Acta> getAllActas(){
+        dbAdapter.open();
+        ArrayList<Acta> Actas = dbAdapter.getAllActas();
+        dbAdapter.close();
+        return Actas;
+    }
+
+    // Métodos para Agente
+    public void insertarAgente(Agente agente) {
+        dbAdapter.open();
+        dbAdapter.addAgente(agente);
+        dbAdapter.close();
+    }
+
+    public void actualizarAgente(Agente agente) {
+        dbAdapter.open();
+        dbAdapter.updateAgente(agente);
+        dbAdapter.close();
+    }
+
+    public void eliminarAgente(int idAgente) {
+        dbAdapter.open();
+        dbAdapter.deleteAgente(idAgente);
+        dbAdapter.close();
+    }
+
+    public ArrayList<Agente> getAllAgentes(){
+        dbAdapter.open();
+        ArrayList<Agente> Agente = dbAdapter.getAllAgentes();
+        dbAdapter.close();
+        return Agente;
     }
 }

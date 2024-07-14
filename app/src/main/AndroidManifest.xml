@@ -36,10 +36,6 @@
             android:value="AIzaSyBxaVAOO9PDFR9gcZIIRr46aR0pyqiLQAU" />
 
         <activity
-            android:name=".fragments.Zona.MapsZona"
-            android:exported="false"
-            android:label="@string/title_activity_maps_zona" />
-        <activity
             android:name=".fragments.Audiencia.AgregarAudienciaActivity"
             android:exported="false"
             android:theme="@style/Theme.Grupo_05_Tarea_16_Ejercicio_01.NoActionBar" />
