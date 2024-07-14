@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.Accidente.AgregarAccidenteActivity">
+    tools:context=".fragments.Accidente.AgregarAccidenteFragment">
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,37 +17,55 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/et_placa"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Número de placa"/>
+                android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/et_agente"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="ID Agente"/>
+                <EditText
+                    android:id="@+id/et_placa"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Número de placa" />
 
-            <EditText
-                android:id="@+id/et_hora"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="time"
-                android:hint="Hora"/>
+                <EditText
+                    android:id="@+id/et_agente"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="ID Agente" />
 
-            <EditText
-                android:id="@+id/et_fecha"
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="date"
-                android:hint="Fecha"/>
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/et_hora"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Hora"
+                    android:inputType="time" />
+
+                <EditText
+                    android:id="@+id/et_fecha"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Fecha"
+                    android:inputType="date" />
+
+            </LinearLayout>
 
             <EditText
                 android:id="@+id/et_descripcion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Descripción"/>
+                android:hint="Descripción" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -64,8 +81,7 @@
                 <ImageView
                     android:id="@+id/iv_imagenAccidente"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"/>
-
+                    android:layout_height="200dp" />
 
             </LinearLayout>
 
@@ -80,17 +96,11 @@
                     android:layout_height="wrap_content"
                     android:hint="Nombre del lugar" />
 
-                <EditText
-                    android:id="@+id/et_latitud"
+                <fragment
+                    android:id="@+id/fr_ubicacionAccidente"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Latitud" />
-
-                <EditText
-                    android:id="@+id/et_longitud"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Longitud" />
+                    android:layout_height="250dp" />
 
             </LinearLayout>
 
@@ -98,10 +108,10 @@
                 android:id="@+id/btn_agregarAccidente"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Añadir"/>
+                android:text="Añadir" />
 
         </LinearLayout>
     </LinearLayout>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

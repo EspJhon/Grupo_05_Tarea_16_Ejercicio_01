@@ -3,7 +3,11 @@ package com.example.grupo_05_tarea_16_ejercicio_01.fragments.Audiencia;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,15 +59,21 @@ public class AudienciaFragment extends Fragment {
         lv_audiencias=view.findViewById(R.id.lv_audiencias);
         btn_nuevaAudiencia=view.findViewById(R.id.btn_nuevaAudiencia);
 
-        btn_nuevaAudiencia.setOnClickListener(new View.OnClickListener() {
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        view.findViewById(R.id.btn_nuevaAudiencia).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), AgregarAudienciaActivity.class);
-                startActivity(intent);
+                NavController navController = Navigation.findNavController(v);
+                navController.navigate(R.id.action_audienciaFragment_to_agregarAudienciaFragment);
             }
         });
 
-        return view;
     }
 
     @Override

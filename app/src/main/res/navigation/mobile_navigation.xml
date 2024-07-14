@@ -24,7 +24,11 @@
         android:id="@+id/accidenteFragment"
         android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.Accidente.AccidenteFragment"
         android:label="fragment_accidente"
-        tools:layout="@layout/fragment_accidente" />
+        tools:layout="@layout/fragment_accidente" >
+        <action
+            android:id="@+id/action_accidenteFragment_to_agregarAccidenteFragment"
+            app:destination="@id/agregarAccidenteFragment" />
+    </fragment>
     <fragment
         android:id="@+id/infraccionFragment"
         android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.Infraccion.InfraccionFragment"
@@ -34,7 +38,11 @@
         android:id="@+id/audienciaFragment"
         android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.Audiencia.AudienciaFragment"
         android:label="fragment_audiencia"
-        tools:layout="@layout/fragment_audiencia" />
+        tools:layout="@layout/fragment_audiencia" >
+        <action
+            android:id="@+id/action_audienciaFragment_to_agregarAudienciaFragment"
+            app:destination="@id/agregarAudienciaFragment" />
+    </fragment>
     <fragment
         android:id="@+id/normaDetFragment"
         android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.NormaDet.NormaDetFragment"
@@ -98,4 +106,14 @@
         android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.Zona.MapsZonaFragment"
         android:label="Mapa"
         tools:layout="@layout/fragment_maps_zona" />
+    <fragment
+        android:id="@+id/agregarAccidenteFragment"
+        android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.Accidente.AgregarAccidenteFragment"
+        android:label="fragment_agregar_accidente"
+        tools:layout="@layout/fragment_agregar_accidente" />
+    <fragment
+        android:id="@+id/agregarAudienciaFragment"
+        android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.Audiencia.AgregarAudienciaFragment"
+        android:label="fragment_agregar_audiencia"
+        tools:layout="@layout/fragment_agregar_audiencia" />
 </navigation>
