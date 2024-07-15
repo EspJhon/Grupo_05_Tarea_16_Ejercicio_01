@@ -67,7 +67,11 @@
         android:id="@+id/actaFragment"
         android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.Acta.ActaFragment"
         android:label="fragment_acta"
-        tools:layout="@layout/fragment_acta" />
+        tools:layout="@layout/fragment_acta" >
+        <action
+            android:id="@+id/action_actaFragment_to_actaRegisterFragment"
+            app:destination="@id/actaRegisterFragment" />
+    </fragment>
     <fragment
         android:id="@+id/zonaFragment"
         android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.Zona.ZonaFragment"
@@ -141,4 +145,9 @@
         android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.OficinaGob.ActualizarOficinaFragment"
         android:label="fragment_actualizar_oficina"
         tools:layout="@layout/fragment_actualizar_oficina" />
+    <fragment
+        android:id="@+id/actaRegisterFragment"
+        android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.Acta.ActaRegisterFragment"
+        android:label="fragment_acta_register"
+        tools:layout="@layout/fragment_acta_register" />
 </navigation>

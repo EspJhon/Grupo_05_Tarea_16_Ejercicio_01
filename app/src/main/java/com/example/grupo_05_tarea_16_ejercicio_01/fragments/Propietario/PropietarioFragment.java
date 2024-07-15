@@ -246,6 +246,7 @@ public class PropietarioFragment extends Fragment implements Propietario_Adapter
         progreso.show();
 
         String url = "http://192.168.1.6/db_grupo_05_tarea_16_ejercicio_01/PropietarioRegistro.php?cedulap=" + cedula + "&nombre=" + nombre + "&ciudad=" + ciudad;
+
         url = url.replace(" ", "%20");
 
         Log.d("URLWebService", "URL: " + url);

@@ -18,9 +18,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.example.grupo_05_tarea_16_ejercicio_01.R;
+import com.example.grupo_05_tarea_16_ejercicio_01.adapter.MapMoveFragment;
 import com.example.grupo_05_tarea_16_ejercicio_01.db.DBHelper;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Accidente;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -38,9 +40,8 @@ import java.io.OutputStream;
 
 public class ActualizarAccidenteFragment extends Fragment implements View.OnClickListener, OnMapReadyCallback {
 
-    private EditText et_placaA, et_agenteA, et_horaA, et_fechaA, et_descripcionA,
+    private EditText et_placaA, et_agenteA, et_horaA, et_fechaA, et_descripcionA_accidente, et_tituloA_accidente,
             et_nombreLugarA;
-
     private double latitud=0,longitud=0;
     private ImageView iv_imagenAccidenteA;
     private DBHelper dbHelper;
@@ -48,6 +49,7 @@ public class ActualizarAccidenteFragment extends Fragment implements View.OnClic
     private GoogleMap mMap;
     private Accidente accidente;
     private Marker marker;
+    private ScrollView scrollView;
 
     public ActualizarAccidenteFragment() {
         // Required empty public constructor
@@ -75,11 +77,14 @@ public class ActualizarAccidenteFragment extends Fragment implements View.OnClic
 
         View view =inflater.inflate(R.layout.fragment_actualizar_accidente, container, false);
 
+        scrollView = view.findViewById(R.id.sv_accidenteA);
+
         et_placaA = view.findViewById(R.id.et_placaA);
         et_agenteA = view.findViewById(R.id.et_agenteA);
         et_horaA = view.findViewById(R.id.et_horaA);
         et_fechaA = view.findViewById(R.id.et_fechaA);
-        et_descripcionA = view.findViewById(R.id.et_descripcionA);
+        et_tituloA_accidente = view.findViewById(R.id.et_tituloA_accidente);
+        et_descripcionA_accidente = view.findViewById(R.id.et_descripcionA_accidente);
         et_nombreLugarA = view.findViewById(R.id.et_nombreLugarA);
         iv_imagenAccidenteA = view.findViewById(R.id.iv_imagenAccidenteA);
 
@@ -87,9 +92,15 @@ public class ActualizarAccidenteFragment extends Fragment implements View.OnClic
         view.findViewById(R.id.btn_subirFotoA).setOnClickListener(this::onClick);
         view.findViewById(R.id.btn_actualizarAccidente).setOnClickListener(this::onClick);
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.fr_ubicacionAccidenteA);
-        if (mapFragment != null) {
-            mapFragment.getMapAsync(this);
+        MapMoveFragment mapMoveFragment = (MapMoveFragment) getChildFragmentManager().findFragmentById(R.id.fr_ubicacionAccidenteA);
+        if (mapMoveFragment != null){
+            mapMoveFragment.getMapAsync(this);
+            mapMoveFragment.setListener(new MapMoveFragment.OnTouchListener() {
+                @Override
+                public void onTouch() {
+                    scrollView.requestDisallowInterceptTouchEvent(true);
+                }
+            });
         }
 
         if (getArguments() != null && getArguments().getSerializable("id") != null) {
@@ -162,7 +173,8 @@ public class ActualizarAccidenteFragment extends Fragment implements View.OnClic
 
         if (et_placaA.getText().toString().trim().isEmpty() || et_agenteA.getText().toString().trim().isEmpty() ||
                 et_horaA.getText().toString().trim().isEmpty() || et_fechaA.getText().toString().trim().isEmpty() ||
-                et_descripcionA.getText().toString().trim().isEmpty() ||
+                et_descripcionA_accidente.getText().toString().trim().isEmpty() ||
+                et_tituloA_accidente.getText().toString().trim().isEmpty() ||
                 et_nombreLugarA.getText().toString().trim().isEmpty()) {
 
             Toast.makeText(getActivity(), "Debe llenar todos los campos", Toast.LENGTH_SHORT).show();
@@ -173,13 +185,15 @@ public class ActualizarAccidenteFragment extends Fragment implements View.OnClic
         int agenteA = Integer.parseInt(et_agenteA.getText().toString().trim());
         String horaA = et_horaA.getText().toString().trim();
         String fechaA = et_fechaA.getText().toString().trim();
-        String descripcionA = et_descripcionA.getText().toString().trim();
+        String tituloA = et_tituloA_accidente.getText().toString().trim();
+        String descripcionA = et_descripcionA_accidente.getText().toString().trim();
         String lugarA = et_nombreLugarA.getText().toString().trim();
 
         accidente.setIdVehiculo(placaA);
         accidente.setIdagente(agenteA);
         accidente.setHora(horaA);
         accidente.setFecha(fechaA);
+        accidente.setTitulo(tituloA);
         accidente.setDescripcion(descripcionA);
         accidente.setURLimagen(URL);
         accidente.setNombreLugar(lugarA);
@@ -228,7 +242,8 @@ public class ActualizarAccidenteFragment extends Fragment implements View.OnClic
         et_agenteA.setText(String.valueOf(accidente.getIdagente()));
         et_horaA.setText(accidente.getHora());
         et_fechaA.setText(accidente.getFecha());
-        et_descripcionA.setText(accidente.getDescripcion());
+        et_tituloA_accidente.setText(accidente.getTitulo());
+        et_descripcionA_accidente.setText(accidente.getDescripcion());
         et_nombreLugarA.setText(accidente.getNombreLugar());
         latitud = accidente.getLatitud();
         longitud = accidente.getLongitud();

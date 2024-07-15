@@ -20,9 +20,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.example.grupo_05_tarea_16_ejercicio_01.R;
+import com.example.grupo_05_tarea_16_ejercicio_01.adapter.MapMoveFragment;
 import com.example.grupo_05_tarea_16_ejercicio_01.db.DBHelper;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Accidente;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -39,7 +41,7 @@ import java.io.OutputStream;
 
 public class AgregarAccidenteFragment extends Fragment implements View.OnClickListener, OnMapReadyCallback {
 
-    private EditText et_placa, et_agente, et_hora, et_fecha, et_descripcion,
+    private EditText et_placa, et_agente, et_hora, et_fecha, et_descripcion_accidente, et_titulo_accidente,
             et_nombreLugar;
     private double latitud = 0, longitud = 0;
     private ImageView iv_imagenAccidente;
@@ -47,6 +49,7 @@ public class AgregarAccidenteFragment extends Fragment implements View.OnClickLi
     private String URL;
     private GoogleMap mMap;
     private Accidente accidente;
+    private ScrollView scrollView;
 
     public AgregarAccidenteFragment() {
         // Required empty public constructor
@@ -74,11 +77,14 @@ public class AgregarAccidenteFragment extends Fragment implements View.OnClickLi
 
         dbHelper = new DBHelper(getActivity());
 
+        scrollView = view.findViewById(R.id.sv_accidente);
+
         et_placa = view.findViewById(R.id.et_placa);
         et_agente = view.findViewById(R.id.et_agente);
         et_hora = view.findViewById(R.id.et_hora);
         et_fecha = view.findViewById(R.id.et_fecha);
-        et_descripcion = view.findViewById(R.id.et_descripcion);
+        et_descripcion_accidente = view.findViewById(R.id.et_descripcion_accidente);
+        et_titulo_accidente = view.findViewById(R.id.et_titulo_accidente);
         et_nombreLugar = view.findViewById(R.id.et_nombreLugar);
         iv_imagenAccidente = view.findViewById(R.id.iv_imagenAccidente);
 
@@ -86,9 +92,15 @@ public class AgregarAccidenteFragment extends Fragment implements View.OnClickLi
         view.findViewById(R.id.btn_subirFoto).setOnClickListener(this::onClick);
         view.findViewById(R.id.btn_agregarAccidente).setOnClickListener(this::onClick);
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.fr_ubicacionAccidente);
-        if (mapFragment != null) {
-            mapFragment.getMapAsync(this);
+        MapMoveFragment mapMoveFragment = (MapMoveFragment) getChildFragmentManager().findFragmentById(R.id.fr_ubicacionAccidente);
+        if (mapMoveFragment != null){
+            mapMoveFragment.getMapAsync(this);
+            mapMoveFragment.setListener(new MapMoveFragment.OnTouchListener() {
+                @Override
+                public void onTouch() {
+                    scrollView.requestDisallowInterceptTouchEvent(true);
+                }
+            });
         }
 
         return view;
@@ -109,7 +121,8 @@ public class AgregarAccidenteFragment extends Fragment implements View.OnClickLi
 
         if (et_placa.getText().toString().trim().isEmpty() || et_agente.getText().toString().trim().isEmpty() ||
                 et_hora.getText().toString().trim().isEmpty() || et_fecha.getText().toString().trim().isEmpty() ||
-                et_descripcion.getText().toString().trim().isEmpty() ||
+                et_descripcion_accidente.getText().toString().trim().isEmpty() ||
+                et_titulo_accidente.getText().toString().trim().isEmpty() ||
                 et_nombreLugar.getText().toString().trim().isEmpty()) {
             Toast.makeText(getActivity(), "Debe llenar todos los campos", Toast.LENGTH_SHORT).show();
             return;
@@ -129,11 +142,12 @@ public class AgregarAccidenteFragment extends Fragment implements View.OnClickLi
         int agente = Integer.parseInt(et_agente.getText().toString().trim());
         String hora = et_hora.getText().toString().trim();
         String fecha = et_fecha.getText().toString().trim();
-        String descripcion = et_descripcion.getText().toString().trim();
+        String titulo = et_titulo_accidente.getText().toString().trim();
+        String descripcion = et_descripcion_accidente.getText().toString().trim();
 
         String lugar = et_nombreLugar.getText().toString().trim();
 
-        Accidente accidente = new Accidente(placa, agente, hora, fecha, descripcion, URL, lugar, latitud, longitud);
+        Accidente accidente = new Accidente(placa, agente, hora, fecha,titulo, descripcion, URL, lugar, latitud, longitud);
         dbHelper.Insertar_Accidente(accidente);
 
         requireActivity().getSupportFragmentManager().popBackStack();

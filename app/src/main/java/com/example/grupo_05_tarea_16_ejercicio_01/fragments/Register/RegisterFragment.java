@@ -81,6 +81,7 @@ public class RegisterFragment extends Fragment implements Response.Listener<JSON
         progreso.show();
 
         String url = "http://192.168.1.6/db_grupo_05_tarea_16_ejercicio_01/UsuarioRegistro.php?usuario=" + usuario + "&contrasena=" + contrasena;
+
         url = url.replace(" ", "%20");
 
         Log.d("URLWebService", "URL: " + url);
