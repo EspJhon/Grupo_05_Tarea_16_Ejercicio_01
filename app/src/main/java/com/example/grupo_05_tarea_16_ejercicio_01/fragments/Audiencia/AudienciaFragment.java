@@ -1,17 +1,16 @@
 package com.example.grupo_05_tarea_16_ejercicio_01.fragments.Audiencia;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,8 +19,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -34,11 +35,11 @@ import com.example.grupo_05_tarea_16_ejercicio_01.R;
 import com.example.grupo_05_tarea_16_ejercicio_01.adapter.AudienciaAdapter;
 import com.example.grupo_05_tarea_16_ejercicio_01.db.DBHelper;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Audiencia;
-import com.example.grupo_05_tarea_16_ejercicio_01.modelo.NormasDet;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class AudienciaFragment extends Fragment implements Response.Listener<JSONObject>, Response.ErrorListener{
 
@@ -53,7 +54,6 @@ public class AudienciaFragment extends Fragment implements Response.Listener<JSO
     public AudienciaFragment() {
         // Required empty public constructor
     }
-
 
     public static AudienciaFragment newInstance(String param1, String param2) {
         AudienciaFragment fragment = new AudienciaFragment();
@@ -77,15 +77,17 @@ public class AudienciaFragment extends Fragment implements Response.Listener<JSO
         request = Volley.newRequestQueue(requireActivity());
         View view = inflater.inflate(R.layout.fragment_audiencia, container, false);
 
-        lv_audiencias=view.findViewById(R.id.lv_audiencias);
-        btn_nuevaAudiencia=view.findViewById(R.id.btn_nuevaAudiencia);
+        lv_audiencias = view.findViewById(R.id.lv_audiencias);
+        btn_nuevaAudiencia = view.findViewById(R.id.btn_nuevaAudiencia);
         ListarAudiencias();
+
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
                 // No hacer nada para deshabilitar el botón de retroceso
             }
         });
+
         return view;
     }
 
@@ -93,80 +95,15 @@ public class AudienciaFragment extends Fragment implements Response.Listener<JSO
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         dbHelper = new DBHelper(getContext());
-        view.findViewById(R.id.btn_nuevaAudiencia).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Dialog_Audiencia(1,null);
-            }
-        });
-        lv_audiencias.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Audiencia paudiencia = (Audiencia) parent.getItemAtPosition(position);
-                LayoutInflater inflater = LayoutInflater.from(getContext());
-                View dialogView = inflater.inflate(R.layout.dialog_audiencia, null);
+        view.findViewById(R.id.btn_nuevaAudiencia).setOnClickListener(v -> Dialog_Audiencia(1, null));
 
-                final EditText et_lugar = dialogView.findViewById(R.id.et_lugar);
-                final EditText et_fecha = dialogView.findViewById(R.id.et_fecha);
-                final EditText et_hora = dialogView.findViewById(R.id.et_hora);
-                final EditText et_codigo = dialogView.findViewById(R.id.et_codigo);
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle("Actualizar Norma");
-                builder.setView(dialogView);
-
-                et_lugar.setText(paudiencia.getLugar());
-                et_fecha.setText(paudiencia.getFecha());
-                et_hora.setText(paudiencia.getHora());
-                et_codigo.setText(String.valueOf(paudiencia.getCodigo()));
-                builder.setPositiveButton("Guardar", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        int codigo = Integer.parseInt(et_codigo.getText().toString().trim());
-                        String lugar = et_lugar.getText().toString().trim();
-                        String fecha = et_fecha.getText().toString().trim();
-                        String hora = et_hora.getText().toString().trim();
-
-                        Audiencia audiencia = dbHelper.get_Audiencia(paudiencia.getIdAudiencia());
-                        if (audiencia != null) {
-                            audiencia.setCodigo(codigo);
-                            audiencia.setLugar(lugar);
-                            audiencia.setFecha(fecha);
-                            audiencia.setHora(hora);
-                            dbHelper.Actualizar_Audiencia(audiencia);
-                            audiencia = null;
-                            Toast.makeText(getContext(), "Audiencia Actualizada", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(getContext(), "Audiencia no Actualizada", Toast.LENGTH_SHORT).show();
-                        }
-                        ListarAudiencias();
-                    }
-                });
-                builder.setNegativeButton("Eliminar", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-                        builder.setTitle("Confirmar Eliminación")
-                                .setMessage("¿Estás seguro de eliminar este Audiencia?")
-                                .setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        Audiencia audiencia = dbHelper.get_Audiencia(paudiencia.getIdAudiencia());
-                                        dbHelper.Eliminar_Audiencia(audiencia);
-                                        ListarAudiencias();
-
-                                        Toast.makeText(requireContext(), "Audiencia eliminado correctamente", Toast.LENGTH_SHORT).show();
-                                    }
-                                })
-                                .setNegativeButton("Cancelar", null)
-                                .create().show();
-                    }
-                });
-                builder.show();
-            }
+        lv_audiencias.setOnItemClickListener((parent, view1, position, id) -> {
+            Audiencia paudiencia = (Audiencia) parent.getItemAtPosition(position);
+            Dialog_Audiencia(2, paudiencia);
         });
     }
 
-    public void Dialog_Audiencia(int tipo, Audiencia audiencia) {
+    public void Dialog_Audiencia(int tipo, @Nullable Audiencia paudiencia) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         View dialogView = inflater.inflate(R.layout.dialog_audiencia, null);
 
@@ -176,39 +113,102 @@ public class AudienciaFragment extends Fragment implements Response.Listener<JSO
         final EditText et_codigo = dialogView.findViewById(R.id.et_codigo);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setView(dialogView);
 
+        if (tipo == 1) { // Insertar
             builder.setTitle("Añadir Norma");
-            builder.setView(dialogView);
-            // Set up the buttons
-            builder.setPositiveButton("Guardar", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    int codigo = Integer.parseInt(et_codigo.getText().toString().trim());
-                    String lugar = et_lugar.getText().toString().trim();
-                    String fecha = et_fecha.getText().toString().trim();
-                    String hora = et_hora.getText().toString().trim();
+            builder.setPositiveButton("Guardar", (dialog, which) -> {
+                int codigo = Integer.parseInt(et_codigo.getText().toString().trim());
+                String lugar = et_lugar.getText().toString().trim();
+                String fecha = et_fecha.getText().toString().trim();
+                String hora = et_hora.getText().toString().trim();
 
-                    Audiencia audiencia = new Audiencia(codigo,lugar,fecha,hora);
-                    dbHelper.Insertar_Audiencia(audiencia);
-                    cargaWebService(codigo,lugar,fecha,hora);
-                    ListarAudiencias();
-                }
+                Audiencia audiencia = new Audiencia(codigo, lugar, fecha, hora);
+                dbHelper.Insertar_Audiencia(audiencia);
+                cargaWebService(codigo, lugar, fecha, hora);
+                ListarAudiencias();
             });
-            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
+            builder.setNegativeButton("Cancelar", (dialog, which) -> dialog.cancel());
+        } else { // Actualizar o Eliminar
+            builder.setTitle("Actualizar Norma");
+
+            et_lugar.setText(paudiencia.getLugar());
+            et_fecha.setText(paudiencia.getFecha());
+            et_hora.setText(paudiencia.getHora());
+            et_codigo.setText(String.valueOf(paudiencia.getCodigo()));
+
+            builder.setPositiveButton("Guardar", (dialog, which) -> {
+                int codigo = Integer.parseInt(et_codigo.getText().toString().trim());
+                String lugar = et_lugar.getText().toString().trim();
+                String fecha = et_fecha.getText().toString().trim();
+                String hora = et_hora.getText().toString().trim();
+
+                Audiencia audiencia = dbHelper.get_Audiencia(paudiencia.getIdAudiencia());
+                if (audiencia != null) {
+                    audiencia.setCodigo(codigo);
+                    audiencia.setLugar(lugar);
+                    audiencia.setFecha(fecha);
+                    audiencia.setHora(hora);
+                    dbHelper.Actualizar_Audiencia(audiencia);
+                    Toast.makeText(getContext(), "Audiencia Actualizada", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "Audiencia no Actualizada", Toast.LENGTH_SHORT).show();
                 }
+                ListarAudiencias();
             });
 
-
+            builder.setNegativeButton("Eliminar", (dialog, which) -> {
+                AlertDialog.Builder deleteBuilder = new AlertDialog.Builder(requireContext());
+                deleteBuilder.setTitle("Confirmar Eliminación")
+                        .setMessage("¿Estás seguro de eliminar este Audiencia?")
+                        .setPositiveButton("Eliminar", (dialog1, which1) -> {
+                            dbHelper.Eliminar_Audiencia(paudiencia);
+                            ListarAudiencias();
+                            Toast.makeText(requireContext(), "Audiencia eliminada correctamente", Toast.LENGTH_SHORT).show();
+                        })
+                        .setNegativeButton("Cancelar", null)
+                        .create().show();
+            });
+        }
 
         builder.show();
+
+        et_fecha.setOnClickListener(v -> showDatePickerDialog(et_fecha));
+        et_hora.setOnClickListener(v -> showTimePickerDialog(et_hora));
     }
+
+    private void showDatePickerDialog(final EditText et_fecha) {
+        final Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(requireContext(), (view, year1, month1, dayOfMonth) -> {
+            String selectedDate = year1 + "-" + String.format("%02d", (month1 + 1)) + "-" + String.format("%02d", dayOfMonth);
+            et_fecha.setText(selectedDate);
+        }, year, month, day);
+
+        datePickerDialog.show();
+    }
+
+    private void showTimePickerDialog(final EditText et_hora) {
+        final Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+        int second = calendar.get(Calendar.SECOND);
+
+        TimePickerDialog timePickerDialog = new TimePickerDialog(requireContext(), (view, hourOfDay, minuteOfDay) -> {
+            String selectedTime = String.format("%02d:%02d:%02d", hourOfDay, minuteOfDay, second);
+            et_hora.setText(selectedTime);
+        }, hour, minute, true);
+
+        timePickerDialog.show();
+    }
+
 
     public void ListarAudiencias() {
         ArrayList<Audiencia> audiencias = dbHelper.get_all_Audiencias();
-        AudienciaAdapter adapter = new AudienciaAdapter(getActivity(),audiencias);
+        AudienciaAdapter adapter = new AudienciaAdapter(getActivity(), audiencias);
         lv_audiencias.setAdapter(adapter);
     }
 
@@ -226,7 +226,6 @@ public class AudienciaFragment extends Fragment implements Response.Listener<JSO
         jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, this, this);
         request.add(jsonObjectRequest);
     }
-
 
     @Override
     public void onErrorResponse(VolleyError error) {

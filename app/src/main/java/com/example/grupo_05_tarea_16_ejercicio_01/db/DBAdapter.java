@@ -26,7 +26,7 @@ import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Zona;
 import java.util.ArrayList;
 
 public class DBAdapter {
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
     private static final String DATABASE_NAME = "DB_Grupo_05_Tarea_16_Ejercicio_01";
 
     //tabla propietario
@@ -420,7 +420,26 @@ public class DBAdapter {
 
 
     //MÉTODOS TABLA AUDIENCIA
+
+    private boolean isValidDate(String date) {
+        return date.matches("\\d{4}-\\d{2}-\\d{2}");
+    }
+
+    private boolean isValidTime(String time) {
+        return time.matches("\\d{2}:\\d{2}:\\d{2}");
+    }
+
+
+
     public void Insertar_Audiencia(Audiencia audiencia) {
+
+        if (!isValidDate(audiencia.getFecha())) {
+            throw new IllegalArgumentException("Formato de fecha incorrecto, debe ser YYYY-MM-DD");
+        }
+        if (!isValidTime(audiencia.getHora())) {
+            throw new IllegalArgumentException("Formato de hora incorrecto, debe ser HH:MM:SS");
+        }
+
         ContentValues values = new ContentValues();
         values.put(Table_Audiencia.CODIGO, audiencia.getCodigo());
         values.put(Table_Audiencia.LUGAR, audiencia.getLugar());
@@ -430,6 +449,14 @@ public class DBAdapter {
     }
 
     public void Actualizar_Audiencia(Audiencia audiencia) {
+
+        if (!isValidDate(audiencia.getFecha())) {
+            throw new IllegalArgumentException("Formato de fecha incorrecto, debe ser YYYY-MM-DD");
+        }
+        if (!isValidTime(audiencia.getHora())) {
+            throw new IllegalArgumentException("Formato de hora incorrecto, debe ser HH:MM:SS");
+        }
+
         ContentValues values = new ContentValues();
         values.put(Table_Audiencia.CODIGO, audiencia.getCodigo());
         values.put(Table_Audiencia.LUGAR, audiencia.getLugar());
