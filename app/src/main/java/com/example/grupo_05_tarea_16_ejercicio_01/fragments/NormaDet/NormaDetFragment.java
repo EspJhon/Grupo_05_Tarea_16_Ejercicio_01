@@ -1,6 +1,7 @@
 package com.example.grupo_05_tarea_16_ejercicio_01.fragments.NormaDet;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
@@ -21,6 +22,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.grupo_05_tarea_16_ejercicio_01.R;
 import com.example.grupo_05_tarea_16_ejercicio_01.adapter.NormaDetalleAdapter;
 import com.example.grupo_05_tarea_16_ejercicio_01.adapter.ZonaAdapter;
@@ -30,6 +37,8 @@ import com.example.grupo_05_tarea_16_ejercicio_01.modelo.NormasDet;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Zona;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -224,4 +233,6 @@ public class NormaDetFragment extends Fragment implements Response.Listener<JSON
         progreso.dismiss();
         Toast.makeText(requireActivity(), "Mensaje: " + response.toString(), Toast.LENGTH_SHORT).show();
     }
+
+
 }
