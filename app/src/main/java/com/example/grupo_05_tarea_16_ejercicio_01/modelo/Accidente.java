@@ -8,6 +8,7 @@ public class Accidente {
     private int Idagente;
     private String hora;
     private String fecha;
+    private String titulo;
     private String descripcion;
     private String URLimagen;
     private String nombreLugar;
@@ -17,12 +18,13 @@ public class Accidente {
     public Accidente() {
     }
 
-    public Accidente(int idVehiculo, int idagente, String hora, String fecha, String descripcion,
+    public Accidente(int idVehiculo, int idagente, String hora, String fecha, String titulo, String descripcion,
                      String URLimagen, String nombreLugar, double latitud, double longitud) {
         IdVehiculo = idVehiculo;
         Idagente = idagente;
         this.hora = hora;
         this.fecha = fecha;
+        this.titulo = titulo;
         this.descripcion = descripcion;
         this.URLimagen = URLimagen;
         this.nombreLugar = nombreLugar;
@@ -110,6 +112,14 @@ public class Accidente {
         this.longitud = longitud;
     }
 
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
     @NonNull
     @Override
     public String toString() {
@@ -119,6 +129,7 @@ public class Accidente {
                 ", Idagente=" + Idagente +
                 ", hora='" + hora + '\'' +
                 ", fecha='" + fecha + '\'' +
+                ", titulo='" + titulo + '\'' +
                 ", descripcion='" + descripcion + '\'' +
                 ", URLimagen='" + URLimagen + '\'' +
                 ", nombreLugar='" + nombreLugar + '\'' +
@@ -126,4 +137,5 @@ public class Accidente {
                 ", longitud=" + longitud +
                 '}';
     }
+
 }

@@ -26,7 +26,7 @@ import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Zona;
 import java.util.ArrayList;
 
 public class DBAdapter {
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 5;
     private static final String DATABASE_NAME = "DB_Grupo_05_Tarea_16_Ejercicio_01";
 
     //tabla propietario
@@ -63,6 +63,8 @@ public class DBAdapter {
         public static final String ID = "Idaccidente";
         public static final String HORA = "hora";
         public static final String FECHA = "fecha";
+
+        public static final String TITULO = "titulo";
         public static final String DESCRIPCION = "descripcion";
         public static final String URL = "URLimagen";
         public static final String NOMBRE_LUGAR = "nombreLugar";
@@ -170,6 +172,7 @@ public class DBAdapter {
                     Table_Agente.ID + " integer not null, " +
                     Table_Accidente.HORA + " text not null, " +
                     Table_Accidente.FECHA + " text not null, " +
+                    Table_Accidente.TITULO + " text not null, " +
                     Table_Accidente.DESCRIPCION + " text not null, " +
                     Table_Accidente.URL + " text not null, " +
                     Table_Accidente.NOMBRE_LUGAR + " text not null, " +
@@ -213,6 +216,7 @@ public class DBAdapter {
     private static final String CREATE_ACTA =
             "create table " + Table_Acta.TABLE + " (" +
                     Table_Acta.ID + " integer primary key autoincrement, " +
+                    Table_Acta.CODIGO + " integer not null, " +
                     Table_Accidente.ID + " integer not null, " +
                     Table_Audiencia.ID + " integer not null, " +
                     Table_Acta.HORA + " text not null, " +
@@ -336,6 +340,7 @@ public class DBAdapter {
         values.put(Table_Agente.ID, accidente.getIdagente());
         values.put(Table_Accidente.HORA, accidente.getHora());
         values.put(Table_Accidente.FECHA, accidente.getFecha());
+        values.put(Table_Accidente.TITULO, accidente.getTitulo());
         values.put(Table_Accidente.DESCRIPCION, accidente.getDescripcion());
         values.put(Table_Accidente.URL, accidente.getURLimagen());
         values.put(Table_Accidente.NOMBRE_LUGAR, accidente.getNombreLugar());
@@ -350,6 +355,7 @@ public class DBAdapter {
         values.put(Table_Agente.ID, accidente.getIdagente());
         values.put(Table_Accidente.HORA, accidente.getHora());
         values.put(Table_Accidente.FECHA, accidente.getFecha());
+        values.put(Table_Accidente.TITULO, accidente.getTitulo());
         values.put(Table_Accidente.DESCRIPCION, accidente.getDescripcion());
         values.put(Table_Accidente.URL, accidente.getURLimagen());
         values.put(Table_Accidente.NOMBRE_LUGAR, accidente.getNombreLugar());
@@ -376,11 +382,12 @@ public class DBAdapter {
                     accidente.setIdagente(cursor.getInt(2));
                     accidente.setHora(cursor.getString(3));
                     accidente.setFecha(cursor.getString(4));
-                    accidente.setDescripcion(cursor.getString(5));
-                    accidente.setURLimagen(cursor.getString(6));
-                    accidente.setNombreLugar(cursor.getString(7));
-                    accidente.setLatitud(cursor.getDouble(8));
-                    accidente.setLongitud(cursor.getDouble(9));
+                    accidente.setTitulo(cursor.getString(5));
+                    accidente.setDescripcion(cursor.getString(6));
+                    accidente.setURLimagen(cursor.getString(7));
+                    accidente.setNombreLugar(cursor.getString(8));
+                    accidente.setLatitud(cursor.getDouble(9));
+                    accidente.setLongitud(cursor.getDouble(10));
                 } while (cursor.moveToNext());
             }
             cursor.close();
@@ -403,11 +410,12 @@ public class DBAdapter {
                     accidente.setIdagente(cursor.getInt(2));
                     accidente.setHora(cursor.getString(3));
                     accidente.setFecha(cursor.getString(4));
-                    accidente.setDescripcion(cursor.getString(5));
-                    accidente.setURLimagen(cursor.getString(6));
-                    accidente.setNombreLugar(cursor.getString(7));
-                    accidente.setLatitud(cursor.getDouble(8));
-                    accidente.setLongitud(cursor.getDouble(9));
+                    accidente.setTitulo(cursor.getString(5));
+                    accidente.setDescripcion(cursor.getString(6));
+                    accidente.setURLimagen(cursor.getString(7));
+                    accidente.setNombreLugar(cursor.getString(8));
+                    accidente.setLatitud(cursor.getDouble(9));
+                    accidente.setLongitud(cursor.getDouble(10));
                     accidentes.add(accidente);
                 } while (cursor.moveToNext());
             }
@@ -836,8 +844,7 @@ public class DBAdapter {
         return puestoControls;
     }
 
-
-    public long addActa(Acta acta) {
+    public void addActa(Acta acta) {
         ContentValues values = new ContentValues();
         values.put(Table_Acta.CODIGO, acta.getCodigo());
         values.put(Table_Accidente.ID, acta.getIdaccidente());
@@ -847,9 +854,8 @@ public class DBAdapter {
         values.put(Table_Agente.ID, acta.getIdagente());
         values.put(Table_Acta.FECHA, acta.getFecha());
 
-        return db.insert(Table_Acta.TABLE, null, values);
+        db.insert(Table_Acta.TABLE, null, values);
     }
-
     public ArrayList<Acta> getAllActas() {
         ArrayList<Acta> actas = new ArrayList<>();
         try {
@@ -858,21 +864,18 @@ public class DBAdapter {
             if (cursor.moveToFirst()) {
                 do {
                     Acta acta = new Acta();
-                    acta.setIdActa(cursor.getInt(cursor.getColumnIndexOrThrow(Table_Acta.ID)));
-                    acta.setCodigo(cursor.getInt(cursor.getColumnIndexOrThrow(Table_Acta.CODIGO)));
-                    acta.setIdaccidente(cursor.getInt(cursor.getColumnIndexOrThrow(Table_Accidente.ID)));
-                    acta.setIdAudiencia(cursor.getInt(cursor.getColumnIndexOrThrow(Table_Audiencia.ID)));
-                    acta.setHora(cursor.getString(cursor.getColumnIndexOrThrow(Table_Acta.HORA)));
-                    acta.setIdZona(cursor.getInt(cursor.getColumnIndexOrThrow(Table_Zona.ID)));
-                    acta.setIdagente(cursor.getInt(cursor.getColumnIndexOrThrow(Table_Agente.ID)));
-                    acta.setFecha(cursor.getString(cursor.getColumnIndexOrThrow(Table_Acta.FECHA)));
-
+                    acta.setIdActa(cursor.getInt(0));
+                    acta.setCodigo(cursor.getInt(1));
+                    acta.setIdaccidente(cursor.getInt(2));
+                    acta.setIdAudiencia(cursor.getInt(3));
+                    acta.setHora(cursor.getString(4));
+                    acta.setIdZona(cursor.getInt(5));
+                    acta.setIdagente(cursor.getInt(6));
+                    acta.setFecha(cursor.getString(7));
                     actas.add(acta);
                 } while (cursor.moveToNext());
             }
-            cursor.close();
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
         return actas;
