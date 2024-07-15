@@ -16,6 +16,7 @@ import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Agente;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Audiencia;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Infraccion;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.NormasDet;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.OficinaGob;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Propietario;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.PuestoControl;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Usuario;
@@ -53,6 +54,8 @@ public class DBAdapter {
         public static final String VALOR_VEHICULO = "valor_vehiculo";
         public static final String NUMERO_POLIZA = "npoliza";
         public static final String UBICACION = "ubicacion";
+        public static final String LATITUD = "latitud";
+        public static final String LONGITUD = "longitud";
     }
 
     private static final class Table_Accidente {
@@ -157,6 +160,8 @@ public class DBAdapter {
                     Table_Oficina.NUMERO_POLIZA + " integer not null, " +
                     Table_Vehiculo.ID + " integer not null, " +
                     Table_Oficina.UBICACION + " text not null, " +
+                    Table_Oficina.LATITUD + " decimal(6,2) not null, " +
+                    Table_Oficina.LONGITUD + " decimal(6,2) not null, " +
                     "FOREIGN KEY (" + Table_Vehiculo.ID + ") REFERENCES " + Table_Vehiculo.TABLE + "(" + Table_Vehiculo.ID + ") );";
     private static final String CREATE_ACCIDENTE =
             "create table " + Table_Accidente.TABLE + " (" +

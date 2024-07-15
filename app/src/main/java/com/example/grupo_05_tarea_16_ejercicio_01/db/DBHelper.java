@@ -8,6 +8,7 @@ import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Agente;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Audiencia;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Infraccion;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.NormasDet;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.OficinaGob;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Propietario;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.PuestoControl;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Usuario;
