@@ -28,6 +28,9 @@
         <action
             android:id="@+id/action_accidenteFragment_to_agregarAccidenteFragment"
             app:destination="@id/agregarAccidenteFragment" />
+        <action
+            android:id="@+id/action_accidenteFragment_to_actualizarAccidenteFragment"
+            app:destination="@id/actualizarAccidenteFragment" />
     </fragment>
     <fragment
         android:id="@+id/infraccionFragment"
@@ -116,4 +119,9 @@
         android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.Infraccion.InfraccionRegisterFragment"
         android:label="fragment_infraccion_register"
         tools:layout="@layout/fragment_infraccion_register" />
+    <fragment
+        android:id="@+id/actualizarAccidenteFragment"
+        android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.Accidente.ActualizarAccidenteFragment"
+        android:label="fragment_actualizar_accidente"
+        tools:layout="@layout/fragment_actualizar_accidente" />
 </navigation>
