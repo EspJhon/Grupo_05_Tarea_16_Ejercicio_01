@@ -5,6 +5,7 @@ import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -32,6 +33,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.OutputStream;
 
 public class ActualizarAccidenteFragment extends Fragment implements View.OnClickListener, OnMapReadyCallback {
@@ -82,6 +84,7 @@ public class ActualizarAccidenteFragment extends Fragment implements View.OnClic
         iv_imagenAccidenteA = view.findViewById(R.id.iv_imagenAccidenteA);
 
         view.findViewById(R.id.btn_tomarFotoA).setOnClickListener(this::onClick);
+        view.findViewById(R.id.btn_subirFotoA).setOnClickListener(this::onClick);
         view.findViewById(R.id.btn_actualizarAccidente).setOnClickListener(this::onClick);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.fr_ubicacionAccidenteA);
@@ -105,6 +108,8 @@ public class ActualizarAccidenteFragment extends Fragment implements View.OnClic
             ActivarCam();
         } else if (v.getId() == R.id.btn_actualizarAccidente) {
             ActualizarAccidente();
+        }else if (v.getId() == R.id.btn_subirFotoA) {
+            SubirFoto();
         }
     }
 
@@ -116,6 +121,16 @@ public class ActualizarAccidenteFragment extends Fragment implements View.OnClic
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             URL = GuardarURL(imageBitmap);
             iv_imagenAccidenteA.setImageBitmap(imageBitmap);
+        } else if (requestCode == 222222 && data != null && data.getData() != null) {
+            Uri imageUri = data.getData();
+            try {
+                InputStream imageStream = getActivity().getContentResolver().openInputStream(imageUri);
+                Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                URL = GuardarURL(selectedImage);
+                iv_imagenAccidenteA.setImageBitmap(selectedImage);
+            } catch (Exception e) {
+                Toast.makeText(getActivity(), "Error al cargar la imagen", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -182,6 +197,13 @@ public class ActualizarAccidenteFragment extends Fragment implements View.OnClic
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intent.resolveActivity(requireActivity().getPackageManager()) != null) {
             startActivityForResult(intent,111111);
+        }
+    }
+
+    private void SubirFoto(){
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        if (intent.resolveActivity(requireActivity().getPackageManager()) != null) {
+            startActivityForResult(intent, 222222);
         }
     }
 
