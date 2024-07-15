@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.OficinaGob.AgregarOficinaFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/et_valorVehiculo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Valor del vehículo" />
+
+            <EditText
+                android:id="@+id/et_numPoliza"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Número de Poliza" />
+
+            <EditText
+                android:id="@+id/et_numPlaca"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Número de Placa" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/et_ubicacion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Ubicación" />
+
+                <fragment
+                    android:id="@+id/fr_ubicacionOficina"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="350dp" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_agregarOficina"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Añadir" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+</FrameLayout>

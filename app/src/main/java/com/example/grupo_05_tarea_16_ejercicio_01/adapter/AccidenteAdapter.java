@@ -43,8 +43,6 @@ public class AccidenteAdapter extends ArrayAdapter<Accidente> {
         TextView tv_hora = convertView.findViewById(R.id.tv_hora);
         TextView tv_fecha = convertView.findViewById(R.id.tv_fecha);
         TextView tv_descripcion = convertView.findViewById(R.id.tv_descripcion);
-        TextView tv_latitd = convertView.findViewById(R.id.tv_latitud);
-        TextView tv_longitud = convertView.findViewById(R.id.tv_longitud);
 
         tv_placa.setText("Vehículo: " + accidentes.get(position).getIdVehiculo() + "");
         tv_agente.setText("Agente: " + accidentes.get(position).getIdagente() + "");
@@ -52,8 +50,6 @@ public class AccidenteAdapter extends ArrayAdapter<Accidente> {
         tv_hora.setText("Hora: " + accidentes.get(position).getHora());
         tv_fecha.setText("Fecha: " + accidentes.get(position).getFecha());
         tv_descripcion.setText("Descripción: " + accidentes.get(position).getDescripcion());
-        tv_latitd.setText("Descripción: " + accidentes.get(position).getLatitud() + "");
-        tv_longitud.setText("Descripción: " + accidentes.get(position).getLongitud() + "");
 
         return convertView;
     }

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/tv_valorVehiculo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="[Valor del vehículo]" />
+
+        <TextView
+            android:id="@+id/tv_numPoliza"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="[Número de poliza]" />
+
+        <TextView
+            android:id="@+id/tv_numPlaca"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="[Número de placa]" />
+
+        <TextView
+            android:id="@+id/tv_ubicacion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="[Ubicación]" />
+
+    </LinearLayout>
+
+</LinearLayout>

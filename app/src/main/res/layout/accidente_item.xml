@@ -65,18 +65,6 @@
             android:layout_height="wrap_content"
             android:text="[Descripción]" />
 
-        <TextView
-            android:id="@+id/tv_latitud"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="[Latitud]" />
-
-        <TextView
-            android:id="@+id/tv_longitud"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="[Longitud]" />
-
     </LinearLayout>
 
 </LinearLayout>

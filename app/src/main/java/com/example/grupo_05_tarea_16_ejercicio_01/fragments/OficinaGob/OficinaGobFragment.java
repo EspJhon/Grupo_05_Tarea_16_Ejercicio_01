@@ -1,49 +1,44 @@
 package com.example.grupo_05_tarea_16_ejercicio_01.fragments.OficinaGob;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.ListView;
 
 import com.example.grupo_05_tarea_16_ejercicio_01.R;
+import com.example.grupo_05_tarea_16_ejercicio_01.adapter.AccidenteAdapter;
+import com.example.grupo_05_tarea_16_ejercicio_01.adapter.OficinaAdapter;
+import com.example.grupo_05_tarea_16_ejercicio_01.db.DBHelper;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Accidente;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.OficinaGob;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link OficinaGobFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
+
 public class OficinaGobFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private ListView lv_oficinas;
+    private Button btn_nuevaOficina;
+    private DBHelper dbHelper;
 
     public OficinaGobFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment OficinaGobFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static OficinaGobFragment newInstance(String param1, String param2) {
         OficinaGobFragment fragment = new OficinaGobFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -52,15 +47,76 @@ public class OficinaGobFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_oficina_gob, container, false);
+        View view = inflater.inflate(R.layout.fragment_oficina_gob, container, false);
+
+        dbHelper=new DBHelper(getActivity());
+
+        lv_oficinas=view.findViewById(R.id.lv_oficinas);
+        btn_nuevaOficina=view.findViewById(R.id.btn_nuevaOficina);
+
+        return view;
     }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        view.findViewById(R.id.btn_nuevaOficina).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavController navController = Navigation.findNavController(v);
+                navController.navigate(R.id.action_oficinaGobFragment_to_agregarOficinaFragment);
+            }
+        });
+
+        lv_oficinas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                OficinaGob oficinaGob = (OficinaGob) parent.getItemAtPosition(position);
+                OpcionesDialog(oficinaGob);
+            }
+        });
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ListarOficinas();
+    }
+
+    public void ListarOficinas() {
+        ArrayList<OficinaGob> oficinas = dbHelper.get_all_Oficinas();
+        OficinaAdapter adapter = new OficinaAdapter(getActivity(),oficinas);
+        lv_oficinas.setAdapter(adapter);
+    }
+
+    public void OpcionesDialog(OficinaGob oficinaGob){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Seleccione una opción")
+                .setItems(new String[]{"Editar", "Eliminar"}, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable("id", oficinaGob.getIdOficina());
+                                NavController navController = Navigation.findNavController(getView());
+                                navController.navigate(R.id.action_oficinaGobFragment_to_actualizarOficinaFragment,bundle);
+                                break;
+                            case 1:
+                                dbHelper.Eliminar_Oficina(oficinaGob);
+                                ListarOficinas();
+                                break;
+                        }
+                    }
+                });
+        builder.create().show();
+    }
+
 }

@@ -145,6 +145,15 @@ public class ActualizarAccidenteFragment extends Fragment implements View.OnClic
 
     private void ActualizarAccidente() {
 
+        if (et_placaA.getText().toString().trim().isEmpty() || et_agenteA.getText().toString().trim().isEmpty() ||
+                et_horaA.getText().toString().trim().isEmpty() || et_fechaA.getText().toString().trim().isEmpty() ||
+                et_descripcionA.getText().toString().trim().isEmpty() ||
+                et_nombreLugarA.getText().toString().trim().isEmpty()) {
+
+            Toast.makeText(getActivity(), "Debe llenar todos los campos", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         int placaA = Integer.parseInt(et_placaA.getText().toString().trim());
         int agenteA = Integer.parseInt(et_agenteA.getText().toString().trim());
         String horaA = et_horaA.getText().toString().trim();

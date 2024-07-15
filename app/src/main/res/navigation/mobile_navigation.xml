@@ -19,7 +19,14 @@
         android:id="@+id/oficinaGobFragment"
         android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.OficinaGob.OficinaGobFragment"
         android:label="fragment_oficina_gob"
-        tools:layout="@layout/fragment_oficina_gob" />
+        tools:layout="@layout/fragment_oficina_gob" >
+        <action
+            android:id="@+id/action_oficinaGobFragment_to_agregarOficinaFragment"
+            app:destination="@id/agregarOficinaFragment" />
+        <action
+            android:id="@+id/action_oficinaGobFragment_to_actualizarOficinaFragment"
+            app:destination="@id/actualizarOficinaFragment" />
+    </fragment>
     <fragment
         android:id="@+id/accidenteFragment"
         android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.Accidente.AccidenteFragment"
@@ -124,4 +131,14 @@
         android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.Accidente.ActualizarAccidenteFragment"
         android:label="fragment_actualizar_accidente"
         tools:layout="@layout/fragment_actualizar_accidente" />
+    <fragment
+        android:id="@+id/agregarOficinaFragment"
+        android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.OficinaGob.AgregarOficinaFragment"
+        android:label="fragment_agregar_oficina"
+        tools:layout="@layout/fragment_agregar_oficina" />
+    <fragment
+        android:id="@+id/actualizarOficinaFragment"
+        android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.OficinaGob.ActualizarOficinaFragment"
+        android:label="fragment_actualizar_oficina"
+        tools:layout="@layout/fragment_actualizar_oficina" />
 </navigation>

@@ -35,11 +35,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 
-public class AgregarAccidenteFragment extends Fragment implements View.OnClickListener,OnMapReadyCallback{
+public class AgregarAccidenteFragment extends Fragment implements View.OnClickListener, OnMapReadyCallback {
 
     private EditText et_placa, et_agente, et_hora, et_fecha, et_descripcion,
             et_nombreLugar;
-    private double latitud=0,longitud=0;
+    private double latitud = 0, longitud = 0;
     private ImageView iv_imagenAccidente;
     private DBHelper dbHelper;
     private String URL;
@@ -100,9 +100,22 @@ public class AgregarAccidenteFragment extends Fragment implements View.OnClickLi
         }
     }
 
-    public void AgregarAccidente(){
+    public void AgregarAccidente() {
 
-        if (latitud==0 && longitud==0){
+        if (et_placa.getText().toString().trim().isEmpty() || et_agente.getText().toString().trim().isEmpty() ||
+                et_hora.getText().toString().trim().isEmpty() || et_fecha.getText().toString().trim().isEmpty() ||
+                et_descripcion.getText().toString().trim().isEmpty() ||
+                et_nombreLugar.getText().toString().trim().isEmpty()) {
+            Toast.makeText(getActivity(), "Debe llenar todos los campos", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (URL == null || URL.isEmpty()) {
+            Toast.makeText(getActivity(), "Debe subir una imagen", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (latitud == 0 && longitud == 0) {
             Toast.makeText(getActivity(), "Debe seleccionar una ubicación", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -115,7 +128,7 @@ public class AgregarAccidenteFragment extends Fragment implements View.OnClickLi
 
         String lugar = et_nombreLugar.getText().toString().trim();
 
-        Accidente accidente = new Accidente(placa,agente,hora,fecha,descripcion,URL,lugar,latitud,longitud);
+        Accidente accidente = new Accidente(placa, agente, hora, fecha, descripcion, URL, lugar, latitud, longitud);
         dbHelper.Insertar_Accidente(accidente);
 
         requireActivity().getSupportFragmentManager().popBackStack();
@@ -143,8 +156,8 @@ public class AgregarAccidenteFragment extends Fragment implements View.OnClickLi
             public void onMapClick(@NonNull LatLng latLng) {
                 mMap.clear();
                 mMap.addMarker(new MarkerOptions().position(latLng).title("Ubicación seleccionada"));
-                latitud=latLng.latitude;
-                longitud=latLng.longitude;
+                latitud = latLng.latitude;
+                longitud = latLng.longitude;
             }
         });
 
@@ -155,7 +168,7 @@ public class AgregarAccidenteFragment extends Fragment implements View.OnClickLi
     private void ActivarCam() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intent.resolveActivity(requireActivity().getPackageManager()) != null) {
-            startActivityForResult(intent,99999999);
+            startActivityForResult(intent, 99999999);
         }
     }
 

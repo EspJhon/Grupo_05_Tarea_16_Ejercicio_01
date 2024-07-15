@@ -5,10 +5,29 @@
     android:layout_height="match_parent"
     tools:context=".fragments.OficinaGob.OficinaGobFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btn_nuevaOficina"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nuevo"/>
+
+            <ListView
+                android:id="@+id/lv_oficinas"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        </LinearLayout>
+    </LinearLayout>
 
 </FrameLayout>

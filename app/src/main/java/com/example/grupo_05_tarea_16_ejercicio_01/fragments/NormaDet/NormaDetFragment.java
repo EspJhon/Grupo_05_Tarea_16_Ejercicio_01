@@ -212,7 +212,7 @@ public class NormaDetFragment extends Fragment implements Response.Listener<JSON
         progreso.setMessage("Cargando...");
         progreso.show();
 
-        String url = "http://192.168.1.6/db_grupo_05_tarea_16_ejercicio_01/NormaRegistro.php?numnorma=" + numnorma + "&descripcion=" + descripcion;
+        String url = "http://192.168.10.106/db_grupo_05_tarea_16_ejercicio_01/NormaRegistro.php?numnorma=" + numnorma + "&descripcion=" + descripcion;
         url = url.replace(" ", "%20");
 
         Log.d("URLWebService", "URL: " + url);

@@ -320,7 +320,7 @@ public class VehiculoFragment extends Fragment implements Vehiculo_Adapter.OnIte
         progreso.setMessage("Registrando...");
         progreso.show();
 
-        String url = "http://192.168.1.6/db_grupo_05_tarea_16_ejercicio_01/VehiculoRegistro.php?" +
+        String url = "http://192.168.10.106/db_grupo_05_tarea_16_ejercicio_01/VehiculoRegistro.php?" +
                 "numplaca=" + numplaca +
                 "&marca=" + marca +
                 "&modelo=" + modelo +
