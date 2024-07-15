@@ -1,6 +1,7 @@
 package com.example.grupo_05_tarea_16_ejercicio_01.fragments.Vehiculo;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 
@@ -34,6 +35,8 @@ import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Vehiculo;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
 
 
 public class VehiculoFragment extends Fragment implements Vehiculo_Adapter.OnItemLongClickListener, Response.Listener<JSONObject>, Response.ErrorListener  {
@@ -70,6 +73,9 @@ public class VehiculoFragment extends Fragment implements Vehiculo_Adapter.OnIte
         request = Volley.newRequestQueue(requireActivity());
         vehiculos = new ArrayList<>();
         propietarios = new ArrayList<>();
+
+
+
 
         cargarPropietarios();
 
@@ -113,6 +119,7 @@ public class VehiculoFragment extends Fragment implements Vehiculo_Adapter.OnIte
         etMotor = dialogView.findViewById(R.id.et_motor);
         etFecha = dialogView.findViewById(R.id.et_fecha);
         spPropietarios = dialogView.findViewById(R.id.sp_propietarios);
+        etFecha.setOnClickListener(v -> showYearPickerDialog(etFecha));
 
         // Cargar los nombres de los clientes en el Spinner
         cargarPropietariosEnSpinner(spPropietarios);
@@ -170,7 +177,20 @@ public class VehiculoFragment extends Fragment implements Vehiculo_Adapter.OnIte
         vehiculos.clear();
         vehiculos.addAll(dbHelper.get_all_Vehiculos());
         vehiculoAdapter.notifyDataSetChanged();
+        // Antes de notificar los cambios, obtén los nombres de los propietarios
+        HashMap<Integer, String> propietariosMap = obtenerMapaPropietarios();
+        vehiculoAdapter.setPropietariosMap(propietariosMap);
+        vehiculoAdapter.notifyDataSetChanged();
     }
+
+    private HashMap<Integer, String> obtenerMapaPropietarios() {
+        HashMap<Integer, String> propietariosMap = new HashMap<>();
+        for (Propietario propietario : propietarios) {
+            propietariosMap.put(propietario.getIdPropietario(), propietario.getNombre());
+        }
+        return propietariosMap;
+    }
+
 
     @Override
     public void onItemLongClick(Vehiculo vehiculo) {
@@ -350,4 +370,20 @@ public class VehiculoFragment extends Fragment implements Vehiculo_Adapter.OnIte
         Toast.makeText(requireActivity(), "Vehículo registrado correctamente", Toast.LENGTH_SHORT).show();
         cargarVehiculos();
     }
+
+    private void showYearPickerDialog(final EditText et_fecha) {
+        final Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(requireContext(), android.R.style.Theme_Holo_Light_Dialog_NoActionBar, (view, year1, month1, dayOfMonth) -> {
+            String selectedDate = String.valueOf(year1);
+            et_fecha.setText(selectedDate);
+        }, year, 0, 1);
+
+        datePickerDialog.getDatePicker().setCalendarViewShown(false);
+        datePickerDialog.getDatePicker().setSpinnersShown(true);
+        datePickerDialog.setTitle("Seleccione el año");
+        datePickerDialog.show();
+    }
+
 }

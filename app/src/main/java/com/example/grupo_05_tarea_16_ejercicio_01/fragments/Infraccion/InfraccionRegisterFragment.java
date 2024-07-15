@@ -1,6 +1,8 @@
 package com.example.grupo_05_tarea_16_ejercicio_01.fragments.Infraccion;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
@@ -31,6 +33,7 @@ import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Vehiculo;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Zona;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class InfraccionRegisterFragment extends Fragment {
 
@@ -84,6 +87,9 @@ public class InfraccionRegisterFragment extends Fragment {
         sp_agente = view.findViewById(R.id.sp_agente);
         sp_placa = view.findViewById(R.id.sp_placa);
         sp_norma = view.findViewById(R.id.sp_norma);
+
+        edt_register_fecha_infraccion.setOnClickListener(v -> showDatePickerDialog());
+        edt_register_hora_infraccion.setOnClickListener(v -> showTimePickerDialog());
         return view;
     }
     private int IdAgente, IdVehiculo, IdNorma;
@@ -258,5 +264,32 @@ public class InfraccionRegisterFragment extends Fragment {
                 }
             });
         }
+    }
+
+    private void showDatePickerDialog() {
+        final Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(requireContext(), (view, year1, month1, dayOfMonth) -> {
+            String selectedDate = year1 + "-" + String.format("%02d", (month1 + 1)) + "-" + String.format("%02d", dayOfMonth);
+            edt_register_fecha_infraccion.setText(selectedDate);
+        }, year, month, day);
+
+        datePickerDialog.show();
+    }
+
+    private void showTimePickerDialog() {
+        final Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+
+        TimePickerDialog timePickerDialog = new TimePickerDialog(requireContext(), (view, hourOfDay, minuteOfDay) -> {
+            String selectedTime = String.format("%02d:%02d", hourOfDay, minuteOfDay);
+            edt_register_hora_infraccion.setText(selectedTime);
+        }, hour, minute, true);
+
+        timePickerDialog.show();
     }
 }
