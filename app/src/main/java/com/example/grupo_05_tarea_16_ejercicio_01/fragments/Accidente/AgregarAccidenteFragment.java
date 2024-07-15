@@ -20,9 +20,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.example.grupo_05_tarea_16_ejercicio_01.R;
+import com.example.grupo_05_tarea_16_ejercicio_01.adapter.MapMoveFragment;
 import com.example.grupo_05_tarea_16_ejercicio_01.db.DBHelper;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Accidente;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -47,6 +49,7 @@ public class AgregarAccidenteFragment extends Fragment implements View.OnClickLi
     private String URL;
     private GoogleMap mMap;
     private Accidente accidente;
+    private ScrollView scrollView;
 
     public AgregarAccidenteFragment() {
         // Required empty public constructor
@@ -74,6 +77,8 @@ public class AgregarAccidenteFragment extends Fragment implements View.OnClickLi
 
         dbHelper = new DBHelper(getActivity());
 
+        scrollView = view.findViewById(R.id.sv_accidente);
+
         et_placa = view.findViewById(R.id.et_placa);
         et_agente = view.findViewById(R.id.et_agente);
         et_hora = view.findViewById(R.id.et_hora);
@@ -87,9 +92,15 @@ public class AgregarAccidenteFragment extends Fragment implements View.OnClickLi
         view.findViewById(R.id.btn_subirFoto).setOnClickListener(this::onClick);
         view.findViewById(R.id.btn_agregarAccidente).setOnClickListener(this::onClick);
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.fr_ubicacionAccidente);
-        if (mapFragment != null) {
-            mapFragment.getMapAsync(this);
+        MapMoveFragment mapMoveFragment = (MapMoveFragment) getChildFragmentManager().findFragmentById(R.id.fr_ubicacionAccidente);
+        if (mapMoveFragment != null){
+            mapMoveFragment.getMapAsync(this);
+            mapMoveFragment.setListener(new MapMoveFragment.OnTouchListener() {
+                @Override
+                public void onTouch() {
+                    scrollView.requestDisallowInterceptTouchEvent(true);
+                }
+            });
         }
 
         return view;

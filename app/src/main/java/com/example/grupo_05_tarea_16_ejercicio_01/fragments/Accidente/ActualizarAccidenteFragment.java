@@ -18,9 +18,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.example.grupo_05_tarea_16_ejercicio_01.R;
+import com.example.grupo_05_tarea_16_ejercicio_01.adapter.MapMoveFragment;
 import com.example.grupo_05_tarea_16_ejercicio_01.db.DBHelper;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Accidente;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -40,7 +42,6 @@ public class ActualizarAccidenteFragment extends Fragment implements View.OnClic
 
     private EditText et_placaA, et_agenteA, et_horaA, et_fechaA, et_descripcionA_accidente, et_tituloA_accidente,
             et_nombreLugarA;
-
     private double latitud=0,longitud=0;
     private ImageView iv_imagenAccidenteA;
     private DBHelper dbHelper;
@@ -48,6 +49,7 @@ public class ActualizarAccidenteFragment extends Fragment implements View.OnClic
     private GoogleMap mMap;
     private Accidente accidente;
     private Marker marker;
+    private ScrollView scrollView;
 
     public ActualizarAccidenteFragment() {
         // Required empty public constructor
@@ -75,6 +77,8 @@ public class ActualizarAccidenteFragment extends Fragment implements View.OnClic
 
         View view =inflater.inflate(R.layout.fragment_actualizar_accidente, container, false);
 
+        scrollView = view.findViewById(R.id.sv_accidenteA);
+
         et_placaA = view.findViewById(R.id.et_placaA);
         et_agenteA = view.findViewById(R.id.et_agenteA);
         et_horaA = view.findViewById(R.id.et_horaA);
@@ -88,9 +92,15 @@ public class ActualizarAccidenteFragment extends Fragment implements View.OnClic
         view.findViewById(R.id.btn_subirFotoA).setOnClickListener(this::onClick);
         view.findViewById(R.id.btn_actualizarAccidente).setOnClickListener(this::onClick);
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.fr_ubicacionAccidenteA);
-        if (mapFragment != null) {
-            mapFragment.getMapAsync(this);
+        MapMoveFragment mapMoveFragment = (MapMoveFragment) getChildFragmentManager().findFragmentById(R.id.fr_ubicacionAccidenteA);
+        if (mapMoveFragment != null){
+            mapMoveFragment.getMapAsync(this);
+            mapMoveFragment.setListener(new MapMoveFragment.OnTouchListener() {
+                @Override
+                public void onTouch() {
+                    scrollView.requestDisallowInterceptTouchEvent(true);
+                }
+            });
         }
 
         if (getArguments() != null && getArguments().getSerializable("id") != null) {
