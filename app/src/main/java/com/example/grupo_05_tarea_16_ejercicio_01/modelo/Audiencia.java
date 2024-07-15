@@ -15,8 +15,8 @@ public class Audiencia {
     public Audiencia(int codigo, String lugar, String fecha, String hora) {
         this.codigo = codigo;
         this.lugar = lugar;
-        this.fecha = fecha;
-        this.hora = hora;
+        setFecha(fecha); // Usar los métodos de validación
+        setHora(hora);   // Usar los métodos de validación
     }
 
     public int getIdAudiencia() {
@@ -48,6 +48,9 @@ public class Audiencia {
     }
 
     public void setFecha(String fecha) {
+        if (!isValidDate(fecha)) {
+            throw new IllegalArgumentException("Formato de fecha incorrecto, debe ser YYYY-MM-DD");
+        }
         this.fecha = fecha;
     }
 
@@ -56,6 +59,9 @@ public class Audiencia {
     }
 
     public void setHora(String hora) {
+        if (!isValidTime(hora)) {
+            throw new IllegalArgumentException("Formato de hora incorrecto, debe ser HH:MM:SS");
+        }
         this.hora = hora;
     }
 
@@ -64,5 +70,13 @@ public class Audiencia {
     public String toString() {
         return getIdAudiencia() + " ----  " + getCodigo() + " ------ " + getLugar() + " ------ " +
                 getFecha() + " ------ " + getHora();
+    }
+
+    private boolean isValidDate(String date) {
+        return date.matches("\\d{4}-\\d{2}-\\d{2}");
+    }
+
+    private boolean isValidTime(String time) {
+        return time.matches("\\d{2}:\\d{2}:\\d{2}");
     }
 }
