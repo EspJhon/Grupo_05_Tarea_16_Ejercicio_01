@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.grupo_05_tarea_16_ejercicio_01.R;
 import com.example.grupo_05_tarea_16_ejercicio_01.db.DBHelper;
@@ -42,6 +44,7 @@ public class AgregarAccidenteFragment extends Fragment implements View.OnClickLi
     private DBHelper dbHelper;
     private String URL;
     private GoogleMap mMap;
+    private Accidente accidente;
 
     public AgregarAccidenteFragment() {
         // Required empty public constructor
@@ -98,6 +101,12 @@ public class AgregarAccidenteFragment extends Fragment implements View.OnClickLi
     }
 
     public void AgregarAccidente(){
+
+        if (latitud==0 && longitud==0){
+            Toast.makeText(getActivity(), "Debe seleccionar una ubicación", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         int placa = Integer.parseInt(et_placa.getText().toString().trim());
         int agente = Integer.parseInt(et_agente.getText().toString().trim());
         String hora = et_hora.getText().toString().trim();
@@ -140,7 +149,7 @@ public class AgregarAccidenteFragment extends Fragment implements View.OnClickLi
         });
 
         LatLng inicial = new LatLng(-12.037553, -77.044837);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(inicial, 5));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(inicial, 10));
     }
 
     private void ActivarCam() {

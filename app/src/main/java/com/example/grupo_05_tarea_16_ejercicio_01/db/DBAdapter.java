@@ -14,6 +14,7 @@ import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Accidente;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Acta;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Agente;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Audiencia;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Infraccion;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.NormasDet;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Propietario;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.PuestoControl;
@@ -536,6 +537,7 @@ public class DBAdapter {
         db.update(Table_Propietario.TABLE,values,Table_Propietario.ID + " = " + propietario.getIdPropietario(),null);
     }
 
+
     public void Eliminar_Propietario (Propietario propietario){
         ContentValues values = new ContentValues();
         db.delete(Table_Propietario.TABLE,Table_Propietario.ID + " = " + propietario.getIdPropietario(),null);
@@ -952,6 +954,28 @@ public class DBAdapter {
 
         return agentes;
     }
+    public Agente get_Agente(int IdAgente) {
+        try {
+            String query = "SELECT * FROM " + Table_Agente.TABLE +
+                    " WHERE " + Table_Agente.ID + " = " + IdAgente;
+            Cursor cursor = db.rawQuery(query, null);
+            Agente agente = null;
+            if (cursor.moveToFirst()){
+                do {
+                    agente = new Agente();
+                    agente.setIdagente(cursor.getInt(0));
+                    agente.setCedulaa(cursor.getInt(1));
+                    agente.setNombre(cursor.getString(2));
+                    agente.setIdPuestoControl(cursor.getInt(3));
+                    agente.setRango(cursor.getString(4));
+                }while (cursor.moveToNext());
+            }
+            cursor.close();
+            return agente;
+        } catch (Exception ex) {
+            return null;
+        }
+    }
 
     //METODOS DE NORMAS DETALLE
     public void Insertar_Normas_Detalle(NormasDet normasDet) {
@@ -1008,5 +1032,77 @@ public class DBAdapter {
     public void Eliminar_Norma_Detalle(NormasDet normasDet) {
         ContentValues values = new ContentValues();
         db.delete(Table_Norma.TABLE,Table_Norma.ID + " = " + normasDet.getIdnomra(),null);
+    }
+    //METODOS DE IBFRACCION
+    public void Insertar_Infraccion(Infraccion infraccion) {
+        ContentValues values = new ContentValues();
+        values.put(Table_Agente.ID, infraccion.getIdagente());
+        values.put(Table_Vehiculo.ID, infraccion.getIdVehiculo());
+        values.put(Table_Infraccion.VALOR_MULTA, infraccion.getValormulta());
+        values.put(Table_Infraccion.FECHA, infraccion.getFecha());
+        values.put(Table_Norma.ID, infraccion.getIdnomra());
+        values.put(Table_Infraccion.HORA, infraccion.getHora());
+        db.insert(Table_Infraccion.TABLE, null, values);
+    }
+    public ArrayList<Infraccion> get_all_Infracciones(){
+        ArrayList<Infraccion> infraccions = new ArrayList<>();
+        try {
+            String query = "select * from " + Table_Infraccion.TABLE;
+            Cursor cursor = db.rawQuery(query,null);
+            if (cursor.moveToFirst()){
+                do {
+                    Infraccion infraccion = new Infraccion();
+                    infraccion.setIdInfraccion(cursor.getInt(0));
+                    infraccion.setIdagente(cursor.getInt(1));
+                    infraccion.setIdVehiculo(cursor.getInt(2));
+                    infraccion.setValormulta(cursor.getString(3));
+                    infraccion.setFecha(cursor.getString(4));
+                    infraccion.setIdnomra(cursor.getInt(5));
+                    infraccion.setHora(cursor.getString(6));
+                    infraccions.add(infraccion);
+                }while (cursor.moveToNext());
+            }
+        } catch (Exception ex){
+            return null;
+        }
+        return infraccions;
+    }
+    public Infraccion get_Infraccion(int IdFraccion) {
+        try {
+            String query = "SELECT * FROM " + Table_Infraccion.TABLE +
+                    " WHERE " + Table_Infraccion.ID + " = " + IdFraccion;
+            Cursor cursor = db.rawQuery(query, null);
+            Infraccion infraccion = null;
+            if (cursor.moveToFirst()){
+                do {
+                    infraccion = new Infraccion();
+                    infraccion.setIdInfraccion(cursor.getInt(0));
+                    infraccion.setIdagente(cursor.getInt(1));
+                    infraccion.setIdVehiculo(cursor.getInt(2));
+                    infraccion.setValormulta(cursor.getString(3));
+                    infraccion.setFecha(cursor.getString(4));
+                    infraccion.setIdnomra(cursor.getInt(5));
+                    infraccion.setHora(cursor.getString(6));
+                }while (cursor.moveToNext());
+            }
+            cursor.close();
+            return infraccion;
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+    public void Actualizar_Infraccion(Infraccion infraccion) {
+        ContentValues values = new ContentValues();
+        values.put(Table_Agente.ID, infraccion.getIdagente());
+        values.put(Table_Vehiculo.ID, infraccion.getIdVehiculo());
+        values.put(Table_Infraccion.VALOR_MULTA, infraccion.getValormulta());
+        values.put(Table_Infraccion.FECHA, infraccion.getFecha());
+        values.put(Table_Norma.ID, infraccion.getIdnomra());
+        values.put(Table_Infraccion.HORA, infraccion.getHora());
+        db.update(Table_Infraccion.TABLE, values,Table_Infraccion.ID + " = " + infraccion.getIdInfraccion(),null);
+    }
+    public void Eliminar_Infraccion(Infraccion infraccion) {
+        ContentValues values = new ContentValues();
+        db.delete(Table_Infraccion.TABLE,Table_Infraccion.ID + " = " + infraccion.getIdInfraccion(),null);
     }
 }
