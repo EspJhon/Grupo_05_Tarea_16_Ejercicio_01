@@ -1,11 +1,13 @@
 package com.example.grupo_05_tarea_16_ejercicio_01.fragments.Vehiculo;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,16 +19,24 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.grupo_05_tarea_16_ejercicio_01.R;
 import com.example.grupo_05_tarea_16_ejercicio_01.adapter.Vehiculo_Adapter;
 import com.example.grupo_05_tarea_16_ejercicio_01.db.DBHelper;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Propietario;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Vehiculo;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 
-public class VehiculoFragment extends Fragment implements Vehiculo_Adapter.OnItemLongClickListener {
+public class VehiculoFragment extends Fragment implements Vehiculo_Adapter.OnItemLongClickListener, Response.Listener<JSONObject>, Response.ErrorListener  {
     private EditText etNumPlaca, etMarca, etModelo, etMotor, etFecha;
     private Spinner spPropietarios;
     private ListView lvVehiculos;
@@ -37,6 +47,10 @@ public class VehiculoFragment extends Fragment implements Vehiculo_Adapter.OnIte
     private ArrayList<Vehiculo> vehiculos;
     private Vehiculo vehiculoSeleccionado;
     private ArrayList<Propietario> propietarios;
+
+    ProgressDialog progreso;
+    RequestQueue request;
+    JsonObjectRequest jsonObjectRequest;
 
 
     public VehiculoFragment() {
@@ -53,7 +67,7 @@ public class VehiculoFragment extends Fragment implements Vehiculo_Adapter.OnIte
         dbHelper = new DBHelper(requireActivity());
         lvVehiculos = view.findViewById(R.id.lv_vehiculos);
         btnRegistrarVehiculo = view.findViewById(R.id.btn_registrar_vehiculo);
-
+        request = Volley.newRequestQueue(requireActivity());
         vehiculos = new ArrayList<>();
         propietarios = new ArrayList<>();
 
@@ -62,7 +76,7 @@ public class VehiculoFragment extends Fragment implements Vehiculo_Adapter.OnIte
         btnRegistrarVehiculo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mostrarDialogoRegistrarDireccion();
+                mostrarDialogoRegistrarVehiculo();
             }
         });
 
@@ -88,7 +102,7 @@ public class VehiculoFragment extends Fragment implements Vehiculo_Adapter.OnIte
         propietarios = dbHelper.get_all_Propietarios();
     }
 
-    private void mostrarDialogoRegistrarDireccion() {
+    private void mostrarDialogoRegistrarVehiculo() {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_registro_vehiculo, null);
         builder.setView(dialogView);
@@ -131,6 +145,7 @@ public class VehiculoFragment extends Fragment implements Vehiculo_Adapter.OnIte
 
             dbHelper.Insertar_Vehiculo(vehiculo);
 
+            cargaWebService(numeroPlacaInt, marca, modelo, motor, fecha, propietario.getIdPropietario());
             Toast.makeText(getContext(), "Vehículo registrado", Toast.LENGTH_SHORT).show();
             cargarVehiculos();
         });
@@ -298,5 +313,41 @@ public class VehiculoFragment extends Fragment implements Vehiculo_Adapter.OnIte
 
         AlertDialog dialogActualizar = builder.create();
         dialogActualizar.show();
+    }
+
+    private void cargaWebService(int numplaca, String marca, String modelo, String motor, String fecha, int idpropietario) {
+        progreso = new ProgressDialog(requireActivity());
+        progreso.setMessage("Registrando...");
+        progreso.show();
+
+        String url = "http://192.168.1.6/db_grupo_05_tarea_16_ejercicio_01/VehiculoRegistro.php?" +
+                "numplaca=" + numplaca +
+                "&marca=" + marca +
+                "&modelo=" + modelo +
+                "&motor=" + motor +
+                "&f_ano=" + fecha +
+                "&idpropietario=" + idpropietario;
+
+        url = url.replace(" ", "%20");
+
+        Log.d("URLWebService", "URL: " + url);
+
+        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, this, this);
+        request.add(jsonObjectRequest);
+    }
+
+    @Override
+    public void onErrorResponse(VolleyError error) {
+        progreso.hide();
+        String errorMessage = "No se puede conectar: " + error.toString();
+        Toast.makeText(requireActivity(), errorMessage, Toast.LENGTH_LONG).show();
+        Log.d("ERROR: ", errorMessage);
+    }
+
+    @Override
+    public void onResponse(JSONObject response) {
+        progreso.hide();
+        Toast.makeText(requireActivity(), "Vehículo registrado correctamente", Toast.LENGTH_SHORT).show();
+        cargarVehiculos();
     }
 }
