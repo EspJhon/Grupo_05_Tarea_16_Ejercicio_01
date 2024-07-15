@@ -1,6 +1,7 @@
 package com.example.grupo_05_tarea_16_ejercicio_01.fragments.Audiencia;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,19 +24,31 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.grupo_05_tarea_16_ejercicio_01.R;
 import com.example.grupo_05_tarea_16_ejercicio_01.adapter.AudienciaAdapter;
 import com.example.grupo_05_tarea_16_ejercicio_01.db.DBHelper;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Audiencia;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.NormasDet;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
-public class AudienciaFragment extends Fragment {
+public class AudienciaFragment extends Fragment implements Response.Listener<JSONObject>, Response.ErrorListener{
 
     private ListView lv_audiencias;
     private Button btn_nuevaAudiencia;
     private DBHelper dbHelper;
+
+    ProgressDialog progreso;
+    RequestQueue request;
+    JsonObjectRequest jsonObjectRequest;
 
     public AudienciaFragment() {
         // Required empty public constructor
@@ -60,7 +74,7 @@ public class AudienciaFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         dbHelper = new DBHelper(getActivity());
-
+        request = Volley.newRequestQueue(requireActivity());
         View view = inflater.inflate(R.layout.fragment_audiencia, container, false);
 
         lv_audiencias=view.findViewById(R.id.lv_audiencias);
@@ -176,6 +190,7 @@ public class AudienciaFragment extends Fragment {
 
                     Audiencia audiencia = new Audiencia(codigo,lugar,fecha,hora);
                     dbHelper.Insertar_Audiencia(audiencia);
+                    cargaWebService(codigo,lugar,fecha,hora);
                     ListarAudiencias();
                 }
             });
@@ -197,4 +212,32 @@ public class AudienciaFragment extends Fragment {
         lv_audiencias.setAdapter(adapter);
     }
 
+    //WEB SERVICE
+    private void cargaWebService(int codigo, String lugar, String fecha, String hora) {
+        progreso = new ProgressDialog(requireActivity());
+        progreso.setMessage("Cargando...");
+        progreso.show();
+
+        String url = "http://192.168.1.6/db_grupo_05_tarea_16_ejercicio_01/AudienciaRegistro.php?codigo=" + codigo + "&lugar=" + lugar + "&fecha=" + fecha + "&hora=" + hora;
+        url = url.replace(" ", "%20");
+
+        Log.d("URLWebService", "URL: " + url);
+
+        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, this, this);
+        request.add(jsonObjectRequest);
+    }
+
+
+    @Override
+    public void onErrorResponse(VolleyError error) {
+        progreso.hide();
+        Toast.makeText(requireActivity(), "No se puede conectar: " + error.toString(), Toast.LENGTH_LONG).show();
+        Log.d("ERROR: ", error.toString());
+    }
+
+    @Override
+    public void onResponse(JSONObject response) {
+        progreso.hide();
+        Toast.makeText(requireActivity(), "Mensaje: " + response.toString(), Toast.LENGTH_SHORT).show();
+    }
 }
