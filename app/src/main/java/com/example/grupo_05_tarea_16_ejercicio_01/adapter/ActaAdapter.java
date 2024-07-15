@@ -5,46 +5,84 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.grupo_05_tarea_16_ejercicio_01.R;
+import com.example.grupo_05_tarea_16_ejercicio_01.db.DBHelper;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Accidente;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Acta;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Agente;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Infraccion;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Vehiculo;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Zona;
 
 import java.util.ArrayList;
 
-public class ActaAdapter extends ArrayAdapter<Acta> {
+public class ActaAdapter extends RecyclerView.Adapter<ActaAdapter.ViewHolder>{
     private Context context;
-    private ArrayList<Acta> lista_actas;
+    private DBHelper dbHelper;
+    private ArrayList<Acta> actas;
+    private OnItemClickListener onItemClickListener;
 
-    public ActaAdapter(@NonNull Context context, ArrayList<Acta> lista_actas) {
-        super(context, R.layout.item_acta, lista_actas);
+    public ActaAdapter(Context context, DBHelper dbHelper, ArrayList<Acta> actas, OnItemClickListener onItemClickListener) {
         this.context = context;
-        this.lista_actas = lista_actas;
+        this.dbHelper = dbHelper;
+        this.actas = actas;
+        this.onItemClickListener = onItemClickListener;
     }
 
+    public interface OnItemClickListener {
+        void onItemClick(Acta acta);
+    }
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.item_acta, parent, false);
+        return new ViewHolder(view);
+    }
 
-        if (convertView == null) {
-            LayoutInflater inflater = LayoutInflater.from(context);
-            convertView = inflater.inflate(R.layout.item_acta, parent, false);
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        Acta acta = actas.get(position);
+        Agente agente = dbHelper.get_Agente(acta.getIdagente());
+        Accidente accidente = dbHelper.get_Accidente(acta.getIdaccidente());
+        Zona zona = dbHelper.get_Zona_Puesto(String.valueOf(acta.getIdZona()));
+        holder.edt_accidente_acta.setText(String.valueOf(accidente.getTitulo()));
+        holder.edt_fecha_acta.setText(acta.getFecha());
+        holder.edt_agente_acta.setText(agente.getNombre());
+        holder.edt_zona_acta.setText(zona.getTitulo());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onItemClickListener != null) {
+                    onItemClickListener.onItemClick(acta);
+                }
+            }
+        });
+    }
+
+    @Override
+    public int getItemCount() {
+        return actas  !=null ? actas .size() : 0;
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        TextView edt_agente_acta, edt_accidente_acta, edt_fecha_acta, edt_zona_acta;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            edt_agente_acta = itemView.findViewById(R.id.tv_agente_acta);
+            edt_accidente_acta = itemView.findViewById(R.id.tv_accidente_acta);
+            edt_fecha_acta = itemView.findViewById(R.id.tv_fecha_acta);
+            edt_zona_acta = itemView.findViewById(R.id.tv_zona_acta);
         }
 
-        TextView tv_IdActa = convertView.findViewById(R.id.tv_IdActa);
-        TextView tv_Codigo = convertView.findViewById(R.id.tv_Codigo);
-        TextView tv_Fecha = convertView.findViewById(R.id.tv_Fecha);
-
-        Acta acta = lista_actas.get(position);
-
-        // Asegúrate de convertir los valores a cadenas
-        tv_IdActa.setText(String.valueOf(acta.getIdActa()));
-        tv_Codigo.setText(String.valueOf(acta.getCodigo()));
-        tv_Fecha.setText(acta.getFecha());
-
-        return convertView;
     }
+
 }

@@ -29,11 +29,15 @@
             android:layout_gravity="center"
             android:paddingBottom="16dp" />
 
-        <ListView
-            android:id="@+id/lv_actas"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/lv_listas_actas"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="16dp" />
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/tv_prueva"
+            android:layout_width="match_parent"
+            android:textSize="30sp"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 
 </FrameLayout>

@@ -5,71 +5,105 @@
     android:layout_height="match_parent"
     tools:context=".fragments.Accidente.ActualizarAccidenteFragment">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="10dp">
-
+        android:layout_height="match_parent">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="10dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-                <EditText
-                    android:id="@+id/et_placaA"
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:hint="Número de placa" />
+                    android:orientation="horizontal">
 
-                <EditText
-                    android:id="@+id/et_agenteA"
-                    android:layout_width="0dp"
+                    <EditText
+                        android:id="@+id/et_placaA"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="Número de placa" />
+
+                    <EditText
+                        android:id="@+id/et_agenteA"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="ID Agente" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:hint="ID Agente" />
+                    android:orientation="horizontal">
 
-            </LinearLayout>
+                    <EditText
+                        android:id="@+id/et_horaA"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="Hora"
+                        android:inputType="time" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                    <EditText
+                        android:id="@+id/et_fechaA"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="Fecha"
+                        android:inputType="date" />
 
-                <EditText
-                    android:id="@+id/et_horaA"
-                    android:layout_width="0dp"
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:hint="Hora"
-                    android:inputType="time" />
+                    android:orientation="vertical">
 
-                <EditText
-                    android:id="@+id/et_fechaA"
-                    android:layout_width="0dp"
+                    <EditText
+                        android:id="@+id/et_tituloA_accidente"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Titulo" />
+
+                    <EditText
+                        android:id="@+id/et_descripcionA_accidente"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="top"
+                        android:hint="Descripcion"
+                        android:inputType="textMultiLine"
+                        android:maxLines="6"
+                        android:minLines="4"
+                        android:overScrollMode="always"
+                        android:padding="10dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:hint="Fecha"
-                    android:inputType="date" />
+                    android:orientation="horizontal">
 
-            </LinearLayout>
+                    <Button
+                        android:id="@+id/btn_tomarFotoA"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tomar Foto" />
 
-            <EditText
-                android:id="@+id/et_descripcionA"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Descripción" />
+                    <ImageView
+                        android:id="@+id/iv_imagenAccidenteA"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -91,39 +125,29 @@
 
                 </LinearLayout>
 
-                <ImageView
-                    android:id="@+id/iv_imagenAccidenteA"
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp" />
+                    <EditText
+                        android:id="@+id/et_nombreLugarA"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Nombre del lugar" />
 
-            </LinearLayout>
+                    <fragment
+                        android:id="@+id/fr_ubicacionAccidenteA"
+                        android:name="com.google.android.gms.maps.SupportMapFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="250dp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                </LinearLayout>
 
-                <EditText
-                    android:id="@+id/et_nombreLugarA"
+                <Button
+                    android:id="@+id/btn_actualizarAccidente"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Nombre del lugar" />
-
-                <fragment
-                    android:id="@+id/fr_ubicacionAccidenteA"
-                    android:name="com.google.android.gms.maps.SupportMapFragment"
-                    android:layout_width="match_parent"
-                    android:layout_height="250dp" />
+                    android:text="Actualizar" />
 
             </LinearLayout>
-
-            <Button
-                android:id="@+id/btn_actualizarAccidente"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Actualizar" />
-
         </LinearLayout>
-    </LinearLayout>
+    </ScrollView>
+
 
 </FrameLayout>
