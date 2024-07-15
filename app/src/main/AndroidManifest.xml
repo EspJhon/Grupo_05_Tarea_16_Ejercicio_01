@@ -36,15 +36,6 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBxaVAOO9PDFR9gcZIIRr46aR0pyqiLQAU" />
-
-        <activity
-            android:name=".fragments.Audiencia.AgregarAudienciaActivity"
-            android:exported="false"
-            android:theme="@style/Theme.Grupo_05_Tarea_16_Ejercicio_01.NoActionBar" />
-        <activity
-            android:name=".fragments.Accidente.AgregarAccidenteActivity"
-            android:exported="false"
-            android:theme="@style/Theme.Grupo_05_Tarea_16_Ejercicio_01.NoActionBar" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

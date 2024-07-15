@@ -6,6 +6,7 @@ import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -33,6 +34,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.OutputStream;
 
 public class AgregarAccidenteFragment extends Fragment implements View.OnClickListener, OnMapReadyCallback {
@@ -82,6 +84,7 @@ public class AgregarAccidenteFragment extends Fragment implements View.OnClickLi
         iv_imagenAccidente = view.findViewById(R.id.iv_imagenAccidente);
 
         view.findViewById(R.id.btn_tomarFoto).setOnClickListener(this::onClick);
+        view.findViewById(R.id.btn_subirFoto).setOnClickListener(this::onClick);
         view.findViewById(R.id.btn_agregarAccidente).setOnClickListener(this::onClick);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.fr_ubicacionAccidente);
@@ -98,6 +101,8 @@ public class AgregarAccidenteFragment extends Fragment implements View.OnClickLi
             ActivarCam();
         } else if (v.getId() == R.id.btn_agregarAccidente) {
             AgregarAccidente();
+        } else if (v.getId()==R.id.btn_subirFoto) {
+            SubirFoto();
         }
     }
 
@@ -147,6 +152,16 @@ public class AgregarAccidenteFragment extends Fragment implements View.OnClickLi
             URL = GuardarURL(foto);
 
             iv_imagenAccidente.setImageBitmap(foto);
+        }else if (requestCode == 88888 && data != null && data.getData() != null) {
+            Uri imageUri = data.getData();
+            try {
+                InputStream imageStream = getActivity().getContentResolver().openInputStream(imageUri);
+                Bitmap imgSubida = BitmapFactory.decodeStream(imageStream);
+                URL = GuardarURL(imgSubida);
+                iv_imagenAccidente.setImageBitmap(imgSubida);
+            } catch (Exception e) {
+                Toast.makeText(getActivity(), "Error al cargar la imagen", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -189,6 +204,13 @@ public class AgregarAccidenteFragment extends Fragment implements View.OnClickLi
         }
 
         return file.getAbsolutePath();
+    }
+
+    private void SubirFoto() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        if (intent.resolveActivity(requireActivity().getPackageManager()) != null) {
+            startActivityForResult(intent, 88888);
+        }
     }
 
 }
