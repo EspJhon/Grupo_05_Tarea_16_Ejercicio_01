@@ -7,6 +7,7 @@ import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Acta;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Agente;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Audiencia;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.NormasDet;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.OficinaGob;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Propietario;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.PuestoControl;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Usuario;
@@ -306,5 +307,39 @@ public class DBHelper {
         dbAdapter.open();
         dbAdapter.Actualizar_Norma_Detalle(normasDet);
         dbAdapter.close();
+    }
+
+    //TABLA OFICINA
+
+    public void Insertar_Oficina(OficinaGob oficinaGob){
+        dbAdapter.open();
+        dbAdapter.Insertar_Oficina(oficinaGob);
+        dbAdapter.close();
+    }
+
+    public void Actualizar_Oficina(OficinaGob oficinaGob){
+        dbAdapter.open();
+        dbAdapter.Actualizar_Oficina(oficinaGob);
+        dbAdapter.close();
+    }
+
+    public void Eliminar_Oficina(OficinaGob oficinaGob){
+        dbAdapter.open();
+        dbAdapter.Eliminar_Oficina(oficinaGob);
+        dbAdapter.close();
+    }
+
+    public OficinaGob get_Oficina(int id){
+        dbAdapter.open();
+        OficinaGob oficinaGob = dbAdapter.get_Oficina(id);
+        dbAdapter.close();
+        return oficinaGob;
+    }
+
+    public ArrayList<OficinaGob> get_all_Oficinas(){
+        dbAdapter.open();
+        ArrayList<OficinaGob> oficinas = dbAdapter.get_all_Oficinas();
+        dbAdapter.close();
+        return oficinas;
     }
 }
