@@ -2,6 +2,7 @@ package com.example.grupo_05_tarea_16_ejercicio_01.fragments.Propietario;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,14 +21,22 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.grupo_05_tarea_16_ejercicio_01.R;
 import com.example.grupo_05_tarea_16_ejercicio_01.adapter.Propietario_Adapter;
 import com.example.grupo_05_tarea_16_ejercicio_01.db.DBHelper;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Propietario;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
-public class PropietarioFragment extends Fragment implements Propietario_Adapter.OnItemLongClickListener {
+public class PropietarioFragment extends Fragment implements Propietario_Adapter.OnItemLongClickListener, Response.Listener<JSONObject>, Response.ErrorListener {
 
     private ListView lv_propietarios;
     private EditText et_cedula, et_nombre, et_ciudad;
@@ -36,6 +46,10 @@ public class PropietarioFragment extends Fragment implements Propietario_Adapter
     private Propietario propietarioSeleccionado;
     private Button btnLogout;
 
+    ProgressDialog progreso;
+    RequestQueue request;
+    JsonObjectRequest jsonObjectRequest;
+
     public PropietarioFragment() {}
 
     @Override
@@ -44,6 +58,8 @@ public class PropietarioFragment extends Fragment implements Propietario_Adapter
         View view = inflater.inflate(R.layout.fragment_propietario, container, false);
 
         dbHelper = new DBHelper(requireActivity());
+        request = Volley.newRequestQueue(requireActivity());  // Inicializar RequestQueue
+
         //LLAMADA AL DIALOG REGISTRAR
         view.findViewById(R.id.btn_registrar_propietario).setOnClickListener(this::onClick);
         lv_propietarios = view.findViewById(R.id.lv_propietarios);
@@ -73,7 +89,6 @@ public class PropietarioFragment extends Fragment implements Propietario_Adapter
             }
         });
 
-
         return view;
     }
 
@@ -86,7 +101,6 @@ public class PropietarioFragment extends Fragment implements Propietario_Adapter
         Navigation.findNavController(requireView()).navigate(R.id.loginFragment);
     }
 
-    //MÉTODO REGISTRAR (ONCLICK)
     private void onClick(View v) {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_registro_propietario, null);
@@ -117,7 +131,8 @@ public class PropietarioFragment extends Fragment implements Propietario_Adapter
 
             Propietario propietario = new Propietario(cedulaInt, nombre, ciudad);
             Registrar(propietario);
-
+            Log.d("RegistroPropietario", "Cedula: " + cedula + ", Nombre: " + nombre + ", Ciudad: " + ciudad);
+            cargaWebService(cedula, nombre, ciudad);
             Toast.makeText(getContext(), "Cliente registrado", Toast.LENGTH_SHORT).show();
             Listar();
         });
@@ -214,13 +229,42 @@ public class PropietarioFragment extends Fragment implements Propietario_Adapter
         builder.setNegativeButton("Cancelar", (dialogInterface, which) -> {
         });
 
-        AlertDialog dialogActualizar = builder.create();
-        dialogActualizar.show();
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void actualizarPropietario(Propietario propietario) {
         dbHelper.Actualizar_Propietario(propietario);
         Listar();
         Toast.makeText(requireActivity(), "Propietario actualizado: " + propietario.getNombre(), Toast.LENGTH_SHORT).show();
+    }
+
+    //WEB SERVICE
+    private void cargaWebService(String cedula, String nombre, String ciudad) {
+        progreso = new ProgressDialog(requireActivity());
+        progreso.setMessage("Cargando...");
+        progreso.show();
+
+        String url = "http://192.168.1.6/db_grupo_05_tarea_16_ejercicio_01/PropietarioRegistro.php?cedulap=" + cedula + "&nombre=" + nombre + "&ciudad=" + ciudad;
+        url = url.replace(" ", "%20");
+
+        Log.d("URLWebService", "URL: " + url);
+
+        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, this, this);
+        request.add(jsonObjectRequest);
+    }
+
+
+    @Override
+    public void onErrorResponse(VolleyError error) {
+        progreso.hide();
+        Toast.makeText(requireActivity(), "No se puede conectar: " + error.toString(), Toast.LENGTH_LONG).show();
+        Log.d("ERROR: ", error.toString());
+    }
+
+    @Override
+    public void onResponse(JSONObject response) {
+        progreso.hide();
+        Toast.makeText(requireActivity(), "Mensaje: " + response.toString(), Toast.LENGTH_SHORT).show();
     }
 }

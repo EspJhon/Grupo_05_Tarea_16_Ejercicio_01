@@ -6,8 +6,8 @@ import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Accidente;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Acta;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Agente;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Audiencia;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Infraccion;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.NormasDet;
-import com.example.grupo_05_tarea_16_ejercicio_01.modelo.OficinaGob;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Propietario;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.PuestoControl;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Usuario;
@@ -280,6 +280,12 @@ public class DBHelper {
         dbAdapter.close();
         return Agente;
     }
+    public Agente get_Agente(int IdAgente){
+        dbAdapter.open();
+        Agente agente = dbAdapter.get_Agente(IdAgente);
+        dbAdapter.close();
+        return agente;
+    }
 
     public void Insertar_Normas_Detalle(NormasDet normasDet){
         dbAdapter.open();
@@ -292,7 +298,7 @@ public class DBHelper {
         dbAdapter.close();
         return normasDets;
     }
-    public NormasDet get_Zona(int IdNorma){
+    public NormasDet get_Norma_Detalle(int IdNorma){
         dbAdapter.open();
         NormasDet normasDet = dbAdapter.get_Norma_Detalle(IdNorma);
         dbAdapter.close();
@@ -309,8 +315,33 @@ public class DBHelper {
         dbAdapter.close();
     }
 
-    //TABLA OFICINA
-
+    public void Insertar_Infraccion(Infraccion infraccion){
+        dbAdapter.open();
+        dbAdapter.Insertar_Infraccion(infraccion);
+        dbAdapter.close();
+    }
+    public ArrayList<Infraccion> get_all_Infracciones(){
+        dbAdapter.open();
+        ArrayList<Infraccion> infraccions = dbAdapter.get_all_Infracciones();
+        dbAdapter.close();
+        return infraccions;
+    }
+    public Infraccion get_Infraccion(int IdFraccion){
+        dbAdapter.open();
+        Infraccion infraccion = dbAdapter.get_Infraccion(IdFraccion);
+        dbAdapter.close();
+        return infraccion;
+    }
+    public void Eliminar_Infraccion(Infraccion infraccion) {
+        dbAdapter.open();
+        dbAdapter.Eliminar_Infraccion(infraccion);
+        dbAdapter.close();
+    }
+    public void Actualizar_Infraccion(Infraccion infraccion) {
+        dbAdapter.open();
+        dbAdapter.Actualizar_Infraccion(infraccion);
+        dbAdapter.close();
+    }
     public void Insertar_Oficina(OficinaGob oficinaGob){
         dbAdapter.open();
         dbAdapter.Insertar_Oficina(oficinaGob);
