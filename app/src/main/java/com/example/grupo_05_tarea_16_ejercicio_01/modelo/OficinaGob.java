@@ -6,15 +6,19 @@ public class OficinaGob {
     private int npoliza;
     private int IdVehiculo;
     private String ubicacion;
+    private double latitud;
+    private double longitud;
 
     public OficinaGob() {
     }
 
-    public OficinaGob(String valor_vehiculo, int npoliza, int idVehiculo, String ubicacion) {
+    public OficinaGob(String valor_vehiculo, int npoliza, int idVehiculo, String ubicacion, double latitud, double longitud) {
         this.valor_vehiculo = valor_vehiculo;
         this.npoliza = npoliza;
-        this.IdVehiculo = idVehiculo;
+        IdVehiculo = idVehiculo;
         this.ubicacion = ubicacion;
+        this.latitud = latitud;
+        this.longitud = longitud;
     }
 
     public int getIdOficina() {
@@ -55,5 +59,21 @@ public class OficinaGob {
 
     public void setUbicacion(String ubicacion) {
         this.ubicacion = ubicacion;
+    }
+
+    public double getLatitud() {
+        return latitud;
+    }
+
+    public void setLatitud(double latitud) {
+        this.latitud = latitud;
+    }
+
+    public double getLongitud() {
+        return longitud;
+    }
+
+    public void setLongitud(double longitud) {
+        this.longitud = longitud;
     }
 }

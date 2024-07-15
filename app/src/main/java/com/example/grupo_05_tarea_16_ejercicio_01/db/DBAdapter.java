@@ -1105,4 +1105,82 @@ public class DBAdapter {
         ContentValues values = new ContentValues();
         db.delete(Table_Infraccion.TABLE,Table_Infraccion.ID + " = " + infraccion.getIdInfraccion(),null);
     }
+
+    //TABLA OFICINA
+
+    public void Insertar_Oficina(OficinaGob oficinaGob) {
+        ContentValues values = new ContentValues();
+        values.put(Table_Oficina.VALOR_VEHICULO, oficinaGob.getValor_vehiculo());
+        values.put(Table_Oficina.NUMERO_POLIZA, oficinaGob.getNpoliza());
+        values.put(Table_Vehiculo.ID, oficinaGob.getIdVehiculo());
+        values.put(Table_Oficina.UBICACION, oficinaGob.getUbicacion());
+        values.put(Table_Oficina.LATITUD, oficinaGob.getLatitud());
+        values.put(Table_Oficina.LONGITUD, oficinaGob.getLongitud());
+        db.insert(Table_Oficina.TABLE, null, values);
+    }
+
+    public void Actualizar_Oficina(OficinaGob oficinaGob) {
+        ContentValues values = new ContentValues();
+        values.put(Table_Oficina.VALOR_VEHICULO, oficinaGob.getValor_vehiculo());
+        values.put(Table_Oficina.NUMERO_POLIZA, oficinaGob.getNpoliza());
+        values.put(Table_Vehiculo.ID, oficinaGob.getIdVehiculo());
+        values.put(Table_Oficina.UBICACION, oficinaGob.getUbicacion());
+        values.put(Table_Oficina.LATITUD, oficinaGob.getLatitud());
+        values.put(Table_Oficina.LONGITUD, oficinaGob.getLongitud());
+        db.update(Table_Oficina.TABLE, values, Table_Oficina.ID + " = " + oficinaGob.getIdOficina(), null);
+    }
+
+    public void Eliminar_Oficina(OficinaGob oficinaGob) {
+        db.delete(Table_Oficina.TABLE, Table_Oficina.ID + " = " + oficinaGob.getIdOficina(), null);
+    }
+
+    public OficinaGob get_Oficina(int id) {
+        try {
+            String query = "SELECT * FROM " + Table_Oficina.TABLE +
+                    " WHERE " + Table_Oficina.ID + " = " + id;
+            Cursor cursor = db.rawQuery(query, null);
+            OficinaGob oficinaGob = null;
+            if (cursor.moveToFirst()) {
+                do {
+                    oficinaGob = new OficinaGob();
+                    oficinaGob.setIdOficina(cursor.getInt(0));
+                    oficinaGob.setValor_vehiculo(cursor.getString(1));
+                    oficinaGob.setNpoliza(cursor.getInt(2));
+                    oficinaGob.setIdVehiculo(cursor.getInt(3));
+                    oficinaGob.setUbicacion(cursor.getString(4));
+                    oficinaGob.setLatitud(cursor.getDouble(5));
+                    oficinaGob.setLongitud(cursor.getDouble(6));
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            return oficinaGob;
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public ArrayList<OficinaGob> get_all_Oficinas() {
+        ArrayList<OficinaGob> oficinas = new ArrayList<>();
+        try {
+            String query = "SELECT * FROM " + Table_Oficina.TABLE;
+            Cursor cursor = db.rawQuery(query, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    OficinaGob oficinaGob = new OficinaGob();
+                    oficinaGob.setIdOficina(cursor.getInt(0));
+                    oficinaGob.setValor_vehiculo(cursor.getString(1));
+                    oficinaGob.setNpoliza(cursor.getInt(2));
+                    oficinaGob.setIdVehiculo(cursor.getInt(3));
+                    oficinaGob.setUbicacion(cursor.getString(4));
+                    oficinaGob.setLatitud(cursor.getDouble(5));
+                    oficinaGob.setLongitud(cursor.getDouble(6));
+                    oficinas.add(oficinaGob);
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+        } catch (Exception ex) {
+            return null;
+        }
+        return oficinas;
+    }
 }
