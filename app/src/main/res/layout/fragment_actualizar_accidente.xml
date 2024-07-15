@@ -6,6 +6,7 @@
     tools:context=".fragments.Accidente.ActualizarAccidenteFragment">
 
     <ScrollView
+        android:id="@+id/sv_accidenteA"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
@@ -132,7 +133,7 @@
 
                     <fragment
                         android:id="@+id/fr_ubicacionAccidenteA"
-                        android:name="com.google.android.gms.maps.SupportMapFragment"
+                        android:name="com.example.grupo_05_tarea_16_ejercicio_01.adapter.MapMoveFragment"
                         android:layout_width="match_parent"
                         android:layout_height="250dp" />
 
