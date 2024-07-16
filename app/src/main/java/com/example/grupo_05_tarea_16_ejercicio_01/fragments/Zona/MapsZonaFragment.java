@@ -1,6 +1,7 @@
 package com.example.grupo_05_tarea_16_ejercicio_01.fragments.Zona;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
@@ -9,13 +10,22 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.grupo_05_tarea_16_ejercicio_01.R;
 import com.example.grupo_05_tarea_16_ejercicio_01.db.DBHelper;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Usuario;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Zona;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -26,12 +36,22 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class MapsZonaFragment extends Fragment implements OnMapReadyCallback{
 
     DBHelper dbHelper;
     GoogleMap mMap;
+    ProgressDialog progreso;
+    RequestQueue request;
+    JsonObjectRequest jsonObjectRequest;
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -67,6 +87,7 @@ public class MapsZonaFragment extends Fragment implements OnMapReadyCallback{
         View view = inflater.inflate(R.layout.fragment_maps_zona, container, false);
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map_zona_general);
         mapFragment.getMapAsync(this);
+        request = Volley.newRequestQueue(getContext());
         return view;
     }
     public void onMapReady(@NonNull GoogleMap googleMap) {
@@ -122,14 +143,17 @@ public class MapsZonaFragment extends Fragment implements OnMapReadyCallback{
                         LatLng mUbi = new LatLng(mlatitud, mlongitud);
                         mMap.addMarker(new MarkerOptions().position(mUbi).title(title));
                         Zona zona = new Zona("", "", "", slatitud, slongitud, title);
+                        cargaWebService("","","",slatitud,slongitud,title);
                         dbHelper.Insertar_Zonas(zona);
 
                         // Navegar de regreso al fragmento anterior
-                        try {
-                            NavController navController = Navigation.findNavController(getView());
-                            navController.navigateUp();
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                        if (isAdded()) {
+                            try {
+                                NavController navController = Navigation.findNavController(requireView());
+                                navController.navigateUp();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                 });
@@ -154,4 +178,57 @@ public class MapsZonaFragment extends Fragment implements OnMapReadyCallback{
             }
         }
     }
+
+    private void cargaWebService(String departamento, String provincia, String distrito, String latitud, String longitud, String titulo) {
+        progreso = new ProgressDialog(requireActivity());
+        progreso.setMessage("Cargando...");
+        progreso.show();
+        List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.1.16");
+        // Puedes añadir más IPs según sea necesario
+        String selectedIp = "";
+        Map<String, String> userIpMap = new HashMap<>();
+        userIpMap.put("jhon", ips.get(0));
+        userIpMap.put("chagua", ips.get(0));
+        userIpMap.put("matias", ips.get(0)); // Assuming all three get IP1 for now
+
+        ArrayList<Usuario> usuarios = dbHelper.get_all_Usuarios();
+        for (Usuario usuario : usuarios) {
+            selectedIp = userIpMap.get(usuario.getUsername());
+            if (selectedIp != null) {
+                break; // Exit loop after finding a match
+            }
+        }
+
+        String url="http://" + selectedIp + "/db_grupo_05_tarea_16_ejercicio_01/ZonaRegistro.php?" +
+                "departamento=" + departamento +
+                "&provincia=" + provincia +
+                "&distrito=" + distrito +
+                "&latitud=" + latitud +
+                "&longitud=" + longitud +
+                "&titulo=" + titulo;
+        url = url.replace(" ","%20");
+        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                if (isAdded()) {  // Verifica si el fragmento está adjunto antes de interactuar con la UI
+
+                    Toast.makeText(requireActivity(), "Zona registrado correctamente", Toast.LENGTH_SHORT).show();
+                    // preguntarle a chagua del runable
+                }
+                progreso.hide();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (isAdded()) {  // Verifica si el fragmento está adjunto antes de interactuar con la UI
+
+                    Toast.makeText(requireActivity(), "No se puede conectar: " + error.toString(), Toast.LENGTH_LONG).show();
+                }
+                progreso.hide();
+            }
+        });
+
+        request.add(jsonObjectRequest);
+    }
+
 }
