@@ -238,6 +238,29 @@ public class DBHelper {
         return puestoControl;
     }
 
+    public PuestoControl get_Puesto_Control_Marker(String latitud, String longitud){
+        dbAdapter.open();
+        PuestoControl puestoControl = dbAdapter.get_Puesto_Control_Marker(latitud, longitud);
+        dbAdapter.close();
+        return puestoControl;
+    }
+
+    public void Eliminar_Puesto_Control(PuestoControl puestoControl) {
+        dbAdapter.open();
+        dbAdapter.Eliminar_Puesto_Control(puestoControl);
+        dbAdapter.close();
+    }
+    public void Eliminar_Puesto_Control_Zona(int idZona) {
+        dbAdapter.open();
+        dbAdapter.Eliminar_Puesto_Control_Zona(idZona);
+        dbAdapter.close();
+    }
+    public void Actualizar_Puesto_Control(PuestoControl puestoControl) {
+        dbAdapter.open();
+        dbAdapter.Actualizar_Puesto_Control(puestoControl);
+        dbAdapter.close();
+    }
+
     public void insertarActa(Acta acta) {
         dbAdapter.open();
         dbAdapter.addActa(acta);

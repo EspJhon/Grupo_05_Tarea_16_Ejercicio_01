@@ -20,12 +20,15 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.grupo_05_tarea_16_ejercicio_01.MainActivity;
 import com.example.grupo_05_tarea_16_ejercicio_01.R;
 import com.example.grupo_05_tarea_16_ejercicio_01.adapter.AccidenteAdapter;
 import com.example.grupo_05_tarea_16_ejercicio_01.db.DBHelper;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Accidente;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Agente;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Vehiculo;
 
 import java.util.ArrayList;
 
@@ -70,12 +73,22 @@ public class AccidenteFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        dbHelper = new DBHelper(getContext());
         view.findViewById(R.id.btn_nuevoAccidente).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NavController navController = Navigation.findNavController(v);
-                navController.navigate(R.id.action_accidenteFragment_to_agregarAccidenteFragment);
+                ArrayList<Vehiculo> prueba01 = dbHelper.get_all_Vehiculos();
+                ArrayList<Agente> prueba02 = dbHelper.getAllAgentes();
+                if (prueba01.isEmpty() || prueba02.isEmpty()) {
+                    Toast.makeText(getContext(), "No Existen Registro de Vehiculo y Agente", Toast.LENGTH_SHORT).show();
+                } else if (prueba01.isEmpty()) {
+                    Toast.makeText(getContext(), "No Existe Vehiculo", Toast.LENGTH_SHORT).show();
+                } else if (prueba02.isEmpty()) {
+                    Toast.makeText(getContext(), "No Existe Agente", Toast.LENGTH_SHORT).show();
+                } else {
+                    NavController navController = Navigation.findNavController(v);
+                    navController.navigate(R.id.action_accidenteFragment_to_agregarAccidenteFragment);
+                }
             }
         });
 

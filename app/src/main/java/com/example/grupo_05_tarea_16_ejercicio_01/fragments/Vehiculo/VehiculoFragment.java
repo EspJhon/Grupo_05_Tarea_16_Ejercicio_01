@@ -82,7 +82,12 @@ public class VehiculoFragment extends Fragment implements Vehiculo_Adapter.OnIte
         btnRegistrarVehiculo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mostrarDialogoRegistrarVehiculo();
+                ArrayList<Propietario> prueba = dbHelper.get_all_Propietarios();
+                if (prueba.isEmpty()) {
+                    Toast.makeText(getContext(), "No Existe Propietario", Toast.LENGTH_SHORT).show();
+                } else {
+                    mostrarDialogoRegistrarVehiculo();
+                }
             }
         });
 
