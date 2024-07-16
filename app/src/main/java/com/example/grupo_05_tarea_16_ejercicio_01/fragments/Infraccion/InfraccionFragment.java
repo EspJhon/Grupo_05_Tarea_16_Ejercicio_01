@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.grupo_05_tarea_16_ejercicio_01.R;
 import com.example.grupo_05_tarea_16_ejercicio_01.adapter.InfraccionAdapter;
@@ -22,8 +23,11 @@ import com.example.grupo_05_tarea_16_ejercicio_01.adapter.NormaDetalleAdapter;
 import com.example.grupo_05_tarea_16_ejercicio_01.adapter.PuestoControlAdapter;
 import com.example.grupo_05_tarea_16_ejercicio_01.db.DBHelper;
 import com.example.grupo_05_tarea_16_ejercicio_01.fragments.PuestoControl.PuestoControlGrupo;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Agente;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Infraccion;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.NormasDet;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.PuestoControl;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Vehiculo;
 
 import java.util.ArrayList;
 
@@ -84,11 +88,25 @@ public class InfraccionFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        dbHelper = new DBHelper(getContext());
         btn_anadir_infraccion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NavController navController = Navigation.findNavController(v);
-                navController.navigate(R.id.action_infraccionFragment_to_infraccionRegisterFragment);
+                ArrayList<Vehiculo> prueba01 = dbHelper.get_all_Vehiculos();
+                ArrayList<Agente> prueba02 = dbHelper.getAllAgentes();
+                ArrayList<NormasDet> prueba03 = dbHelper.get_all_Normas_Detalle();
+                if (prueba01.isEmpty() || prueba02.isEmpty() || prueba03.isEmpty()) {
+                    Toast.makeText(getContext(), "No Existen Registro de Vehiculo, Agente y Norma", Toast.LENGTH_SHORT).show();
+                } else if (prueba01.isEmpty()) {
+                    Toast.makeText(getContext(), "No Existe Vehiculo", Toast.LENGTH_SHORT).show();
+                } else if (prueba02.isEmpty()) {
+                    Toast.makeText(getContext(), "No Existe Agente", Toast.LENGTH_SHORT).show();
+                } else if (prueba03.isEmpty()) {
+                    Toast.makeText(getContext(), "No Existe Norma", Toast.LENGTH_SHORT).show();
+                } else {
+                    NavController navController = Navigation.findNavController(v);
+                    navController.navigate(R.id.action_infraccionFragment_to_infraccionRegisterFragment);
+                }
             }
         });
     }

@@ -92,7 +92,12 @@ public class AgenteFragment extends Fragment {
         btnRegistrarAgente.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mostrarDialogoRegistrarEditarAgente(null);
+                ArrayList<PuestoControl> prueba = dbHelper.get_all_Puesto_Controls();
+                if (prueba.isEmpty()) {
+                    Toast.makeText(getContext(), "No Existe Puesto de Control", Toast.LENGTH_SHORT).show();
+                } else {
+                    mostrarDialogoRegistrarEditarAgente(null);
+                }
             }
         });
 

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.grupo_05_tarea_16_ejercicio_01.R;
 import com.example.grupo_05_tarea_16_ejercicio_01.adapter.PuestoControlAdapter;
@@ -79,11 +80,17 @@ public class PuestoControlFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        dbHelper = new DBHelper(getContext());
         view.findViewById(R.id.btn_agregar_puesto_control).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NavController navController = Navigation.findNavController(v);
-                navController.navigate(R.id.action_puestoControlFragment_to_registerPuestoControlFragment);
+                ArrayList<Zona> prueba = dbHelper.get_all_Zonas();
+                if (prueba.isEmpty()) {
+                    Toast.makeText(getContext(), "No existe una Zona", Toast.LENGTH_SHORT).show();
+                } else {
+                    NavController navController = Navigation.findNavController(v);
+                    navController.navigate(R.id.action_puestoControlFragment_to_registerPuestoControlFragment);
+                }
             }
         });
     }

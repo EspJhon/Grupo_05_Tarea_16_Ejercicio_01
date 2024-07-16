@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.grupo_05_tarea_16_ejercicio_01.R;
 import com.example.grupo_05_tarea_16_ejercicio_01.adapter.AccidenteAdapter;
@@ -23,6 +24,7 @@ import com.example.grupo_05_tarea_16_ejercicio_01.adapter.OficinaAdapter;
 import com.example.grupo_05_tarea_16_ejercicio_01.db.DBHelper;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Accidente;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.OficinaGob;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Vehiculo;
 
 import java.util.ArrayList;
 
@@ -66,12 +68,17 @@ public class OficinaGobFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        dbHelper = new DBHelper(getContext());
         view.findViewById(R.id.btn_nuevaOficina).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NavController navController = Navigation.findNavController(v);
-                navController.navigate(R.id.action_oficinaGobFragment_to_agregarOficinaFragment);
+                ArrayList<Vehiculo> prueba = dbHelper.get_all_Vehiculos();
+                if (prueba.isEmpty()) {
+                    Toast.makeText(getContext(), "No Existe un Vehiculo", Toast.LENGTH_SHORT).show();
+                } else {
+                    NavController navController = Navigation.findNavController(v);
+                    navController.navigate(R.id.action_oficinaGobFragment_to_agregarOficinaFragment);
+                }
             }
         });
 

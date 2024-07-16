@@ -27,8 +27,14 @@ import com.example.grupo_05_tarea_16_ejercicio_01.R;
 import com.example.grupo_05_tarea_16_ejercicio_01.adapter.ActaAdapter;
 import com.example.grupo_05_tarea_16_ejercicio_01.adapter.InfraccionAdapter;
 import com.example.grupo_05_tarea_16_ejercicio_01.db.DBHelper;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Accidente;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Acta;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Agente;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Audiencia;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Infraccion;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.NormasDet;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Vehiculo;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Zona;
 
 import java.util.ArrayList;
 
@@ -93,8 +99,24 @@ public class ActaFragment extends Fragment {
         btnRegistrarActa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NavController navController = Navigation.findNavController(v);
-                navController.navigate(R.id.action_actaFragment_to_actaRegisterFragment);
+                ArrayList<Accidente> prueba01 = dbHelper.get_all_Accidentes();
+                ArrayList<Agente> prueba02 = dbHelper.getAllAgentes();
+                ArrayList<Audiencia> prueba03 = dbHelper.get_all_Audiencias();
+                ArrayList<Zona> prueba04 = dbHelper.get_all_Zonas();
+                if (prueba01.isEmpty() || prueba02.isEmpty() || prueba03.isEmpty() || prueba04.isEmpty()) {
+                    Toast.makeText(getContext(), "No Existen los Registro necesarios", Toast.LENGTH_SHORT).show();
+                } else if (prueba01.isEmpty()) {
+                    Toast.makeText(getContext(), "No Existe Accidente", Toast.LENGTH_SHORT).show();
+                } else if (prueba02.isEmpty()) {
+                    Toast.makeText(getContext(), "No Existe Agente", Toast.LENGTH_SHORT).show();
+                } else if (prueba03.isEmpty()) {
+                    Toast.makeText(getContext(), "No Existe Audiencia", Toast.LENGTH_SHORT).show();
+                } else if (prueba03.isEmpty()) {
+                    Toast.makeText(getContext(), "No Existe Zona", Toast.LENGTH_SHORT).show();
+                } else {
+                    NavController navController = Navigation.findNavController(v);
+                    navController.navigate(R.id.action_actaFragment_to_actaRegisterFragment);
+                }
             }
         });
     }

@@ -894,6 +894,46 @@ public class DBAdapter {
             return null;
         }
     }
+    public PuestoControl get_Puesto_Control_Marker(String latitud, String longitud) {
+        try {
+            String query = "SELECT * FROM " + Table_Puesto_Control.TABLE +
+                    " WHERE " + Table_Puesto_Control.LATITUD + " = ? AND " + Table_Puesto_Control.LONGITUD + " = ?";
+            Cursor cursor = db.rawQuery(query, new String[]{latitud, longitud});
+            PuestoControl puestoControl = null;
+            if (cursor.moveToFirst()){
+                do {
+                    puestoControl = new PuestoControl();
+                    puestoControl.setIdPuestoControl(cursor.getInt(0));
+                    puestoControl.setIdZona(cursor.getInt(1));
+                    puestoControl.setReferencia(cursor.getString(2));
+                    puestoControl.setLatitud(cursor.getString(3));
+                    puestoControl.setLongitud(cursor.getString(4));
+                    puestoControl.setTitulo(cursor.getString(5));
+                }while (cursor.moveToNext());
+            }
+            cursor.close();
+            return puestoControl;
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public void Actualizar_Puesto_Control(PuestoControl puestoControl) {
+        ContentValues values = new ContentValues();
+        values.put(Table_Zona.ID, puestoControl.getIdZona());
+        values.put(Table_Puesto_Control.REFERENCIA, puestoControl.getReferencia());
+        values.put(Table_Puesto_Control.LATITUD, puestoControl.getLatitud());
+        values.put(Table_Puesto_Control.LONGITUD, puestoControl.getLongitud());
+        values.put(Table_Puesto_Control.TITULO, puestoControl.getTitulo());
+        db.update(Table_Puesto_Control.TABLE, values,Table_Puesto_Control.ID + " = " + puestoControl.getIdPuestoControl(),null);
+    }
+    public void Eliminar_Puesto_Control(PuestoControl puestoControl) {
+        ContentValues values = new ContentValues();
+        db.delete(Table_Puesto_Control.TABLE,Table_Puesto_Control.ID + " = " + puestoControl.getIdPuestoControl(),null);
+    }
+    public void Eliminar_Puesto_Control_Zona(int idZona) {
+        db.delete(Table_Puesto_Control.TABLE,Table_Zona.ID + " = ?", new String[]{String.valueOf(idZona)});
+    }
 
     public void addActa(Acta acta) {
         ContentValues values = new ContentValues();

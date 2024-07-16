@@ -40,7 +40,7 @@ public class PuestoControl {
     }
 
     public void setReferencia(String referencia) {
-        referencia = referencia;
+        this.referencia = referencia;
     }
 
     public String getLatitud() {
