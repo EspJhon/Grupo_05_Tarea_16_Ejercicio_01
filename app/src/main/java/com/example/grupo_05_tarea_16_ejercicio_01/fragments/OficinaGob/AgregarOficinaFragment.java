@@ -1,11 +1,13 @@
 package com.example.grupo_05_tarea_16_ejercicio_01.fragments.OficinaGob;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +19,17 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.grupo_05_tarea_16_ejercicio_01.R;
 import com.example.grupo_05_tarea_16_ejercicio_01.db.DBHelper;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Accidente;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.OficinaGob;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Usuario;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Vehiculo;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -29,15 +38,24 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.util.ArrayList;
+import org.json.JSONObject;
 
-public class AgregarOficinaFragment extends Fragment implements OnMapReadyCallback {
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class AgregarOficinaFragment extends Fragment implements OnMapReadyCallback, Response.Listener<JSONObject>, Response.ErrorListener {
 
     private EditText et_valorVehiculo, et_numPoliza, et_ubicacion;
     private Spinner sp_numPlaca_oficina;
-    private String latitud=null,longitud=null;
+    private String latitud = null, longitud = null;
     private DBHelper dbHelper;
     private GoogleMap mMap;
+    private ProgressDialog progressDialog;
+    RequestQueue request;
+    JsonObjectRequest jsonObjectRequest;
 
     public AgregarOficinaFragment() {
         // Required empty public constructor
@@ -69,6 +87,8 @@ public class AgregarOficinaFragment extends Fragment implements OnMapReadyCallba
         sp_numPlaca_oficina = view.findViewById(R.id.sp_numPlaca_oficina);
         et_ubicacion = view.findViewById(R.id.et_ubicacion);
 
+        request = Volley.newRequestQueue(getContext());
+
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.fr_ubicacionOficina);
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
@@ -76,15 +96,17 @@ public class AgregarOficinaFragment extends Fragment implements OnMapReadyCallba
 
         return view;
     }
+
     private int IdVehiculo;
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         dbHelper = new DBHelper(getContext());
         ArrayList<Vehiculo> vehiculos = dbHelper.get_all_Vehiculos();
-        ArrayList<String> tituloVehiculos= new ArrayList<>();
+        ArrayList<String> tituloVehiculos = new ArrayList<>();
         if (vehiculos != null) {
-            for (Vehiculo vehiculo : vehiculos){
+            for (Vehiculo vehiculo : vehiculos) {
                 tituloVehiculos.add(String.valueOf(vehiculo.getNumplaca()));
             }
         }
@@ -121,8 +143,8 @@ public class AgregarOficinaFragment extends Fragment implements OnMapReadyCallba
             public void onMapClick(@NonNull LatLng latLng) {
                 mMap.clear();
                 mMap.addMarker(new MarkerOptions().position(latLng).title("Ubicación seleccionada"));
-                latitud= String.valueOf(latLng.latitude);
-                longitud= String.valueOf(latLng.longitude);
+                latitud = String.valueOf(latLng.latitude);
+                longitud = String.valueOf(latLng.longitude);
             }
         });
 
@@ -130,7 +152,7 @@ public class AgregarOficinaFragment extends Fragment implements OnMapReadyCallba
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(inicial, 10));
     }
 
-    public void AgregarOficina(){
+    public void AgregarOficina() {
 
         if (et_valorVehiculo.getText().toString().trim().isEmpty() ||
                 et_numPoliza.getText().toString().trim().isEmpty() ||
@@ -140,7 +162,7 @@ public class AgregarOficinaFragment extends Fragment implements OnMapReadyCallba
             return;
         }
 
-        if (latitud==null && longitud==null){
+        if (latitud == null && longitud == null) {
             Toast.makeText(getActivity(), "Debe seleccionar una ubicación", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -150,9 +172,81 @@ public class AgregarOficinaFragment extends Fragment implements OnMapReadyCallba
         int numPlaca = IdVehiculo;
         String ubicacion = et_ubicacion.getText().toString().trim();
 
-        OficinaGob oficinaGob = new OficinaGob(valorVehiculo,numPoliza,numPlaca,ubicacion,latitud,longitud);
+        OficinaGob oficinaGob = new OficinaGob(valorVehiculo, numPoliza, numPlaca, ubicacion, latitud, longitud);
         dbHelper.Insertar_Oficina(oficinaGob);
 
-        requireActivity().getSupportFragmentManager().popBackStack();
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                requireActivity().getSupportFragmentManager().popBackStack();
+            }
+        };
+
+        CargarWebService(valorVehiculo, numPoliza, numPlaca, ubicacion, latitud, longitud, runnable);
+    }
+
+    private void CargarWebService(String valorvehiculo, int npoliza, int idvehiculo, String ubicacion,
+                                  String latitud, String longitud, Runnable runnable) {
+        progressDialog = new ProgressDialog(requireActivity());
+        progressDialog.setMessage("Registrando...");
+        progressDialog.show();
+
+        List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.1.6");
+        // Puedes añadir más IPs según sea necesario
+        String selectedIp = "";
+        Map<String, String> userIpMap = new HashMap<>();
+        userIpMap.put("jhon", ips.get(0));
+        userIpMap.put("chagua", ips.get(1));
+        userIpMap.put("matias", ips.get(2));
+
+        ArrayList<Usuario> usuarios = dbHelper.get_all_Usuarios();
+        for (Usuario usuario : usuarios) {
+            selectedIp = userIpMap.get(usuario.getUsername());
+            if (selectedIp != null) {
+                break;
+            }
+        }
+
+        String urlWS = "http://" + selectedIp + "/db_grupo_05_tarea_16_ejercicio_01/OficinaRegistro.php?" +
+                "valorvehiculo=" + valorvehiculo +
+                "&npoliza=" + npoliza +
+                "&idvehiculo=" + idvehiculo +
+                "&ubicacion=" + ubicacion +
+                "&latitud=" + latitud +
+                "&longitud=" + longitud;
+
+        urlWS = urlWS.replace(" ", "%20");
+
+        //Log.d("URLWebService", "URL: " + urlWS);
+
+        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, urlWS, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                progressDialog.hide();
+                Toast.makeText(requireActivity(), "Oficina registrada correctamente", Toast.LENGTH_SHORT).show();
+                if (runnable != null) {
+                    runnable.run();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                progressDialog.hide();
+                Toast.makeText(requireActivity(), "No se puede conectar: " + error.toString(), Toast.LENGTH_LONG).show();
+                Log.d("ERROR: ", error.toString());
+            }
+        });
+
+        request.add(jsonObjectRequest);
+    }
+
+    @Override
+    public void onErrorResponse(VolleyError error) {
+
+    }
+
+    @Override
+    public void onResponse(JSONObject response) {
+
     }
 }
