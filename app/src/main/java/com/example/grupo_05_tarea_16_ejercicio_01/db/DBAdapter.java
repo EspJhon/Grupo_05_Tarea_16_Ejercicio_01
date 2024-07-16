@@ -534,6 +534,27 @@ public class DBAdapter {
         db.insert(Table_Usuario.TABLE, null, values);
     }
 
+    public ArrayList<Usuario> get_all_Usuarios(){
+
+        ArrayList<Usuario> usuarios = new ArrayList<>();
+        try{
+            String query = "select * from " + Table_Usuario.TABLE;
+            Cursor cursor = db.rawQuery(query,null);
+            if(cursor.moveToFirst()){
+                do{
+                    Usuario usuario = new Usuario();
+                    usuario.setIdUsuario(cursor.getInt(0));
+                    usuario.setUsername(cursor.getString(1));
+                    usuario.setPassword(cursor.getString(1));
+                    usuarios.add(usuario);
+                }while(cursor.moveToNext());
+            }
+        }catch (Exception ex){
+            return null;
+        }
+        return usuarios;
+    }
+
     public boolean validarUsuario(Usuario usuario) {
         Cursor cursor = db.query(Table_Usuario.TABLE,
                 new String[]{Table_Usuario.ID},
