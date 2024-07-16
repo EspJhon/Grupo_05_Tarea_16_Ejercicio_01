@@ -108,7 +108,7 @@ public class ActaFragment extends Fragment {
             @Override
             public void onItemClick(Acta acta) {
                 Bundle bundle = new Bundle();
-                bundle.putInt("IdInfraccion", acta.getIdActa());
+                bundle.putInt("IdActa", acta.getIdActa());
                 bundle.putBoolean("modo_edicion", true);
                 NavController navController = Navigation.findNavController(getView());
                 navController.navigate(R.id.action_actaFragment_to_actaRegisterFragment, bundle);

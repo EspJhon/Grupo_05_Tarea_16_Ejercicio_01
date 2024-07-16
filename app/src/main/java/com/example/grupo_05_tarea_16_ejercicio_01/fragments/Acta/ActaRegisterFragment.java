@@ -1,5 +1,7 @@
 package com.example.grupo_05_tarea_16_ejercicio_01.fragments.Acta;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -35,8 +38,10 @@ import java.util.ArrayList;
 public class ActaRegisterFragment extends Fragment {
     private EditText et_CodigoActa_Acta, et_Hora_Acta, et_FechaActa_Acta;
     private Spinner sp_IdAccidente, sp_IdAudiencia, sp_IdZona, sp_IdAgente;
-    private Button  btn_RegistrarActa;
+    private Button  btn_RegistrarActa, btn_eliminar_acta, btn_actualizar_acta;
     DBHelper dbHelper;
+    private LinearLayout layout_btn_registrar_acta, layout_btn_actualizar_acta;
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -78,6 +83,10 @@ public class ActaRegisterFragment extends Fragment {
         sp_IdAgente = view.findViewById(R.id.sp_IdAgente);
         sp_IdZona = view.findViewById(R.id.sp_IdZona);
         btn_RegistrarActa = view.findViewById(R.id.btn_RegistrarActa);
+        btn_eliminar_acta = view.findViewById(R.id.btn_eliminar_acta);
+        btn_actualizar_acta = view.findViewById(R.id.btn_actualizar_acta);
+        layout_btn_registrar_acta = view.findViewById(R.id.layout_btn_registrar_acta);
+        layout_btn_actualizar_acta = view.findViewById(R.id.layout_btn_actualizar_acta);
         return view;
     }
     private int IdAccidente, IdAudiencia, IdZona, IdAgente;
@@ -200,6 +209,91 @@ public class ActaRegisterFragment extends Fragment {
                 }
             }
         });
+
+        boolean modoEdicion = getArguments() != null && getArguments().getBoolean("modo_edicion", false);
+        if (modoEdicion) {
+            layout_btn_actualizar_acta.setVisibility(View.VISIBLE);
+            layout_btn_registrar_acta.setVisibility(View.GONE);
+
+            int IdActa = getArguments().getInt("IdActa");
+            Acta acta = dbHelper.get_Acta(IdActa);
+            Accidente accidente = dbHelper.get_Accidente(acta.getIdaccidente());
+            Audiencia audiencia = dbHelper.get_Audiencia(acta.getIdAudiencia());
+            Agente agente = dbHelper.get_Agente(acta.getIdagente());
+            Zona zona = dbHelper.get_Zona_Puesto(String.valueOf(acta.getIdZona()));
+
+            String agenteItem = agente.getCedulaa() + " - " + agente.getNombre();
+            int spinnerPosition_agente = adapter_agente.getPosition(agenteItem);
+            sp_IdAgente.setSelection(spinnerPosition_agente);
+            sp_IdAgente.setPadding(16,8,16,8);
+
+            String audienciaItem = audiencia.getCodigo() + " - " + audiencia.getLugar();
+            int spinnerPosition_audiencia = adapter_agente.getPosition(audienciaItem);
+            sp_IdAudiencia.setSelection(spinnerPosition_audiencia);
+            sp_IdAudiencia.setPadding(16,8,16,8);
+
+            int spinnerPosition_accidente = adapter_accidente.getPosition(String.valueOf(accidente.getTitulo()));
+            sp_IdAgente.setSelection(spinnerPosition_accidente);
+            sp_IdAgente.setPadding(16,8,16,8);
+
+            int spinnerPosition_zona = adapter_zona.getPosition(zona.getTitulo());
+            sp_IdZona.setSelection(spinnerPosition_zona);
+            sp_IdZona.setPadding(16,8,16,8);
+
+            et_CodigoActa_Acta.setText(String.valueOf(acta.getCodigo()));
+            et_Hora_Acta.setText(acta.getHora());
+            et_FechaActa_Acta.setText(acta.getFecha());
+
+            btn_actualizar_acta.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int AId_Agente = IdAgente;
+                    int AId_Accidente = IdAccidente;
+                    int AId_Audiencia = IdAudiencia;
+                    int AId_Zona = IdZona;
+                    int Acodigo = Integer.parseInt(et_CodigoActa_Acta.getText().toString());
+                    String Afecha = et_FechaActa_Acta.getText().toString();
+                    String Ahora = et_Hora_Acta.getText().toString();
+                    Acta aacta = dbHelper.get_Acta(IdActa);
+                    if (aacta != null) {
+                        aacta.setCodigo(Acodigo);
+                        aacta.setIdaccidente(AId_Accidente);
+                        aacta.setIdAudiencia(AId_Audiencia);
+                        aacta.setHora(Ahora);
+                        aacta.setIdZona(AId_Zona);
+                        aacta.setIdagente(AId_Agente);
+                        aacta.setFecha(Afecha);
+                        dbHelper.actualizarActa(aacta);
+                        aacta = null;
+                        NavController navController = Navigation.findNavController(v);
+                        navController.navigateUp();
+                        Toast.makeText(getContext(), "Acta Actualizada", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getContext(), "Acta no Actualizada", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+            btn_eliminar_acta.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+                    builder.setTitle("Confirmar Eliminación")
+                            .setMessage("¿Estás seguro de eliminar esta Acta?")
+                            .setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Acta aacta = dbHelper.get_Acta(IdActa);
+                                    dbHelper.eliminarActa(aacta);
+                                    NavController navController = Navigation.findNavController(v);
+                                    navController.navigateUp();
+                                    Toast.makeText(requireContext(), "Acta eliminado correctamente", Toast.LENGTH_SHORT).show();
+                                }
+                            })
+                            .setNegativeButton("Cancelar", null)
+                            .create().show();
+                }
+            });
+        }
     }
 
 }

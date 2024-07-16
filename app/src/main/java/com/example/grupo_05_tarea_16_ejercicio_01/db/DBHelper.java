@@ -231,6 +231,13 @@ public class DBHelper {
         return puestoControls;
     }
 
+    public PuestoControl get_Puesto_Control(int IdPuestoControl){
+        dbAdapter.open();
+        PuestoControl puestoControl = dbAdapter.get_Puesto_Control(IdPuestoControl);
+        dbAdapter.close();
+        return puestoControl;
+    }
+
     public void insertarActa(Acta acta) {
         dbAdapter.open();
         dbAdapter.addActa(acta);
@@ -243,10 +250,16 @@ public class DBHelper {
         dbAdapter.close();
     }
 
-    public void eliminarActa(int idActa) {
+    public void eliminarActa(Acta acta) {
         dbAdapter.open();
-        dbAdapter.deleteActa(idActa);
+        dbAdapter.deleteActa(acta);
         dbAdapter.close();
+    }
+    public Acta get_Acta(int IdActa){
+        dbAdapter.open();
+        Acta acta = dbAdapter.get_Acta(IdActa);
+        dbAdapter.close();
+        return acta;
     }
 
     public ArrayList<Acta> getAllActas(){
