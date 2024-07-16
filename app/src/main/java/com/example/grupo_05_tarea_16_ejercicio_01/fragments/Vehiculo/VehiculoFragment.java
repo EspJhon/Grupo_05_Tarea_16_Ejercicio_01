@@ -20,6 +20,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -35,6 +36,7 @@ import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Vehiculo;
 
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -55,7 +57,7 @@ public class VehiculoFragment extends Fragment implements Vehiculo_Adapter.OnIte
     private Vehiculo vehiculoSeleccionado;
     private ArrayList<Propietario> propietarios;
 
-    ProgressDialog progreso;
+    private ProgressDialog progressDialog;
     RequestQueue request;
     JsonObjectRequest jsonObjectRequest;
 
@@ -161,7 +163,12 @@ public class VehiculoFragment extends Fragment implements Vehiculo_Adapter.OnIte
 
             dbHelper.Insertar_Vehiculo(vehiculo);
 
-            cargaWebService(numeroPlacaInt, marca, modelo, motor, fecha, propietario.getIdPropietario());
+            Runnable runnable = new Runnable() {
+                @Override
+                public void run() {}
+            };
+
+            cargaWebService(numeroPlacaInt, marca, modelo, motor, fecha, propietario.getIdPropietario(), runnable);
             Toast.makeText(getContext(), "Vehículo registrado", Toast.LENGTH_SHORT).show();
             cargarVehiculos();
         });
@@ -344,10 +351,10 @@ public class VehiculoFragment extends Fragment implements Vehiculo_Adapter.OnIte
         dialogActualizar.show();
     }
 
-    private void cargaWebService(int numplaca, String marca, String modelo, String motor, String fecha, int idpropietario) {
-        progreso = new ProgressDialog(requireActivity());
-        progreso.setMessage("Registrando...");
-        progreso.show();
+    private void cargaWebService(int numplaca, String marca, String modelo, String motor, String fecha, int idpropietario, Runnable runnable) {
+        progressDialog = new ProgressDialog(requireActivity());
+        progressDialog.setMessage("Registrando...");
+        progressDialog.show();
         List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.1.6");
         // Puedes añadir más IPs según sea necesario
         String selectedIp = "";
@@ -376,23 +383,45 @@ public class VehiculoFragment extends Fragment implements Vehiculo_Adapter.OnIte
 
         Log.d("URLWebService", "URL: " + url);
 
-        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, this, this);
+        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                progressDialog.hide();
+                Toast.makeText(requireActivity(), "Vehiculo registrado correctamente", Toast.LENGTH_SHORT).show();
+                if (runnable != null) {
+                    runnable.run();
+                }
+                cargarVehiculos();
+            }
+        }, error -> {
+            progressDialog.hide();
+            String errorMessage = error.toString();
+            NetworkResponse networkResponse = error.networkResponse;
+            if (networkResponse != null) {
+                try {
+                    String responseBody = new String(networkResponse.data, "utf-8");
+                    Log.d("ServerResponse", responseBody);
+                    errorMessage += "\nResponse: " + responseBody;
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
+            Toast.makeText(requireActivity(), "No se puede conectar: " + errorMessage, Toast.LENGTH_LONG).show();
+            Log.d("ERROR: ", errorMessage);
+        });
+
         request.add(jsonObjectRequest);
     }
 
     @Override
     public void onErrorResponse(VolleyError error) {
-        progreso.hide();
-        String errorMessage = "No se puede conectar: " + error.toString();
-        Toast.makeText(requireActivity(), errorMessage, Toast.LENGTH_LONG).show();
-        Log.d("ERROR: ", errorMessage);
+
     }
 
     @Override
     public void onResponse(JSONObject response) {
-        progreso.hide();
-        Toast.makeText(requireActivity(), "Vehículo registrado correctamente", Toast.LENGTH_SHORT).show();
-        cargarVehiculos();
+
+
     }
 
     private void showYearPickerDialog(final EditText et_fecha) {

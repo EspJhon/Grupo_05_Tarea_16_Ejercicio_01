@@ -1,12 +1,14 @@
 package com.example.grupo_05_tarea_16_ejercicio_01.fragments.Agente;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +20,12 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.grupo_05_tarea_16_ejercicio_01.R;
 import com.example.grupo_05_tarea_16_ejercicio_01.adapter.AgenteAdapter;
 import com.example.grupo_05_tarea_16_ejercicio_01.db.DBHelper;
@@ -25,13 +33,20 @@ import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Acta;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Agente;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.NormasDet;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.PuestoControl;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Usuario;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Vehiculo;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Zona;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
-public class AgenteFragment extends Fragment {
+public class AgenteFragment extends Fragment implements Response.Listener<JSONObject>, Response.ErrorListener{
 
     private Button btnRegistrarAgente;
     private ListView lvAgentes;
@@ -41,6 +56,10 @@ public class AgenteFragment extends Fragment {
     private int IdZona, IdPuestoControl;
     ArrayAdapter<String> adapter_zona;
     ArrayAdapter<String> adapter_puesto_control;
+
+    private ProgressDialog progressDialog;
+    RequestQueue request;
+    JsonObjectRequest jsonObjectRequest;
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -78,6 +97,8 @@ public class AgenteFragment extends Fragment {
 
         lvAgentes = view.findViewById(R.id.lv_agentes);
         btnRegistrarAgente = view.findViewById(R.id.btn_RegistrarAgente);
+
+        request = Volley.newRequestQueue(getContext());
 
         // Inicializar la lista de agentes desde la base de datos
         agenteList = dbHelper.getAllAgentes();
@@ -260,6 +281,13 @@ public class AgenteFragment extends Fragment {
                         Agente agente = new Agente(cedula, nombre, idPuestoControl, rango);
                         dbHelper.insertarAgente(agente);
 
+                        Runnable runnable = new Runnable() {
+                            @Override
+                            public void run() {}
+                        };
+
+                        CargarWebService(cedula, nombre, idPuestoControl, rango, runnable);
+
                         // Actualizar la lista de agentes
                         actualizarListaAgentes();
 
@@ -321,5 +349,67 @@ public class AgenteFragment extends Fragment {
                 })
                 .setNegativeButton("No", null);
         builder.create().show();
+    }
+
+
+    private void CargarWebService(int cedulaag, String nombre, int idpuestocontrol, String rango, Runnable runnable) {
+        progressDialog = new ProgressDialog(requireActivity());
+        progressDialog.setMessage("Registrando...");
+        progressDialog.show();
+
+        List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.1.6");
+        // Puedes añadir más IPs según sea necesario
+        String selectedIp = "";
+        Map<String, String> userIpMap = new HashMap<>();
+        userIpMap.put("jhon", ips.get(0));
+        userIpMap.put("chagua", ips.get(1));
+        userIpMap.put("matias", ips.get(2));
+
+        ArrayList<Usuario> usuarios = dbHelper.get_all_Usuarios();
+        for (Usuario usuario : usuarios) {
+            selectedIp = userIpMap.get(usuario.getUsername());
+            if (selectedIp != null) {
+                break;
+            }
+        }
+
+        String urlWS = "http://" + selectedIp + "/db_grupo_05_tarea_16_ejercicio_01/AgenteRegistro.php?" +
+                "cedulaag=" + cedulaag +
+                "&nombre=" + nombre +
+                "&idpuestodecontrol=" + idpuestocontrol +
+                "&rango=" + rango;
+
+        urlWS = urlWS.replace(" ", "%20");
+
+        //Log.d("URLWebService", "URL: " + urlWS);
+
+        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, urlWS, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                progressDialog.hide();
+                Toast.makeText(requireActivity(), "Agente registrado correctamente", Toast.LENGTH_SHORT).show();
+                if (runnable != null) {
+                    runnable.run();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                progressDialog.hide();
+                Toast.makeText(requireActivity(), "No se puede conectar: " + error.toString(), Toast.LENGTH_LONG).show();
+                Log.d("ERROR: ", error.toString());
+            }
+        });
+
+        request.add(jsonObjectRequest);
+    }
+    @Override
+    public void onErrorResponse(VolleyError error) {
+
+    }
+
+    @Override
+    public void onResponse(JSONObject response) {
+
     }
 }
