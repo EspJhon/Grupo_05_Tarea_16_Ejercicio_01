@@ -183,13 +183,13 @@ public class MapsZonaFragment extends Fragment implements OnMapReadyCallback{
         progreso = new ProgressDialog(requireActivity());
         progreso.setMessage("Cargando...");
         progreso.show();
-        List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.1.16");
+        List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.1.6");
         // Puedes añadir más IPs según sea necesario
         String selectedIp = "";
         Map<String, String> userIpMap = new HashMap<>();
         userIpMap.put("jhon", ips.get(0));
-        userIpMap.put("chagua", ips.get(0));
-        userIpMap.put("matias", ips.get(0)); // Assuming all three get IP1 for now
+        userIpMap.put("chagua", ips.get(1));
+        userIpMap.put("matias", ips.get(2)); // Assuming all three get IP1 for now
 
         ArrayList<Usuario> usuarios = dbHelper.get_all_Usuarios();
         for (Usuario usuario : usuarios) {
