@@ -1,6 +1,7 @@
 package com.example.grupo_05_tarea_16_ejercicio_01.fragments.PuestoControl;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
@@ -23,10 +24,17 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.grupo_05_tarea_16_ejercicio_01.R;
 import com.example.grupo_05_tarea_16_ejercicio_01.db.DBHelper;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Infraccion;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.PuestoControl;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Usuario;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Zona;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -38,8 +46,12 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.button.MaterialButton;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class RegisterPuestoControlFragment extends Fragment implements OnMapReadyCallback{
@@ -51,6 +63,9 @@ public class RegisterPuestoControlFragment extends Fragment implements OnMapRead
     Spinner sp_zona;
     GoogleMap mMap;
     Marker currentMarker;
+    ProgressDialog progreso;
+    RequestQueue request;
+    JsonObjectRequest jsonObjectRequest;
     private int idPuestoControlSeleccionado = 0;
     boolean modoEdicion;
     private LinearLayout layout_edt_registrar, layout_btn_registrar, layout_btn_actualizar;
@@ -103,6 +118,7 @@ public class RegisterPuestoControlFragment extends Fragment implements OnMapRead
         layout_edt_registrar.setVisibility(View.GONE);
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map_puesto_control);
         mapFragment.getMapAsync(this);
+        request = Volley.newRequestQueue(getContext());
         return view;
     }
     String latitud, longitud, titulo;
@@ -156,6 +172,7 @@ public class RegisterPuestoControlFragment extends Fragment implements OnMapRead
                 } else {
                     PuestoControl puestoControl = new PuestoControl(id_zon, referencia, slatitud, slongitud, title);
                     dbHelper.Insertar_Puesto_Control(puestoControl);
+                    cargaWebService(id_zon, referencia, slatitud, slongitud, title);
                     Toast.makeText(getContext(), "Registrado Correctamente", Toast.LENGTH_SHORT).show();
                     edt_register_titulo_puesto_control.setText("");
                     edt_register_latitud_puesto_control.setText("");
@@ -364,5 +381,56 @@ public class RegisterPuestoControlFragment extends Fragment implements OnMapRead
             LatLng latLng = new LatLng(Double.parseDouble(puestoControl.getLatitud()), Double.parseDouble(puestoControl.getLongitud()));
             mMap.addMarker(new MarkerOptions().position(latLng).title(puestoControl.getTitulo()));
         }
+    }
+
+    private void cargaWebService(int idzona, String refeencia, String latitud, String longitud, String titulo) {
+        progreso = new ProgressDialog(requireActivity());
+        progreso.setMessage("Cargando...");
+        progreso.show();
+        List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.1.6");
+        // Puedes añadir más IPs según sea necesario
+        String selectedIp = "";
+        Map<String, String> userIpMap = new HashMap<>();
+        userIpMap.put("jhon", ips.get(0));
+        userIpMap.put("chagua", ips.get(1));
+        userIpMap.put("matias", ips.get(2)); // Assuming all three get IP1 for now
+
+        ArrayList<Usuario> usuarios = dbHelper.get_all_Usuarios();
+        for (Usuario usuario : usuarios) {
+            selectedIp = userIpMap.get(usuario.getUsername());
+            if (selectedIp != null) {
+                break; // Exit loop after finding a match
+            }
+        }
+
+        String url="http://" + selectedIp + "/db_grupo_05_tarea_16_ejercicio_01/PuestoControlRegistro.php?" +
+                "idzona=" + idzona +
+                "&referencia=" + refeencia +
+                "&latitud=" + latitud +
+                "&longitud=" + longitud +
+                "&titulo=" + titulo;
+        url = url.replace(" ","%20");
+        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                if (isAdded()) {  // Verifica si el fragmento está adjunto antes de interactuar con la UI
+
+                    Toast.makeText(requireActivity(), "Puesto registrado correctamente", Toast.LENGTH_SHORT).show();
+                    // preguntarle a chagua del runable
+                }
+                progreso.hide();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (isAdded()) {  // Verifica si el fragmento está adjunto antes de interactuar con la UI
+
+                    Toast.makeText(requireActivity(), "No se puede conectar: " + error.toString(), Toast.LENGTH_LONG).show();
+                }
+                progreso.hide();
+            }
+        });
+
+        request.add(jsonObjectRequest);
     }
 }

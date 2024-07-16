@@ -307,14 +307,14 @@ public class AgenteFragment extends Fragment {
         adapter.notifyDataSetChanged();
     }
 
-    private void mostrarConfirmacionEliminar(final int position) {
+    private void mostrarConfirmacionEliminar(int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setMessage("¿Estás seguro de que deseas eliminar este agente?")
                 .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Agente agente = agenteList.get(position);
-                        dbHelper.eliminarAgente(agente.getCedulaa());
+                        dbHelper.eliminarAgente(agente.getIdagente());
                         actualizarListaAgentes();
                         Toast.makeText(requireContext(), "Agente eliminado correctamente", Toast.LENGTH_SHORT).show();
                     }
