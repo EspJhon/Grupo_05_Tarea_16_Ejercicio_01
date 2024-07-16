@@ -34,7 +34,6 @@ import java.util.ArrayList;
 
 public class ActaFragment extends Fragment {
 
-    TextView prueba;
     private Button btnRegistrarActa;
     private RecyclerView lv_listas_actas;
     ActaAdapter adapter;
@@ -77,7 +76,6 @@ public class ActaFragment extends Fragment {
         lv_listas_actas = view.findViewById(R.id.lv_listas_actas);
         btnRegistrarActa = view.findViewById(R.id.btn_RegistrarActa);
         lv_listas_actas.setLayoutManager(new LinearLayoutManager(getContext()));
-        prueba = view.findViewById(R.id.tv_prueva);
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
@@ -103,7 +101,6 @@ public class ActaFragment extends Fragment {
 
     public void Listar_Actas() {
         ArrayList<Acta> actas = dbHelper.getAllActas();
-        //prueba.setText(String.valueOf(actas.get(1).getFecha()));
         adapter = new ActaAdapter(getContext(), dbHelper, actas, new ActaAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Acta acta) {

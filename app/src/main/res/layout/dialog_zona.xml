@@ -13,7 +13,8 @@
             android:layout_height="wrap_content"
             android:text="Título"
             android:textStyle="bold"
-            android:textSize="16sp"/>
+            android:textSize="20sp"
+            android:textColor="@color/black"/>
         <EditText
             android:id="@+id/edt_titulo"
             android:layout_width="match_parent"
@@ -28,8 +29,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Latitud: "
-            android:textSize="16sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:textColor="@color/black"/>
         <EditText
             android:id="@+id/edt_latitud"
             android:layout_width="match_parent"
@@ -44,8 +46,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Longitud: "
-            android:textSize="16sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:textColor="@color/black"/>
         <EditText
             android:id="@+id/edt_longitud"
             android:layout_width="match_parent"

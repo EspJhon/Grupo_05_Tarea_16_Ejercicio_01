@@ -12,14 +12,16 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Número de Placa:"/>
+            android:text="Número de Placa:"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="20sp"/>
         <EditText
             android:id="@+id/et_numPlaca"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Ingrese Número de Placa"
-            android:inputType="number"
-            />
+            android:inputType="number" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -28,13 +30,15 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Marca:"/>
+            android:text="Marca:"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="20sp"/>
         <EditText
             android:id="@+id/et_marca"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Ingrese Marca"
-            />
+            android:hint="Ingrese Marca" />
     </LinearLayout>
 
     <LinearLayout
@@ -44,13 +48,15 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Modelo:"/>
+            android:text="Modelo:"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="20sp"/>
         <EditText
             android:id="@+id/et_modelo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Ingrese Modelo"
-            />
+            android:hint="Ingrese Modelo" />
     </LinearLayout>
 
     <LinearLayout
@@ -60,13 +66,15 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Motor:"/>
+            android:text="Motor:"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="20sp"/>
         <EditText
             android:id="@+id/et_motor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Ingrese Motor"
-            />
+            android:hint="Ingrese Motor" />
     </LinearLayout>
 
     <LinearLayout
@@ -76,15 +84,17 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Año"/>
+            android:text="Fecha:"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="20sp"/>
         <EditText
             android:id="@+id/et_fecha"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Ingrese Año"
             android:focusable="false"
-            android:clickable="true"
-            />
+            android:clickable="true" />
     </LinearLayout>
 
     <LinearLayout
@@ -94,7 +104,10 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Seleccione el Propietario"/>
+            android:text="Seleccione el Propietario"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="20sp"/>
         <Spinner
             android:id="@+id/sp_propietarios"
             android:layout_width="match_parent"

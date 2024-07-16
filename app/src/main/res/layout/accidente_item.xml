@@ -20,14 +20,18 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="[Num. Placa]" />
+                android:text="[Num. Placa]"
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
 
             <TextView
                 android:id="@+id/tv_agente"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="[Agente]" />
+                android:text="[Agente]"
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
         </LinearLayout>
 
         <LinearLayout
@@ -41,21 +45,27 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="[Lugar]" />
+                android:text="[Lugar]"
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
 
             <TextView
                 android:id="@+id/tv_hora"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="[Hora]" />
+                android:text="[Hora]"
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
 
             <TextView
                 android:id="@+id/tv_fecha"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="[Fecha]" />
+                android:text="[Fecha]"
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
 
         </LinearLayout>
 
@@ -63,7 +73,9 @@
             android:id="@+id/tv_descripcion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="[Descripción]" />
+            android:text="[Descripción]"
+            android:textStyle="bold"
+            android:textColor="@color/black"/>
 
     </LinearLayout>
 
