@@ -12,14 +12,14 @@ public class Accidente {
     private String descripcion;
     private String URLimagen;
     private String nombreLugar;
-    private double latitud;
-    private double longitud;
+    private String latitud;
+    private String longitud;
 
     public Accidente() {
     }
 
     public Accidente(int idVehiculo, int idagente, String hora, String fecha, String titulo, String descripcion,
-                     String URLimagen, String nombreLugar, double latitud, double longitud) {
+                     String URLimagen, String nombreLugar, String latitud, String longitud) {
         IdVehiculo = idVehiculo;
         Idagente = idagente;
         this.hora = hora;
@@ -96,19 +96,19 @@ public class Accidente {
         this.nombreLugar = nombreLugar;
     }
 
-    public double getLatitud() {
+    public String getLatitud() {
         return latitud;
     }
 
-    public void setLatitud(double latitud) {
+    public void setLatitud(String latitud) {
         this.latitud = latitud;
     }
 
-    public double getLongitud() {
+    public String getLongitud() {
         return longitud;
     }
 
-    public void setLongitud(double longitud) {
+    public void setLongitud(String longitud) {
         this.longitud = longitud;
     }
 

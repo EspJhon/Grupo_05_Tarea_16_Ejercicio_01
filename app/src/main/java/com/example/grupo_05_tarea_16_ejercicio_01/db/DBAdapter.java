@@ -163,8 +163,8 @@ public class DBAdapter {
                     Table_Oficina.NUMERO_POLIZA + " integer not null, " +
                     Table_Vehiculo.ID + " integer not null, " +
                     Table_Oficina.UBICACION + " text not null, " +
-                    Table_Oficina.LATITUD + " decimal(6,2) not null, " +
-                    Table_Oficina.LONGITUD + " decimal(6,2) not null, " +
+                    Table_Oficina.LATITUD + " text not null, " +
+                    Table_Oficina.LONGITUD + " text not null, " +
                     "FOREIGN KEY (" + Table_Vehiculo.ID + ") REFERENCES " + Table_Vehiculo.TABLE + "(" + Table_Vehiculo.ID + ") );";
     private static final String CREATE_ACCIDENTE =
             "create table " + Table_Accidente.TABLE + " (" +
@@ -177,8 +177,8 @@ public class DBAdapter {
                     Table_Accidente.DESCRIPCION + " text not null, " +
                     Table_Accidente.URL + " text not null, " +
                     Table_Accidente.NOMBRE_LUGAR + " text not null, " +
-                    Table_Accidente.LATITUD + " decimal(6,2) not null, " +
-                    Table_Accidente.LONGITUD + " decimal(6,2) not null, " +
+                    Table_Accidente.LATITUD + " text not null, " +
+                    Table_Accidente.LONGITUD + " text not null, " +
                     "FOREIGN KEY (" + Table_Vehiculo.ID + ") REFERENCES " + Table_Vehiculo.TABLE + "(" + Table_Vehiculo.ID + "), " +
                     "FOREIGN KEY (" + Table_Agente.ID + ") REFERENCES " + Table_Agente.TABLE + "(" + Table_Agente.ID + ") );";
     private static final String CREATE_INFRACCION =
@@ -387,8 +387,8 @@ public class DBAdapter {
                     accidente.setDescripcion(cursor.getString(6));
                     accidente.setURLimagen(cursor.getString(7));
                     accidente.setNombreLugar(cursor.getString(8));
-                    accidente.setLatitud(cursor.getDouble(9));
-                    accidente.setLongitud(cursor.getDouble(10));
+                    accidente.setLatitud(cursor.getString(9));
+                    accidente.setLongitud(cursor.getString(10));
                 } while (cursor.moveToNext());
             }
             cursor.close();
@@ -415,8 +415,8 @@ public class DBAdapter {
                     accidente.setDescripcion(cursor.getString(6));
                     accidente.setURLimagen(cursor.getString(7));
                     accidente.setNombreLugar(cursor.getString(8));
-                    accidente.setLatitud(cursor.getDouble(9));
-                    accidente.setLongitud(cursor.getDouble(10));
+                    accidente.setLatitud(cursor.getString(9));
+                    accidente.setLongitud(cursor.getString(10));
                     accidentes.add(accidente);
                 } while (cursor.moveToNext());
             }
@@ -1232,8 +1232,8 @@ public class DBAdapter {
                     oficinaGob.setNpoliza(cursor.getInt(2));
                     oficinaGob.setIdVehiculo(cursor.getInt(3));
                     oficinaGob.setUbicacion(cursor.getString(4));
-                    oficinaGob.setLatitud(cursor.getDouble(5));
-                    oficinaGob.setLongitud(cursor.getDouble(6));
+                    oficinaGob.setLatitud(cursor.getString(5));
+                    oficinaGob.setLongitud(cursor.getString(6));
                 } while (cursor.moveToNext());
             }
             cursor.close();
@@ -1256,8 +1256,8 @@ public class DBAdapter {
                     oficinaGob.setNpoliza(cursor.getInt(2));
                     oficinaGob.setIdVehiculo(cursor.getInt(3));
                     oficinaGob.setUbicacion(cursor.getString(4));
-                    oficinaGob.setLatitud(cursor.getDouble(5));
-                    oficinaGob.setLongitud(cursor.getDouble(6));
+                    oficinaGob.setLatitud(cursor.getString(5));
+                    oficinaGob.setLongitud(cursor.getString(6));
                     oficinas.add(oficinaGob);
                 } while (cursor.moveToNext());
             }

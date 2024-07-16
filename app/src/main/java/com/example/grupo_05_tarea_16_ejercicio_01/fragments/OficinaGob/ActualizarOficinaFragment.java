@@ -37,7 +37,7 @@ public class ActualizarOficinaFragment extends Fragment implements OnMapReadyCal
 
     private EditText et_valorVehiculoA, et_numPolizaA, et_ubicacionA;
     private Spinner sp_numPlacaA_oficina;
-    private double latitud=0,longitud=0;
+    private String latitud=null,longitud=null;
     private DBHelper dbHelper;
     private GoogleMap mMap;
     private OficinaGob oficinaGob;
@@ -128,7 +128,9 @@ public class ActualizarOficinaFragment extends Fragment implements OnMapReadyCal
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
         if (oficinaGob != null) {
-            LatLng lugarOficina = new LatLng(oficinaGob.getLatitud(), oficinaGob.getLongitud());
+            double latitudObtenida = Double.parseDouble(oficinaGob.getLatitud());
+            double longitudObtenida = Double.parseDouble(oficinaGob.getLongitud());
+            LatLng lugarOficina = new LatLng(latitudObtenida,longitudObtenida);
             mMap.clear();
             mMap.addMarker(new MarkerOptions().position(lugarOficina).title("Ubicación de la oficina"));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lugarOficina, 15));
@@ -137,8 +139,8 @@ public class ActualizarOficinaFragment extends Fragment implements OnMapReadyCal
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
-                latitud = latLng.latitude;
-                longitud = latLng.longitude;
+                latitud = String.valueOf(latLng.latitude);
+                longitud = String.valueOf(latLng.longitude);
                 if (marker != null) {
                     marker.setPosition(latLng);
                 } else {
@@ -168,7 +170,7 @@ public class ActualizarOficinaFragment extends Fragment implements OnMapReadyCal
         oficinaGob.setIdVehiculo(numPlacaA);
         oficinaGob.setUbicacion(ubicacionA);
 
-        if (latitud != 0 || longitud != 0) {
+        if (latitud != null || longitud != null) {
             oficinaGob.setLatitud(latitud);
             oficinaGob.setLongitud(longitud);
         }
@@ -186,8 +188,8 @@ public class ActualizarOficinaFragment extends Fragment implements OnMapReadyCal
         et_valorVehiculoA.setText(oficinaGob.getValor_vehiculo());
         et_numPolizaA.setText(String.valueOf(oficinaGob.getNpoliza()));
         et_ubicacionA.setText(oficinaGob.getUbicacion());
-        latitud = oficinaGob.getLatitud();
-        longitud = oficinaGob.getLongitud();
+        double latitud = Double.parseDouble(oficinaGob.getLatitud());
+        double longitud = Double.parseDouble(oficinaGob.getLongitud());
 
         if (mMap != null) {
             LatLng lugarOficina = new LatLng(latitud, longitud);
