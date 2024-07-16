@@ -16,14 +16,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Cédula:"
-                android:textSize="17dp"/>
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="@color/black"/>
             <EditText
                 android:id="@+id/et_cedula"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Ingrese Cédula"
-                android:inputType="number"
-                />
+                android:inputType="number" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -33,13 +34,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Nombre del Propietario:"
-                android:textSize="17dp"/>
+                android:textSize="20sp"
+                android:textColor="@color/black"
+                android:textStyle="bold"/>
             <EditText
                 android:id="@+id/et_nombre"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Ingrese Nombre"
-                />
+                android:hint="Ingrese Nombre" />
         </LinearLayout>
 
         <LinearLayout
@@ -50,13 +52,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Ciudad:"
-                android:textSize="17dp"/>
+                android:textSize="20sp"
+                android:textColor="@color/black"
+                android:textStyle="bold"/>
             <EditText
                 android:id="@+id/et_ciudad"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Ingrese su Ciudad"
-                />
+                android:hint="Ingrese su Ciudad" />
         </LinearLayout>
 
     </LinearLayout>

@@ -14,7 +14,9 @@
             android:id="@+id/tv_lugar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="[Lugar]" />
+            android:text="[Lugar]"
+            android:textColor="@color/black"
+            android:textStyle="bold"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,23 +29,27 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="[Código]" />
+                android:text="[Código]"
+                android:textColor="@color/black"
+                android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/tv_hora"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="[Fecha]" />
+                android:text="[Fecha]"
+                android:textColor="@color/black"
+                android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/tv_fecha"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="[Hora]" />
-
-
+                android:text="[Hora]"
+                android:textColor="@color/black"
+                android:textStyle="bold"/>
         </LinearLayout>
 
     </LinearLayout>
