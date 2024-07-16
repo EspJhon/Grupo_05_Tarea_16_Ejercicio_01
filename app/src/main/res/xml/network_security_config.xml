@@ -3,6 +3,6 @@
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">192.168.10.106</domain>//Cahgua
         <domain includeSubdomains="true">192.168.100.15</domain>//Jhon
-        <domain includeSubdomains="true">192.168.1.16</domain>//Matias
+        <domain includeSubdomains="true">192.168.1.6</domain>//Matias
     </domain-config>
 </network-security-config>
