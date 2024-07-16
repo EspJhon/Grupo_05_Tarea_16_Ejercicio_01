@@ -14,17 +14,24 @@ import com.example.grupo_05_tarea_16_ejercicio_01.R;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Vehiculo;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Vehiculo_Adapter extends ArrayAdapter<Vehiculo> {
 
     private ArrayList<Vehiculo> vehiculos;
     private Context context;
     private OnItemLongClickListener onItemLongClickListener;
+    private HashMap<Integer, String> propietariosMap; // HashMap para almacenar ID de propietario y nombre
 
     public Vehiculo_Adapter(@NonNull Context context, ArrayList<Vehiculo> vehiculos) {
         super(context, 0, vehiculos);
         this.context = context;
         this.vehiculos = vehiculos;
+        this.propietariosMap = new HashMap<>();
+    }
+
+    public void setPropietariosMap(HashMap<Integer, String> propietariosMap) {
+        this.propietariosMap = propietariosMap;
     }
 
     public void setOnItemLongClickListener(OnItemLongClickListener listener) {
@@ -57,6 +64,12 @@ public class Vehiculo_Adapter extends ArrayAdapter<Vehiculo> {
         viewHolder.tvMotor.setText(vehiculo.getMotor());
         viewHolder.tvFecha.setText(vehiculo.getF_ano());
         viewHolder.tvPropietario.setText(String.valueOf(vehiculo.getIdPropietario()));
+
+
+        // Obtener el nombre del propietario a partir del HashMap
+        String nombrePropietario = propietariosMap.get(vehiculo.getIdPropietario());
+        viewHolder.tvPropietario.setText(nombrePropietario != null ? nombrePropietario : String.valueOf(vehiculo.getIdPropietario()));
+
 
         convertView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override

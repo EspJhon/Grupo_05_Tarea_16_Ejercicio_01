@@ -218,7 +218,7 @@ public class AudienciaFragment extends Fragment implements Response.Listener<JSO
         progreso.setMessage("Cargando...");
         progreso.show();
 
-        String url = "http://192.168.100.15db_grupo_05_tarea_16_ejercicio_01/AudienciaRegistro.php?codigo=" + codigo + "&lugar=" + lugar + "&fecha=" + fecha + "&hora=" + hora;
+        String url = "http://192.168.1.6/db_grupo_05_tarea_16_ejercicio_01/AudienciaRegistro.php?codigo=" + codigo + "&lugar=" + lugar + "&fecha=" + fecha + "&hora=" + hora;
         url = url.replace(" ", "%20");
 
         Log.d("URLWebService", "URL: " + url);

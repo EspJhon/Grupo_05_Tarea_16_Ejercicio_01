@@ -1,5 +1,7 @@
 package com.example.grupo_05_tarea_16_ejercicio_01.fragments.Accidente;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
@@ -44,6 +46,8 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
+
 
 public class ActualizarAccidenteFragment extends Fragment implements OnMapReadyCallback {
 
@@ -97,6 +101,9 @@ public class ActualizarAccidenteFragment extends Fragment implements OnMapReadyC
         et_descripcionA_accidente = view.findViewById(R.id.et_descripcionA_accidente);
         et_nombreLugarA = view.findViewById(R.id.et_nombreLugarA);
         iv_imagenAccidenteA = view.findViewById(R.id.iv_imagenAccidenteA);
+        
+        et_fechaA.setOnClickListener(v -> showDatePickerDialog());
+        et_horaA.setOnClickListener(v -> showTimePickerDialog());
 
         MapMoveFragment mapMoveFragment = (MapMoveFragment) getChildFragmentManager().findFragmentById(R.id.fr_ubicacionAccidenteA);
         if (mapMoveFragment != null){
@@ -328,6 +335,33 @@ public class ActualizarAccidenteFragment extends Fragment implements OnMapReadyC
             mMap.addMarker(new MarkerOptions().position(lugarAccidente).title("Ubicación del accidente"));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lugarAccidente, 15));
         }
+    }
+
+    private void showDatePickerDialog() {
+        final Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(requireContext(), (view, year1, month1, dayOfMonth) -> {
+            String selectedDate = year1 + "-" + String.format("%02d", (month1 + 1)) + "-" + String.format("%02d", dayOfMonth);
+            et_fechaA.setText(selectedDate);
+        }, year, month, day);
+
+        datePickerDialog.show();
+    }
+
+    private void showTimePickerDialog() {
+        final Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+
+        TimePickerDialog timePickerDialog = new TimePickerDialog(requireContext(), (view, hourOfDay, minuteOfDay) -> {
+            String selectedTime = String.format("%02d:%02d", hourOfDay, minuteOfDay);
+            et_horaA.setText(selectedTime);
+        }, hour, minute, true);
+
+        timePickerDialog.show();
     }
 
 
