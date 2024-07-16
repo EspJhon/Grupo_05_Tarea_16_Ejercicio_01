@@ -53,7 +53,7 @@ public class ActualizarAccidenteFragment extends Fragment implements OnMapReadyC
 
     private EditText et_horaA, et_fechaA, et_descripcionA_accidente, et_tituloA_accidente,
             et_nombreLugarA;
-    private double latitud=0,longitud=0;
+    private String latitud = null, longitud = null;
     private Spinner sp_placaA_accidente, sp_agenteA_accidente;
     private ImageView iv_imagenAccidenteA;
     private DBHelper dbHelper;
@@ -89,7 +89,7 @@ public class ActualizarAccidenteFragment extends Fragment implements OnMapReadyC
 
         dbHelper = new DBHelper(getActivity());
 
-        View view =inflater.inflate(R.layout.fragment_actualizar_accidente, container, false);
+        View view = inflater.inflate(R.layout.fragment_actualizar_accidente, container, false);
 
         scrollView = view.findViewById(R.id.sv_accidenteA);
 
@@ -101,12 +101,12 @@ public class ActualizarAccidenteFragment extends Fragment implements OnMapReadyC
         et_descripcionA_accidente = view.findViewById(R.id.et_descripcionA_accidente);
         et_nombreLugarA = view.findViewById(R.id.et_nombreLugarA);
         iv_imagenAccidenteA = view.findViewById(R.id.iv_imagenAccidenteA);
-        
+
         et_fechaA.setOnClickListener(v -> showDatePickerDialog());
         et_horaA.setOnClickListener(v -> showTimePickerDialog());
 
         MapMoveFragment mapMoveFragment = (MapMoveFragment) getChildFragmentManager().findFragmentById(R.id.fr_ubicacionAccidenteA);
-        if (mapMoveFragment != null){
+        if (mapMoveFragment != null) {
             mapMoveFragment.getMapAsync(this);
             mapMoveFragment.setListener(new MapMoveFragment.OnTouchListener() {
                 @Override
@@ -118,7 +118,9 @@ public class ActualizarAccidenteFragment extends Fragment implements OnMapReadyC
 
         return view;
     }
+
     private int AIdAgente, AIdVehiculo;
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -126,7 +128,7 @@ public class ActualizarAccidenteFragment extends Fragment implements OnMapReadyC
         ArrayList<Agente> agentes = dbHelper.getAllAgentes();
         ArrayList<String> tituloAgentes = new ArrayList<>();
         if (agentes != null) {
-            for (Agente agente : agentes){
+            for (Agente agente : agentes) {
                 String item = agente.getCedulaa() + " - " + agente.getNombre(); // Concatenar ID y nombre
                 tituloAgentes.add(item);
             }
@@ -136,9 +138,9 @@ public class ActualizarAccidenteFragment extends Fragment implements OnMapReadyC
         sp_agenteA_accidente.setAdapter(adapter_agente);
 
         ArrayList<Vehiculo> vehiculos = dbHelper.get_all_Vehiculos();
-        ArrayList<String> tituloVehiculos= new ArrayList<>();
+        ArrayList<String> tituloVehiculos = new ArrayList<>();
         if (vehiculos != null) {
-            for (Vehiculo vehiculo : vehiculos){
+            for (Vehiculo vehiculo : vehiculos) {
                 tituloVehiculos.add(String.valueOf(vehiculo.getNumplaca()));
             }
         }
@@ -219,7 +221,9 @@ public class ActualizarAccidenteFragment extends Fragment implements OnMapReadyC
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
         if (accidente != null) {
-            LatLng lugarAccidente = new LatLng(accidente.getLatitud(), accidente.getLongitud());
+            double latitudActualizada = Double.parseDouble(accidente.getLatitud());
+            double longitudActualizada = Double.parseDouble(accidente.getLongitud());
+            LatLng lugarAccidente = new LatLng(latitudActualizada, longitudActualizada);
             mMap.clear();
             mMap.addMarker(new MarkerOptions().position(lugarAccidente).title("Ubicación del accidente"));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lugarAccidente, 15));
@@ -228,8 +232,8 @@ public class ActualizarAccidenteFragment extends Fragment implements OnMapReadyC
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
-                latitud = latLng.latitude;
-                longitud = latLng.longitude;
+                latitud = String.valueOf(latLng.latitude);
+                longitud = String.valueOf(latLng.longitude);
                 if (marker != null) {
                     marker.setPosition(latLng);
                 } else {
@@ -242,9 +246,9 @@ public class ActualizarAccidenteFragment extends Fragment implements OnMapReadyC
     private void ActualizarAccidente() {
 
         if (et_horaA.getText().toString().trim().isEmpty() || et_fechaA.getText().toString().trim().isEmpty() ||
-            et_descripcionA_accidente.getText().toString().trim().isEmpty() ||
-            et_tituloA_accidente.getText().toString().trim().isEmpty() ||
-            et_nombreLugarA.getText().toString().trim().isEmpty()) {
+                et_descripcionA_accidente.getText().toString().trim().isEmpty() ||
+                et_tituloA_accidente.getText().toString().trim().isEmpty() ||
+                et_nombreLugarA.getText().toString().trim().isEmpty()) {
 
             Toast.makeText(getActivity(), "Debe llenar todos los campos", Toast.LENGTH_SHORT).show();
             return;
@@ -266,7 +270,7 @@ public class ActualizarAccidenteFragment extends Fragment implements OnMapReadyC
         accidente.setDescripcion(descripcionA);
         accidente.setURLimagen(URL);
         accidente.setNombreLugar(lugarA);
-        if (latitud != 0 || longitud != 0) {
+        if (latitud != null || longitud != null) {
             accidente.setLatitud(latitud);
             accidente.setLongitud(longitud);
         }
@@ -279,11 +283,11 @@ public class ActualizarAccidenteFragment extends Fragment implements OnMapReadyC
     private void ActivarCam() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intent.resolveActivity(requireActivity().getPackageManager()) != null) {
-            startActivityForResult(intent,111111);
+            startActivityForResult(intent, 111111);
         }
     }
 
-    private void SubirFoto(){
+    private void SubirFoto() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         if (intent.resolveActivity(requireActivity().getPackageManager()) != null) {
             startActivityForResult(intent, 222222);
@@ -312,11 +316,11 @@ public class ActualizarAccidenteFragment extends Fragment implements OnMapReadyC
         String agenteItem = agente.getCedulaa() + " - " + agente.getNombre();
         int spinnerPosition_agente = adapter_agente.getPosition(agenteItem);
         sp_agenteA_accidente.setSelection(spinnerPosition_agente);
-        sp_agenteA_accidente.setPadding(16,8,16,8);
+        sp_agenteA_accidente.setPadding(16, 8, 16, 8);
 
         int spinnerPosition_vehiculo = adapter_placa.getPosition(String.valueOf(vehiculo.getNumplaca()));
         sp_placaA_accidente.setSelection(spinnerPosition_vehiculo);
-        sp_placaA_accidente.setPadding(16,8,16,8);
+        sp_placaA_accidente.setPadding(16, 8, 16, 8);
         et_horaA.setText(accidente.getHora());
         et_fechaA.setText(accidente.getFecha());
         et_tituloA_accidente.setText(accidente.getTitulo());
@@ -330,7 +334,9 @@ public class ActualizarAccidenteFragment extends Fragment implements OnMapReadyC
         iv_imagenAccidenteA.setImageBitmap(bitmap);
 
         if (mMap != null) {
-            LatLng lugarAccidente = new LatLng(latitud, longitud);
+            double latitudObtenida = Double.parseDouble(latitud);
+            double longitudObtenida = Double.parseDouble(longitud);
+            LatLng lugarAccidente = new LatLng(latitudObtenida, longitudObtenida);
             mMap.clear();
             mMap.addMarker(new MarkerOptions().position(lugarAccidente).title("Ubicación del accidente"));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lugarAccidente, 15));

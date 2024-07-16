@@ -35,7 +35,7 @@ public class AgregarOficinaFragment extends Fragment implements OnMapReadyCallba
 
     private EditText et_valorVehiculo, et_numPoliza, et_ubicacion;
     private Spinner sp_numPlaca_oficina;
-    private double latitud=0,longitud=0;
+    private String latitud=null,longitud=null;
     private DBHelper dbHelper;
     private GoogleMap mMap;
 
@@ -121,8 +121,8 @@ public class AgregarOficinaFragment extends Fragment implements OnMapReadyCallba
             public void onMapClick(@NonNull LatLng latLng) {
                 mMap.clear();
                 mMap.addMarker(new MarkerOptions().position(latLng).title("Ubicación seleccionada"));
-                latitud=latLng.latitude;
-                longitud=latLng.longitude;
+                latitud= String.valueOf(latLng.latitude);
+                longitud= String.valueOf(latLng.longitude);
             }
         });
 
@@ -140,7 +140,7 @@ public class AgregarOficinaFragment extends Fragment implements OnMapReadyCallba
             return;
         }
 
-        if (latitud==0 && longitud==0){
+        if (latitud==null && longitud==null){
             Toast.makeText(getActivity(), "Debe seleccionar una ubicación", Toast.LENGTH_SHORT).show();
             return;
         }
