@@ -34,6 +34,7 @@ import com.example.grupo_05_tarea_16_ejercicio_01.adapter.ZonaAdapter;
 import com.example.grupo_05_tarea_16_ejercicio_01.db.DBHelper;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Agente;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.NormasDet;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Usuario;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Zona;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -41,6 +42,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class NormaDetFragment extends Fragment implements Response.Listener<JSONObject>, Response.ErrorListener{
 
@@ -212,7 +217,23 @@ public class NormaDetFragment extends Fragment implements Response.Listener<JSON
         progreso.setMessage("Cargando...");
         progreso.show();
 
-        String url = "http://192.168.10.106/db_grupo_05_tarea_16_ejercicio_01/NormaRegistro.php?numnorma=" + numnorma + "&descripcion=" + descripcion;
+        List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.1.16");
+        // Puedes añadir más IPs según sea necesario
+        String selectedIp = "";
+        Map<String, String> userIpMap = new HashMap<>();
+        userIpMap.put("jhon", ips.get(0));
+        userIpMap.put("chagua", ips.get(0));
+        userIpMap.put("matias", ips.get(0)); // Assuming all three get IP1 for now
+
+        ArrayList<Usuario> usuarios = dbHelper.get_all_Usuarios();
+        for (Usuario usuario : usuarios) {
+            selectedIp = userIpMap.get(usuario.getUsername());
+            if (selectedIp != null) {
+                break; // Exit loop after finding a match
+            }
+        }
+
+        String url = "http://" + selectedIp + "/db_grupo_05_tarea_16_ejercicio_01/NormaRegistro.php?numnorma=" + numnorma + "&descripcion=" + descripcion;
         url = url.replace(" ", "%20");
 
         Log.d("URLWebService", "URL: " + url);

@@ -1,7 +1,7 @@
 package com.example.grupo_05_tarea_16_ejercicio_01.modelo;
 
 public class Usuario {
-
+    private int IdUsuario;
     private String username;
     private String password;
 
@@ -11,6 +11,14 @@ public class Usuario {
     }
 
     public Usuario() {
+    }
+
+    public int getIdUsuario() {
+        return IdUsuario;
+    }
+
+    public void setIdUsuario(int idUsuario) {
+        IdUsuario = idUsuario;
     }
 
     public String getUsername() {

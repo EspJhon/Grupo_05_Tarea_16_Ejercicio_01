@@ -31,10 +31,15 @@ import com.example.grupo_05_tarea_16_ejercicio_01.R;
 import com.example.grupo_05_tarea_16_ejercicio_01.adapter.Propietario_Adapter;
 import com.example.grupo_05_tarea_16_ejercicio_01.db.DBHelper;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Propietario;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Usuario;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class PropietarioFragment extends Fragment implements Propietario_Adapter.OnItemLongClickListener, Response.Listener<JSONObject>, Response.ErrorListener {
 
@@ -245,7 +250,23 @@ public class PropietarioFragment extends Fragment implements Propietario_Adapter
         progreso.setMessage("Cargando...");
         progreso.show();
 
-        String url = "http://192.168.10.106/db_grupo_05_tarea_16_ejercicio_01/PropietarioRegistro.php?cedulap=" + cedula + "&nombre=" + nombre + "&ciudad=" + ciudad;
+        List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.1.16");
+        // Puedes añadir más IPs según sea necesario
+        String selectedIp = "";
+        Map<String, String> userIpMap = new HashMap<>();
+        userIpMap.put("jhon", ips.get(0));
+        userIpMap.put("chagua", ips.get(0));
+        userIpMap.put("matias", ips.get(0)); // Assuming all three get IP1 for now
+
+        ArrayList<Usuario> usuarios = dbHelper.get_all_Usuarios();
+        for (Usuario usuario : usuarios) {
+            selectedIp = userIpMap.get(usuario.getUsername());
+            if (selectedIp != null) {
+                break; // Exit loop after finding a match
+            }
+        }
+
+        String url = "http://"+ selectedIp +"/db_grupo_05_tarea_16_ejercicio_01/PropietarioRegistro.php?cedulap=" + cedula + "&nombre=" + nombre + "&ciudad=" + ciudad;
 
         url = url.replace(" ", "%20");
 

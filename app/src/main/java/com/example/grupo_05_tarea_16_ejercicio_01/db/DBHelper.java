@@ -109,6 +109,12 @@ public class DBHelper {
         dbAdapter.close();
         return valido;
     }
+    public ArrayList<Usuario> get_all_Usuarios(){
+        dbAdapter.open();
+        ArrayList<Usuario> usuarios = dbAdapter.get_all_Usuarios();
+        dbAdapter.close();
+        return usuarios;
+    }
 
     //PROPIETARIO
 
