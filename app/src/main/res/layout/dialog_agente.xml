@@ -30,12 +30,23 @@
         android:hint="Nombre"
         android:inputType="textPersonName"/>
 
-    <EditText
-        android:id="@+id/et_IdPuestoControl"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="ID Puesto de Control"
-        android:inputType="number"/>
+        android:orientation="horizontal">
+        <Spinner
+            android:id="@+id/sp_Zona_agente"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:padding="10dp"/>
+        <Spinner
+            android:id="@+id/sp_IdPuestoControl_agente"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:padding="10dp"/>
+    </LinearLayout>
 
     <EditText
         android:id="@+id/et_Rango"

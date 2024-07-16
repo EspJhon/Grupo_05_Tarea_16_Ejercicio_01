@@ -25,19 +25,19 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <EditText
-                        android:id="@+id/et_placaA"
+                    <Spinner
+                        android:id="@+id/sp_placaA_accidente"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:hint="Número de placa" />
+                        android:padding="10dp" />
 
-                    <EditText
-                        android:id="@+id/et_agenteA"
+                    <Spinner
+                        android:id="@+id/sp_agenteA_accidente"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:hint="ID Agente" />
+                        android:padding="10dp" />
 
                 </LinearLayout>
 

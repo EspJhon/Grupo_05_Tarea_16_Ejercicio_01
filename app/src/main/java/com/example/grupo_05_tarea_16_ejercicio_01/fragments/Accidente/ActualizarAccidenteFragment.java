@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.provider.MediaStore;
@@ -18,15 +19,20 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ScrollView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.grupo_05_tarea_16_ejercicio_01.R;
 import com.example.grupo_05_tarea_16_ejercicio_01.adapter.MapMoveFragment;
 import com.example.grupo_05_tarea_16_ejercicio_01.db.DBHelper;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Accidente;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Agente;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Vehiculo;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -39,13 +45,16 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Calendar;
 
-public class ActualizarAccidenteFragment extends Fragment implements View.OnClickListener, OnMapReadyCallback {
 
-    private EditText et_placaA, et_agenteA, et_horaA, et_fechaA, et_descripcionA_accidente, et_tituloA_accidente,
+public class ActualizarAccidenteFragment extends Fragment implements OnMapReadyCallback {
+
+    private EditText et_horaA, et_fechaA, et_descripcionA_accidente, et_tituloA_accidente,
             et_nombreLugarA;
     private double latitud=0,longitud=0;
+    private Spinner sp_placaA_accidente, sp_agenteA_accidente;
     private ImageView iv_imagenAccidenteA;
     private DBHelper dbHelper;
     private String URL;
@@ -53,6 +62,8 @@ public class ActualizarAccidenteFragment extends Fragment implements View.OnClic
     private Accidente accidente;
     private Marker marker;
     private ScrollView scrollView;
+    ArrayAdapter<String> adapter_agente;
+    ArrayAdapter<String> adapter_placa;
 
     public ActualizarAccidenteFragment() {
         // Required empty public constructor
@@ -82,19 +93,15 @@ public class ActualizarAccidenteFragment extends Fragment implements View.OnClic
 
         scrollView = view.findViewById(R.id.sv_accidenteA);
 
-        et_placaA = view.findViewById(R.id.et_placaA);
-        et_agenteA = view.findViewById(R.id.et_agenteA);
+        sp_placaA_accidente = view.findViewById(R.id.sp_placaA_accidente);
+        sp_agenteA_accidente = view.findViewById(R.id.sp_agenteA_accidente);
         et_horaA = view.findViewById(R.id.et_horaA);
         et_fechaA = view.findViewById(R.id.et_fechaA);
         et_tituloA_accidente = view.findViewById(R.id.et_tituloA_accidente);
         et_descripcionA_accidente = view.findViewById(R.id.et_descripcionA_accidente);
         et_nombreLugarA = view.findViewById(R.id.et_nombreLugarA);
         iv_imagenAccidenteA = view.findViewById(R.id.iv_imagenAccidenteA);
-
-        view.findViewById(R.id.btn_tomarFotoA).setOnClickListener(this::onClick);
-        view.findViewById(R.id.btn_subirFotoA).setOnClickListener(this::onClick);
-        view.findViewById(R.id.btn_actualizarAccidente).setOnClickListener(this::onClick);
-
+        
         et_fechaA.setOnClickListener(v -> showDatePickerDialog());
         et_horaA.setOnClickListener(v -> showTimePickerDialog());
 
@@ -109,25 +116,82 @@ public class ActualizarAccidenteFragment extends Fragment implements View.OnClic
             });
         }
 
+        return view;
+    }
+    private int AIdAgente, AIdVehiculo;
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        dbHelper = new DBHelper(getContext());
+        ArrayList<Agente> agentes = dbHelper.getAllAgentes();
+        ArrayList<String> tituloAgentes = new ArrayList<>();
+        if (agentes != null) {
+            for (Agente agente : agentes){
+                String item = agente.getCedulaa() + " - " + agente.getNombre(); // Concatenar ID y nombre
+                tituloAgentes.add(item);
+            }
+        }
+        adapter_agente = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, tituloAgentes);
+        adapter_agente.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sp_agenteA_accidente.setAdapter(adapter_agente);
+
+        ArrayList<Vehiculo> vehiculos = dbHelper.get_all_Vehiculos();
+        ArrayList<String> tituloVehiculos= new ArrayList<>();
+        if (vehiculos != null) {
+            for (Vehiculo vehiculo : vehiculos){
+                tituloVehiculos.add(String.valueOf(vehiculo.getNumplaca()));
+            }
+        }
+        adapter_placa = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, tituloVehiculos);
+        adapter_placa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sp_placaA_accidente.setAdapter(adapter_placa);
         if (getArguments() != null && getArguments().getSerializable("id") != null) {
             int id = getArguments().getInt("id");
             accidente = dbHelper.get_Accidente(id);
             CargarDatosRegistrados(accidente);
         }
+        sp_agenteA_accidente.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Agente agente = agentes.get(position);
+                AIdAgente = agente.getIdagente();
+            }
 
-        return view;
-    }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
+            }
+        });
+        sp_placaA_accidente.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Vehiculo vehiculo = vehiculos.get(position);
+                AIdVehiculo = vehiculo.getIdVehiculo();
+            }
 
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.btn_tomarFotoA) {
-            ActivarCam();
-        } else if (v.getId() == R.id.btn_actualizarAccidente) {
-            ActualizarAccidente();
-        }else if (v.getId() == R.id.btn_subirFotoA) {
-            SubirFoto();
-        }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        view.findViewById(R.id.btn_tomarFotoA).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ActivarCam();
+            }
+        });
+        view.findViewById(R.id.btn_actualizarAccidente).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ActualizarAccidente();
+            }
+        });
+        view.findViewById(R.id.btn_subirFotoA).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SubirFoto();
+            }
+        });
     }
 
     @Override
@@ -177,18 +241,17 @@ public class ActualizarAccidenteFragment extends Fragment implements View.OnClic
 
     private void ActualizarAccidente() {
 
-        if (et_placaA.getText().toString().trim().isEmpty() || et_agenteA.getText().toString().trim().isEmpty() ||
-                et_horaA.getText().toString().trim().isEmpty() || et_fechaA.getText().toString().trim().isEmpty() ||
-                et_descripcionA_accidente.getText().toString().trim().isEmpty() ||
-                et_tituloA_accidente.getText().toString().trim().isEmpty() ||
-                et_nombreLugarA.getText().toString().trim().isEmpty()) {
+        if (et_horaA.getText().toString().trim().isEmpty() || et_fechaA.getText().toString().trim().isEmpty() ||
+            et_descripcionA_accidente.getText().toString().trim().isEmpty() ||
+            et_tituloA_accidente.getText().toString().trim().isEmpty() ||
+            et_nombreLugarA.getText().toString().trim().isEmpty()) {
 
             Toast.makeText(getActivity(), "Debe llenar todos los campos", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        int placaA = Integer.parseInt(et_placaA.getText().toString().trim());
-        int agenteA = Integer.parseInt(et_agenteA.getText().toString().trim());
+        int placaA = AIdVehiculo;
+        int agenteA = AIdAgente;
         String horaA = et_horaA.getText().toString().trim();
         String fechaA = et_fechaA.getText().toString().trim();
         String tituloA = et_tituloA_accidente.getText().toString().trim();
@@ -244,8 +307,16 @@ public class ActualizarAccidenteFragment extends Fragment implements View.OnClic
     }
 
     private void CargarDatosRegistrados(Accidente accidente) {
-        et_placaA.setText(String.valueOf(accidente.getIdVehiculo()));
-        et_agenteA.setText(String.valueOf(accidente.getIdagente()));
+        Agente agente = dbHelper.get_Agente(accidente.getIdagente());
+        Vehiculo vehiculo = dbHelper.get_Vehiculo(accidente.getIdVehiculo());
+        String agenteItem = agente.getCedulaa() + " - " + agente.getNombre();
+        int spinnerPosition_agente = adapter_agente.getPosition(agenteItem);
+        sp_agenteA_accidente.setSelection(spinnerPosition_agente);
+        sp_agenteA_accidente.setPadding(16,8,16,8);
+
+        int spinnerPosition_vehiculo = adapter_placa.getPosition(String.valueOf(vehiculo.getNumplaca()));
+        sp_placaA_accidente.setSelection(spinnerPosition_vehiculo);
+        sp_placaA_accidente.setPadding(16,8,16,8);
         et_horaA.setText(accidente.getHora());
         et_fechaA.setText(accidente.getFecha());
         et_tituloA_accidente.setText(accidente.getTitulo());

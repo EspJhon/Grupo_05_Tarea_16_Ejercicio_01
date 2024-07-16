@@ -871,6 +871,29 @@ public class DBAdapter {
         }
         return puestoControls;
     }
+    public PuestoControl get_Puesto_Control(int IdPuestoControl) {
+        try {
+            String query = "SELECT * FROM " + Table_Puesto_Control.TABLE +
+                    " WHERE " + Table_Puesto_Control.ID + " = " + IdPuestoControl;
+            Cursor cursor = db.rawQuery(query, null);
+            PuestoControl puestoControl = null;
+            if (cursor.moveToFirst()){
+                do {
+                    puestoControl = new PuestoControl();
+                    puestoControl.setIdPuestoControl(cursor.getInt(0));
+                    puestoControl.setIdZona(cursor.getInt(1));
+                    puestoControl.setReferencia(cursor.getString(2));
+                    puestoControl.setLatitud(cursor.getString(3));
+                    puestoControl.setLongitud(cursor.getString(4));
+                    puestoControl.setTitulo(cursor.getString(5));
+                }while (cursor.moveToNext());
+            }
+            cursor.close();
+            return puestoControl;
+        } catch (Exception ex) {
+            return null;
+        }
+    }
 
     public void addActa(Acta acta) {
         ContentValues values = new ContentValues();
@@ -908,6 +931,31 @@ public class DBAdapter {
         }
         return actas;
     }
+    public Acta get_Acta(int IdActa) {
+        try {
+            String query = "SELECT * FROM " + Table_Acta.TABLE +
+                    " WHERE " + Table_Acta.ID + " = " + IdActa;
+            Cursor cursor = db.rawQuery(query, null);
+            Acta acta = null;
+            if (cursor.moveToFirst()){
+                do {
+                    acta = new Acta();
+                    acta.setIdActa(cursor.getInt(0));
+                    acta.setCodigo(cursor.getInt(1));
+                    acta.setIdaccidente(cursor.getInt(2));
+                    acta.setIdAudiencia(cursor.getInt(3));
+                    acta.setHora(cursor.getString(4));
+                    acta.setIdZona(cursor.getInt(5));
+                    acta.setIdagente(cursor.getInt(6));
+                    acta.setFecha(cursor.getString(7));
+                }while (cursor.moveToNext());
+            }
+            cursor.close();
+            return acta;
+        } catch (Exception ex) {
+            return null;
+        }
+    }
     // Editar Acta
     public int updateActa(Acta acta) {
         ContentValues values = new ContentValues();
@@ -926,9 +974,9 @@ public class DBAdapter {
     }
 
     // Eliminar Acta
-    public int deleteActa(int idActa) {
+    public int deleteActa(Acta acta) {
         String selection = Table_Acta.ID + " = ?";
-        String[] selectionArgs = { String.valueOf(idActa) };
+        String[] selectionArgs = { String.valueOf(acta.getIdActa()) };
 
         return db.delete(Table_Acta.TABLE, selection, selectionArgs);
     }

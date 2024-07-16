@@ -20,15 +20,20 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ScrollView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.grupo_05_tarea_16_ejercicio_01.R;
 import com.example.grupo_05_tarea_16_ejercicio_01.adapter.MapMoveFragment;
 import com.example.grupo_05_tarea_16_ejercicio_01.db.DBHelper;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Accidente;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Agente;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Vehiculo;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -40,13 +45,15 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Calendar;
 
-public class AgregarAccidenteFragment extends Fragment implements View.OnClickListener, OnMapReadyCallback {
+public class AgregarAccidenteFragment extends Fragment implements OnMapReadyCallback {
 
-    private EditText et_placa, et_agente, et_hora, et_fecha, et_descripcion_accidente, et_titulo_accidente,
+    private EditText et_hora, et_fecha, et_descripcion_accidente, et_titulo_accidente,
             et_nombreLugar;
     private double latitud = 0, longitud = 0;
+    private Spinner sp_placa_accidente, sp_agente_accidente;
     private ImageView iv_imagenAccidente;
     private DBHelper dbHelper;
     private String URL;
@@ -82,19 +89,15 @@ public class AgregarAccidenteFragment extends Fragment implements View.OnClickLi
 
         scrollView = view.findViewById(R.id.sv_accidente);
 
-        et_placa = view.findViewById(R.id.et_placa);
-        et_agente = view.findViewById(R.id.et_agente);
+        sp_placa_accidente = view.findViewById(R.id.sp_placa_accidente);
+        sp_agente_accidente = view.findViewById(R.id.sp_agente_accidente);
         et_hora = view.findViewById(R.id.et_hora);
         et_fecha = view.findViewById(R.id.et_fecha);
         et_descripcion_accidente = view.findViewById(R.id.et_descripcion_accidente);
         et_titulo_accidente = view.findViewById(R.id.et_titulo_accidente);
         et_nombreLugar = view.findViewById(R.id.et_nombreLugar);
         iv_imagenAccidente = view.findViewById(R.id.iv_imagenAccidente);
-
-        view.findViewById(R.id.btn_tomarFoto).setOnClickListener(this::onClick);
-        view.findViewById(R.id.btn_subirFoto).setOnClickListener(this::onClick);
-        view.findViewById(R.id.btn_agregarAccidente).setOnClickListener(this::onClick);
-
+      
         et_fecha.setOnClickListener(v -> showDatePickerDialog());
         et_hora.setOnClickListener(v -> showTimePickerDialog());
 
@@ -111,25 +114,84 @@ public class AgregarAccidenteFragment extends Fragment implements View.OnClickLi
 
         return view;
     }
-
+    private int IdAgente, IdVehiculo;
     @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.btn_tomarFoto) {
-            ActivarCam();
-        } else if (v.getId() == R.id.btn_agregarAccidente) {
-            AgregarAccidente();
-        } else if (v.getId()==R.id.btn_subirFoto) {
-            SubirFoto();
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        dbHelper = new DBHelper(getContext());
+        ArrayList<Agente> agentes = dbHelper.getAllAgentes();
+        ArrayList<String> tituloAgentes = new ArrayList<>();
+        if (agentes != null) {
+            for (Agente agente : agentes){
+                String item = agente.getCedulaa() + " - " + agente.getNombre(); // Concatenar ID y nombre
+                tituloAgentes.add(item);
+            }
         }
+        ArrayAdapter<String> adapter_agente = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, tituloAgentes);
+        adapter_agente.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sp_agente_accidente.setAdapter(adapter_agente);
+
+        ArrayList<Vehiculo> vehiculos = dbHelper.get_all_Vehiculos();
+        ArrayList<String> tituloVehiculos= new ArrayList<>();
+        if (vehiculos != null) {
+            for (Vehiculo vehiculo : vehiculos){
+                tituloVehiculos.add(String.valueOf(vehiculo.getNumplaca()));
+            }
+        }
+        ArrayAdapter<String> adapter_placa = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, tituloVehiculos);
+        adapter_placa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sp_placa_accidente.setAdapter(adapter_placa);
+
+        sp_agente_accidente.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Agente agente = agentes.get(position);
+                IdAgente = agente.getIdagente();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        sp_placa_accidente.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Vehiculo vehiculo = vehiculos.get(position);
+                IdVehiculo = vehiculo.getIdVehiculo();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        view.findViewById(R.id.btn_tomarFoto).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ActivarCam();
+            }
+        });
+        view.findViewById(R.id.btn_agregarAccidente).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AgregarAccidente();
+            }
+        });
+        view.findViewById(R.id.btn_subirFoto).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SubirFoto();
+            }
+        });
     }
 
     public void AgregarAccidente() {
 
-        if (et_placa.getText().toString().trim().isEmpty() || et_agente.getText().toString().trim().isEmpty() ||
-                et_hora.getText().toString().trim().isEmpty() || et_fecha.getText().toString().trim().isEmpty() ||
-                et_descripcion_accidente.getText().toString().trim().isEmpty() ||
-                et_titulo_accidente.getText().toString().trim().isEmpty() ||
-                et_nombreLugar.getText().toString().trim().isEmpty()) {
+        if (et_hora.getText().toString().trim().isEmpty() || et_fecha.getText().toString().trim().isEmpty() ||
+            et_descripcion_accidente.getText().toString().trim().isEmpty() ||
+            et_titulo_accidente.getText().toString().trim().isEmpty() ||
+            et_nombreLugar.getText().toString().trim().isEmpty()) {
             Toast.makeText(getActivity(), "Debe llenar todos los campos", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -144,8 +206,8 @@ public class AgregarAccidenteFragment extends Fragment implements View.OnClickLi
             return;
         }
 
-        int placa = Integer.parseInt(et_placa.getText().toString().trim());
-        int agente = Integer.parseInt(et_agente.getText().toString().trim());
+        int placa = IdVehiculo;
+        int agente = IdAgente;
         String hora = et_hora.getText().toString().trim();
         String fecha = et_fecha.getText().toString().trim();
         String titulo = et_titulo_accidente.getText().toString().trim();
