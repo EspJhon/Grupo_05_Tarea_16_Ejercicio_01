@@ -1,7 +1,10 @@
 package com.example.grupo_05_tarea_16_ejercicio_01;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
+import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,15 +52,46 @@ public class MainActivity extends AppCompatActivity {
         navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
             @Override
             public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
-                if (destination.getId() == R.id.loginFragment) {
+                if (destination.getId() == R.id.loginFragment || destination.getId() == R.id.registerFragment) {
                     // Ocultar la Toolbar en el LoginFragment
                     getSupportActionBar().hide();
+                    drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
                 } else {
                     // Mostrar la Toolbar en otros fragmentos
                     getSupportActionBar().show();
+                    drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
                 }
             }
         });
+
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                int id = menuItem.getItemId();
+                if (id == R.id.nav_cerrar) {
+                    progressDialog = new ProgressDialog(MainActivity.this);
+                    progressDialog.setMessage("Cerrando sesión...");
+                    progressDialog.setCancelable(false);
+                    progressDialog.show();
+
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            progressDialog.dismiss();
+                            navController.navigate(R.id.loginFragment);
+                        }
+                    }, 1000);
+
+                    drawer.closeDrawers();
+                    return true;
+                } else {
+                    boolean handled = NavigationUI.onNavDestinationSelected(menuItem, navController);
+                    drawer.closeDrawer(navigationView);
+                    return handled || MainActivity.super.onOptionsItemSelected(menuItem);
+                }
+            }
+        });
+
     }
 
     @Override
