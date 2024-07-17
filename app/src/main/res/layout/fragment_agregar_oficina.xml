@@ -26,7 +26,8 @@
                 android:id="@+id/et_numPoliza"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Número de Poliza" />
+                android:hint="Número de Poliza"
+                android:inputType="number"/>
 
             <Spinner
                 android:id="@+id/sp_numPlaca_oficina"

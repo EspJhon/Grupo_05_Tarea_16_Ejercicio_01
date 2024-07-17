@@ -2,6 +2,7 @@ package com.example.grupo_05_tarea_16_ejercicio_01.fragments.Infraccion;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,18 +26,31 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.grupo_05_tarea_16_ejercicio_01.R;
 import com.example.grupo_05_tarea_16_ejercicio_01.db.DBHelper;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Agente;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Infraccion;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.NormasDet;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Usuario;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Vehiculo;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Zona;
 
-import java.util.ArrayList;
-import java.util.Calendar;
+import org.json.JSONObject;
 
-public class InfraccionRegisterFragment extends Fragment {
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class InfraccionRegisterFragment extends Fragment implements Response.Listener<JSONObject>, Response.ErrorListener{
 
     private EditText edt_register_valor_multa, edt_register_fecha_infraccion,
                     edt_register_hora_infraccion;
@@ -46,11 +61,14 @@ public class InfraccionRegisterFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    private ProgressDialog progressDialog;
+    RequestQueue request;
+    JsonObjectRequest jsonObjectRequest;
+
     private String mParam1;
     private String mParam2;
 
     public InfraccionRegisterFragment() {
-        // Required empty public constructor
     }
 
     public static InfraccionRegisterFragment newInstance(String param1, String param2) {
@@ -87,6 +105,8 @@ public class InfraccionRegisterFragment extends Fragment {
         sp_agente = view.findViewById(R.id.sp_agente);
         sp_placa = view.findViewById(R.id.sp_placa);
         sp_norma = view.findViewById(R.id.sp_norma);
+
+        request = Volley.newRequestQueue(requireActivity());  // Inicializar RequestQueue
 
         edt_register_fecha_infraccion.setOnClickListener(v -> showDatePickerDialog());
         edt_register_hora_infraccion.setOnClickListener(v -> showTimePickerDialog());
@@ -181,6 +201,15 @@ public class InfraccionRegisterFragment extends Fragment {
                 } else {
                     Infraccion infraccion = new Infraccion(Id_Agente,Id_vehiculo,multa,fecha,Id_Norma,hora);
                     dbHelper.Insertar_Infraccion(infraccion);
+                    Runnable runnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            requireActivity().getSupportFragmentManager().popBackStack();
+                        }
+                    };
+
+                    CargarWebService(Id_Agente, Id_vehiculo, multa, fecha, Id_Norma, hora,runnable);
+
                     NavController navController = Navigation.findNavController(v);
                     navController.navigateUp();
                     Toast.makeText(getContext(), "Infraccion Registrada", Toast.LENGTH_SHORT).show();
@@ -291,5 +320,69 @@ public class InfraccionRegisterFragment extends Fragment {
         }, hour, minute, true);
 
         timePickerDialog.show();
+    }
+
+    private void CargarWebService(int idagente, int idvehiculo, String valormulta, String fecha, int idnorma, String hora, Runnable runnable) {
+        progressDialog = new ProgressDialog(requireActivity());
+        progressDialog.setMessage("Registrando...");
+        progressDialog.show();
+
+        List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.1.6");
+        // Puedes añadir más IPs según sea necesario
+        String selectedIp = "";
+        Map<String, String> userIpMap = new HashMap<>();
+        userIpMap.put("jhon", ips.get(0));
+        userIpMap.put("chagua", ips.get(1));
+        userIpMap.put("matias", ips.get(2));
+
+        ArrayList<Usuario> usuarios = dbHelper.get_all_Usuarios();
+        for (Usuario usuario : usuarios) {
+            selectedIp = userIpMap.get(usuario.getUsername());
+            if (selectedIp != null) {
+                break;
+            }
+        }
+
+        String urlWS = "http://" + selectedIp + "/db_grupo_05_tarea_16_ejercicio_01/InfraccionRegistro.php?" +
+                "idagente=" + idagente +
+                "&idvehiculo=" + idvehiculo +
+                "&valormulta=" + valormulta +
+                "&fecha=" + fecha +
+                "&idnorma=" + idnorma +
+                "&hora=" + hora;
+
+        urlWS = urlWS.replace(" ", "%20");
+
+        //Log.d("URLWebService", "URL: " + urlWS);
+
+        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, urlWS, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                progressDialog.hide();
+                Toast.makeText(requireActivity(), "Infracción registrada correctamente", Toast.LENGTH_SHORT).show();
+                if (runnable != null) {
+                    runnable.run();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                progressDialog.hide();
+                Toast.makeText(requireActivity(), "No se puede conectar: " + error.toString(), Toast.LENGTH_LONG).show();
+                Log.d("ERROR: ", error.toString());
+            }
+        });
+
+        request.add(jsonObjectRequest);
+    }
+
+    @Override
+    public void onErrorResponse(VolleyError error) {
+
+    }
+
+    @Override
+    public void onResponse(JSONObject response) {
+
     }
 }
