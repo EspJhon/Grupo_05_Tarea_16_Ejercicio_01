@@ -20,12 +20,16 @@
                 android:id="@+id/et_valorVehiculo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/rounded_edittext"
+                android:layout_margin="2dp"
                 android:hint="Valor del vehículo" />
 
             <EditText
                 android:id="@+id/et_numPoliza"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/rounded_edittext"
+                android:layout_margin="2dp"
                 android:hint="Número de Poliza"
                 android:inputType="number"/>
 
@@ -44,6 +48,8 @@
                     android:id="@+id/et_ubicacion"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/rounded_edittext"
+                    android:layout_margin="2dp"
                     android:hint="Ubicación" />
 
                 <fragment
@@ -58,7 +64,10 @@
                 android:id="@+id/btn_agregarOficina"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Añadir" />
+                android:text="Añadir"
+                android:layout_margin="10dp"
+                android:background="@drawable/rounded_button_black"
+                android:backgroundTint="@color/black"/>
 
         </LinearLayout>
     </LinearLayout>

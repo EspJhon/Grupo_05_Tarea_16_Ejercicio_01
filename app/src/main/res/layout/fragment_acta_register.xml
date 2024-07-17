@@ -35,6 +35,7 @@
                     android:layout_height="wrap_content"
                     android:padding="5dp"
                     android:text="Código: "
+                    android:textColor="@color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -43,6 +44,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
+                    android:background="@drawable/rounded_edittext"
                     android:hint="Código"
                     android:inputType="number"/>
             </LinearLayout>
@@ -57,6 +59,7 @@
                     android:layout_height="wrap_content"
                     android:padding="5dp"
                     android:text="Accidente: "
+                    android:textColor="@color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -77,6 +80,7 @@
                     android:layout_height="wrap_content"
                     android:padding="5dp"
                     android:text="Audiencia: "
+                    android:textColor="@color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -97,6 +101,7 @@
                     android:layout_height="wrap_content"
                     android:padding="5dp"
                     android:text="Hora: "
+                    android:textColor="@color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -105,6 +110,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Hora"
+                    android:background="@drawable/rounded_edittext"
                     android:focusable="false"
                     android:clickable="true" />
             </LinearLayout>
@@ -119,6 +125,7 @@
                     android:layout_height="wrap_content"
                     android:padding="5dp"
                     android:text="Zona: "
+                    android:textColor="@color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -140,6 +147,7 @@
                     android:padding="5dp"
                     android:text="Agente: "
                     android:textSize="18sp"
+                    android:textColor="@color/black"
                     android:textStyle="bold" />
 
                 <Spinner
@@ -159,6 +167,7 @@
                     android:layout_height="wrap_content"
                     android:padding="5dp"
                     android:text="Fecha: "
+                    android:textColor="@color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -167,6 +176,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Fecha"
+                    android:background="@drawable/rounded_edittext"
                     android:focusable="false"
                     android:clickable="true" />
             </LinearLayout>
@@ -185,9 +195,12 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:padding="10dp"
+                    android:layout_margin="10dp"
                     android:layout_marginTop="16dp"
                     android:textStyle="bold"
-                    android:text="Registrar" />
+                    android:backgroundTint="@color/black"
+                    android:text="Registrar"
+                    android:background="@drawable/rounded_button_black"/>
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/layout_btn_actualizar_acta"

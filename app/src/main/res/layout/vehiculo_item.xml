@@ -8,15 +8,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:background="@drawable/rounded_item"
         android:layout_margin="10dp">
 
         <TextView
             android:id="@+id/tv_numPlaca"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:text="0000"
-            />
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:text="0000"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -28,7 +30,8 @@
                 android:text="Marca:"
                 android:paddingTop="5dp"
                 android:textSize="20sp"
-                />
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
 
             <TextView
                 android:id="@+id/tv_marca"
@@ -53,7 +56,8 @@
                 android:text="Modelo:"
                 android:paddingTop="5dp"
                 android:textSize="20sp"
-                />
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
 
             <TextView
                 android:id="@+id/tv_modelo"
@@ -79,7 +83,8 @@
                 android:text="Motor:"
                 android:paddingTop="5dp"
                 android:textSize="20sp"
-                />
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
 
             <TextView
                 android:id="@+id/tv_motor"
@@ -105,7 +110,8 @@
                 android:text="Fecha:"
                 android:paddingTop="5dp"
                 android:textSize="20sp"
-                />
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
 
             <TextView
                 android:id="@+id/tv_fecha"
@@ -130,7 +136,8 @@
                 android:text="Propietario:"
                 android:paddingTop="5dp"
                 android:textSize="20sp"
-                />
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
 
             <TextView
                 android:id="@+id/tv_propietario"

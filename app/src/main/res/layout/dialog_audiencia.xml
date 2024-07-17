@@ -2,42 +2,91 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/carropoli"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="10dp">
+        android:layout_height="match_parent"
+        android:background="#CC000000"
+        android:gravity="center"
+        android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/et_codigo"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Código"
-            android:inputType="number"/>
+            android:orientation="vertical"
+            android:padding="10dp">
 
-        <EditText
-            android:id="@+id/et_lugar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Lugar" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="28dp">
 
-        <EditText
-            android:id="@+id/et_fecha"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Fecha"
-            android:focusable="false"
-            android:clickable="true" />
+                <ImageView
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:src="@drawable/c_audiencia" />
 
-        <EditText
-            android:id="@+id/et_hora"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Hora"
-            android:focusable="false"
-            android:clickable="true" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="AUDIENCIA"
+                    android:textColor="@color/white"
+                    android:textSize="45sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@drawable/c_menu_audiencia"
+                android:elevation="10dp"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <EditText
+                    android:id="@+id/et_codigo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:background="@drawable/rounded_edittext"
+                    android:hint="Código"
+                    android:inputType="number" />
+
+                <EditText
+                    android:id="@+id/et_lugar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:background="@drawable/rounded_edittext"
+                    android:hint="Lugar" />
+
+                <EditText
+                    android:id="@+id/et_fecha"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:background="@drawable/rounded_edittext"
+                    android:clickable="true"
+                    android:focusable="false"
+                    android:hint="Fecha" />
+
+                <EditText
+                    android:id="@+id/et_hora"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:background="@drawable/rounded_edittext"
+                    android:clickable="true"
+                    android:focusable="false"
+                    android:hint="Hora" />
+            </LinearLayout>
+        </LinearLayout>
 
     </LinearLayout>
 </LinearLayout>

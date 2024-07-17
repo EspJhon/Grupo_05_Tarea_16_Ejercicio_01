@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:background="@drawable/rounded_item"
     android:padding="10dp">
 
     <LinearLayout
@@ -19,7 +20,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Accidente: "
-                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:textSize="18sp"
                 android:textStyle="bold"/>
 
             <TextView
@@ -37,7 +39,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Fecha: "
-                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -61,7 +64,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Agente: "
-                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:textSize="18sp"
                 android:textStyle="bold"/>
 
             <TextView
@@ -79,7 +83,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Zona: "
-                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <TextView

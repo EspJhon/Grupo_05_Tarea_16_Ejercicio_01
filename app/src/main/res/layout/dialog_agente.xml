@@ -1,59 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:padding="20dp">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Registrar Agente"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:textColor="@color/black"
-        android:layout_gravity="center"
-        android:paddingBottom="16dp"/>
-
-    <EditText
-        android:id="@+id/et_Cedula"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Cédula"
-        android:inputType="number"/>
-
-    <EditText
-        android:id="@+id/et_NombreAgente"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Nombre"
-        android:inputType="textPersonName"/>
+    android:layout_height="match_parent"
+    android:background="@drawable/carropoli"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <Spinner
-            android:id="@+id/sp_Zona_agente"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:background="#CC000000"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"/>
-        <Spinner
-            android:id="@+id/sp_IdPuestoControl_agente"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="28dp">
+
+            <ImageView
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:src="@drawable/c_registrar_agente" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center"
+                android:text="REGISTRAR AGENTE"
+                android:textColor="@color/white"
+                android:textSize="45sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"/>
+            android:layout_margin="10dp"
+            android:background="@drawable/c_menu_audiencia"
+            android:elevation="10dp"
+            android:orientation="vertical"
+            android:padding="15dp">
+
+            <EditText
+                android:id="@+id/et_Cedula"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:background="@drawable/rounded_edittext"
+                android:hint="Cédula"
+                android:inputType="number" />
+
+
+            <EditText
+                android:id="@+id/et_NombreAgente"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:background="@drawable/rounded_edittext"
+                android:hint="Nombre"
+                android:inputType="textPersonName" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Spinner
+                    android:id="@+id/sp_Zona_agente"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="10dp" />
+
+                <Spinner
+                    android:id="@+id/sp_IdPuestoControl_agente"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="10dp" />
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/et_Rango"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:background="@drawable/rounded_edittext"
+                android:hint="Rango"
+                android:inputType="text" />
+        </LinearLayout>
     </LinearLayout>
-
-    <EditText
-        android:id="@+id/et_Rango"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Rango"
-        android:inputType="text"/>
-
 </LinearLayout>

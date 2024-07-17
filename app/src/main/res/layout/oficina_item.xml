@@ -8,30 +8,43 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="10dp">
+        android:padding="10dp"
+        android:background="@drawable/rounded_item">
 
         <TextView
             android:id="@+id/tv_valorVehiculo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="16dp"
+            android:textStyle="bold"
             android:text="[Valor del vehículo]" />
 
         <TextView
             android:id="@+id/tv_numPoliza"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="16dp"
+            android:textStyle="bold"
             android:text="[Número de poliza]" />
 
         <TextView
             android:id="@+id/tv_numPlaca"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="16dp"
+            android:textStyle="bold"
             android:text="[Número de placa]" />
 
         <TextView
             android:id="@+id/tv_ubicacion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="16dp"
+            android:textStyle="bold"
             android:text="[Ubicación]" />
 
     </LinearLayout>

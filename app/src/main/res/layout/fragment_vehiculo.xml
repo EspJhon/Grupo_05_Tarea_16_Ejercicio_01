@@ -6,26 +6,33 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="10dp"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/btn_registrar_vehiculo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="10dp"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        android:backgroundTint="@color/purple_500"
-        android:text="Registrar Vehículo"/>
-
-    <ListView
-        android:id="@+id/lv_vehiculos"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:choiceMode="singleChoice"
-        android:listSelector="@android:color/transparent"/>
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <Button
+            android:id="@+id/btn_registrar_vehiculo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="10dp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:background="@drawable/rounded_button_black"
+            android:text="Registrar Vehículo"/>
+
+        <ListView
+            android:id="@+id/lv_vehiculos"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:choiceMode="singleChoice"
+            android:listSelector="@android:color/transparent"/>
 
 
+
+    </LinearLayout>
 
 </LinearLayout>
