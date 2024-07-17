@@ -178,7 +178,9 @@ public class AgregarOficinaFragment extends Fragment implements OnMapReadyCallba
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                requireActivity().getSupportFragmentManager().popBackStack();
+                if (isAdded()) { // Check if the fragment is attached
+                    requireActivity().getSupportFragmentManager().popBackStack();
+                }
             }
         };
 
@@ -234,6 +236,9 @@ public class AgregarOficinaFragment extends Fragment implements OnMapReadyCallba
                 progressDialog.hide();
                 Toast.makeText(requireActivity(), "No se puede conectar: " + error.toString(), Toast.LENGTH_LONG).show();
                 Log.d("ERROR: ", error.toString());
+                if (runnable != null) {
+                    runnable.run();
+                }
             }
         });
 
