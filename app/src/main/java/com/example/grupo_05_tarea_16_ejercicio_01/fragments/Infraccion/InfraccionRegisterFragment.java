@@ -26,11 +26,13 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.grupo_05_tarea_16_ejercicio_01.R;
 import com.example.grupo_05_tarea_16_ejercicio_01.db.DBHelper;
@@ -64,6 +66,8 @@ public class InfraccionRegisterFragment extends Fragment implements Response.Lis
     private ProgressDialog progressDialog;
     RequestQueue request;
     JsonObjectRequest jsonObjectRequest;
+    StringRequest stringRequest;
+
 
     private String mParam1;
     private String mParam2;
@@ -262,6 +266,7 @@ public class InfraccionRegisterFragment extends Fragment implements Response.Lis
                         ainfraccion.setIdnomra(AId_Norma);
                         ainfraccion.setHora(ahora);
                         dbHelper.Actualizar_Infraccion(ainfraccion);
+                        ActualizarWebService(AId_Agente,AId_vehiculo,amulta,afecha,AId_Norma,ahora,ainfraccion.getIdInfraccion());
                         ainfraccion = null;
                         NavController navController = Navigation.findNavController(v);
                         navController.navigateUp();
@@ -378,6 +383,65 @@ public class InfraccionRegisterFragment extends Fragment implements Response.Lis
         });
 
         request.add(jsonObjectRequest);
+    }
+
+    private void ActualizarWebService(int idagente, int idvehiculo, String valormulta,String fecha, int idnorma, String hora, int idinfraccion) {
+        progressDialog = new ProgressDialog(requireActivity());
+        progressDialog.setMessage("Actualizando...");
+        progressDialog.show();
+
+        List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.1.6");
+        // Puedes añadir más IPs según sea necesario
+        String selectedIp = "";
+        Map<String, String> userIpMap = new HashMap<>();
+        userIpMap.put("jhon", ips.get(0));
+        userIpMap.put("chagua", ips.get(1));
+        userIpMap.put("matias", ips.get(2));
+
+        ArrayList<Usuario> usuarios = dbHelper.get_all_Usuarios();
+        for (Usuario usuario : usuarios) {
+            selectedIp = userIpMap.get(usuario.getUsername());
+            if (selectedIp != null) {
+                break;
+            }
+        }
+
+        String urlWS = "http://" + selectedIp + "/db_grupo_05_tarea_16_ejercicio_01/InfraccionActualizar.php";
+
+        stringRequest = new StringRequest(Request.Method.POST, urlWS, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                progressDialog.hide();
+                if (response.trim().equalsIgnoreCase("actualiza")) {
+                    Toast.makeText(requireActivity(), "Accidente actualizado correctamente", Toast.LENGTH_SHORT).show();
+                    requireActivity().getSupportFragmentManager().popBackStack();
+                } else {
+                    Toast.makeText(requireActivity(), "Accidente no se pudo actualizar", Toast.LENGTH_SHORT).show();
+                    Log.i("RESPUESTA: ", "" + response);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(requireActivity(), "No se ha podido conectar", Toast.LENGTH_SHORT).show();
+                progressDialog.hide();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> parametros = new HashMap<>();
+                parametros.put("idagente", String.valueOf(idagente));
+                parametros.put("idvehiculo", String.valueOf(idvehiculo));
+                parametros.put("valormulta",valormulta);
+                parametros.put("fecha",fecha);
+                parametros.put("idnorma",String.valueOf(idnorma));
+                parametros.put("hora", hora);
+                parametros.put("idinfraccion", String.valueOf(idinfraccion));
+
+                return parametros;
+            }
+        };
+        request.add(stringRequest);
     }
 
     @Override
