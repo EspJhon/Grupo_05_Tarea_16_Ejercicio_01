@@ -25,11 +25,13 @@ import android.widget.ListView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.grupo_05_tarea_16_ejercicio_01.R;
 import com.example.grupo_05_tarea_16_ejercicio_01.adapter.AudienciaAdapter;
@@ -51,6 +53,9 @@ public class AudienciaFragment extends Fragment implements Response.Listener<JSO
     private ListView lv_audiencias;
     private Button btn_nuevaAudiencia;
     private DBHelper dbHelper;
+
+    private ProgressDialog progressDialog;
+    StringRequest stringRequest;
 
     ProgressDialog progreso;
     RequestQueue request;
@@ -121,7 +126,7 @@ public class AudienciaFragment extends Fragment implements Response.Listener<JSO
         builder.setView(dialogView);
 
         if (tipo == 1) { // Insertar
-            builder.setTitle("Añadir Norma");
+            builder.setTitle("Añadir Audiencia");
             builder.setPositiveButton("Guardar", (dialog, which) -> {
                 int codigo = Integer.parseInt(et_codigo.getText().toString().trim());
                 String lugar = et_lugar.getText().toString().trim();
@@ -135,7 +140,7 @@ public class AudienciaFragment extends Fragment implements Response.Listener<JSO
             });
             builder.setNegativeButton("Cancelar", (dialog, which) -> dialog.cancel());
         } else { // Actualizar o Eliminar
-            builder.setTitle("Actualizar Norma");
+            builder.setTitle("Actualizar Audiencia");
 
             et_lugar.setText(paudiencia.getLugar());
             et_fecha.setText(paudiencia.getFecha());
@@ -155,6 +160,8 @@ public class AudienciaFragment extends Fragment implements Response.Listener<JSO
                     audiencia.setFecha(fecha);
                     audiencia.setHora(hora);
                     dbHelper.Actualizar_Audiencia(audiencia);
+
+                    ActualizarWebService(codigo,lugar,fecha,hora,audiencia.getIdAudiencia());
                     Toast.makeText(getContext(), "Audiencia Actualizada", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getContext(), "Audiencia no Actualizada", Toast.LENGTH_SHORT).show();
@@ -247,6 +254,72 @@ public class AudienciaFragment extends Fragment implements Response.Listener<JSO
 
         jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, this, this);
         request.add(jsonObjectRequest);
+    }
+
+
+    private void ActualizarWebService(int codigo, String lugar, String fecha, String hora, int idaudiencia) {
+        progressDialog = new ProgressDialog(requireActivity());
+        progressDialog.setMessage("Actualizando...");
+        progressDialog.show();
+
+        List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.1.6");
+        String selectedIp = "";
+        Map<String, String> userIpMap = new HashMap<>();
+        userIpMap.put("jhon", ips.get(0));
+        userIpMap.put("chagua", ips.get(1));
+        userIpMap.put("matias", ips.get(2));
+
+        ArrayList<Usuario> usuarios = dbHelper.get_all_Usuarios();
+        for (Usuario usuario : usuarios) {
+            selectedIp = userIpMap.get(usuario.getUsername());
+            if (selectedIp != null) {
+                break;
+            }
+        }
+
+        if (selectedIp.isEmpty()) {
+            progressDialog.hide();
+            Toast.makeText(requireActivity(), "No se pudo determinar la IP", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String urlWS = "http://" + selectedIp + "/db_grupo_05_tarea_16_ejercicio_01/AudienciaActualizar.php";
+        Log.d("URLWebService", "URL: " + urlWS);
+
+        stringRequest = new StringRequest(Request.Method.POST, urlWS, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                progressDialog.hide();
+                Toast.makeText(requireActivity(), "Audiencia actualizada con éxito", Toast.LENGTH_SHORT).show();
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                progressDialog.hide();
+                if (error.networkResponse != null && error.networkResponse.data != null) {
+                    String errorResponse = new String(error.networkResponse.data);
+                    Log.e("VolleyError", errorResponse);
+                } else {
+                    Log.e("VolleyError", error.toString());
+                }
+                Toast.makeText(requireActivity(), "No se ha podido conectar", Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> parametros = new HashMap<>();
+                parametros.put("codigo", String.valueOf(codigo));
+                parametros.put("lugar", lugar);
+                parametros.put("fecha", fecha);
+                parametros.put("hora", hora);
+                parametros.put("idaudiencia", String.valueOf(idaudiencia));
+
+                Log.d("Params", "codigo: " + codigo + ", lugar: " + lugar + ", fecha: " + fecha + ", hora: " + hora);
+                return parametros;
+            }
+        };
+        request.add(stringRequest);
     }
 
     @Override

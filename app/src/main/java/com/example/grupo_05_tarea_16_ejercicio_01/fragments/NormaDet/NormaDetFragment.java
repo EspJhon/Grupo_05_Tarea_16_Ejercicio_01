@@ -22,11 +22,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.grupo_05_tarea_16_ejercicio_01.R;
 import com.example.grupo_05_tarea_16_ejercicio_01.adapter.NormaDetalleAdapter;
@@ -56,6 +58,9 @@ public class NormaDetFragment extends Fragment implements Response.Listener<JSON
     ProgressDialog progreso;
     RequestQueue request;
     JsonObjectRequest jsonObjectRequest;
+
+    private ProgressDialog progressDialog;
+    StringRequest stringRequest;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -180,6 +185,8 @@ public class NormaDetFragment extends Fragment implements Response.Listener<JSON
                         normasDet.setNumnorma(cnnorma);
                         normasDet.setDescripcion(cdescripcion);
                         dbHelper.Actualizar_Norma_Detalle(normasDet);
+
+                        ActualizarWebService(cnnorma,cdescripcion,IdNorma);
                         normasDet = null;
                         Toast.makeText(getContext(), "Norma Actualizada", Toast.LENGTH_SHORT).show();
                     } else {
@@ -254,6 +261,81 @@ public class NormaDetFragment extends Fragment implements Response.Listener<JSON
     public void onResponse(JSONObject response) {
         progreso.dismiss();
         Toast.makeText(requireActivity(), "Mensaje: " + response.toString(), Toast.LENGTH_SHORT).show();
+    }
+
+    private void ActualizarWebService(String numnorma, String descripcion, int idnorma) {
+        progressDialog = new ProgressDialog(requireActivity());
+        progressDialog.setMessage("Actualizando...");
+        progressDialog.show();
+
+        List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.1.6");
+        String selectedIp = "";
+        Map<String, String> userIpMap = new HashMap<>();
+        userIpMap.put("jhon", ips.get(0));
+        userIpMap.put("chagua", ips.get(1));
+        userIpMap.put("matias", ips.get(2));
+
+        ArrayList<Usuario> usuarios = dbHelper.get_all_Usuarios();
+        for (Usuario usuario : usuarios) {
+            selectedIp = userIpMap.get(usuario.getUsername());
+            if (selectedIp != null) {
+                break;
+            }
+        }
+
+        if (selectedIp.isEmpty()) {
+            progressDialog.hide();
+            Toast.makeText(requireActivity(), "No se pudo determinar la IP", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String urlWS = "http://" + selectedIp + "/db_grupo_05_tarea_16_ejercicio_01/NormaActualizar.php";
+        Log.d("URLWebService", "URL: " + urlWS);
+
+        stringRequest = new StringRequest(Request.Method.POST, urlWS, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                progressDialog.hide();
+                if (response.equalsIgnoreCase("actualiza")) {
+                    Toast.makeText(requireActivity(), "Norma Actualizada con éxito", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Mostrar el error en un AlertDialog
+                    AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
+                    builder.setTitle("Error")
+                            .setMessage(response)
+                            .setPositiveButton("OK", null)
+                            .show();
+
+                    // Registrar en Logcat para más detalles
+                    Log.i("RESPUESTA: ", "" + response);
+                }
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                progressDialog.hide();
+                if (error.networkResponse != null && error.networkResponse.data != null) {
+                    String errorResponse = new String(error.networkResponse.data);
+                    Log.e("VolleyError", errorResponse);
+                } else {
+                    Log.e("VolleyError", error.toString());
+                }
+                Toast.makeText(requireActivity(), "No se ha podido conectar", Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> parametros = new HashMap<>();
+                parametros.put("numnorma", numnorma);
+                parametros.put("descripcion", descripcion);
+                parametros.put("idnorma", String.valueOf(idnorma));
+
+                Log.d("Params", "numnorma: " + numnorma + ", descripcion: " + descripcion);
+                return parametros;
+            }
+        };
+        request.add(stringRequest);
     }
 
 
