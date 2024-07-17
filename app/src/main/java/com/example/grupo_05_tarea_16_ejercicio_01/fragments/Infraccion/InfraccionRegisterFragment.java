@@ -204,8 +204,14 @@ public class InfraccionRegisterFragment extends Fragment implements Response.Lis
 
                     CargarWebService(Id_Agente, Id_vehiculo, multa, fecha, Id_Norma, hora);
 
-                    NavController navController = Navigation.findNavController(v);
-                    navController.navigateUp();
+                    if (isAdded()) {
+                        try {
+                            NavController navController = Navigation.findNavController(v);
+                            navController.navigateUp();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
                     Toast.makeText(getContext(), "Infraccion Registrada", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -352,15 +358,21 @@ public class InfraccionRegisterFragment extends Fragment implements Response.Lis
         jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, urlWS, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
+                if (isAdded()) {  // Verifica si el fragmento está adjunto antes de interactuar con la UI
+
+                    Toast.makeText(requireActivity(), "Zona registrado correctamente", Toast.LENGTH_SHORT).show();
+                    // preguntarle a chagua del runable
+                }
                 progressDialog.hide();
-                Toast.makeText(requireActivity(), "Infracción registrada correctamente", Toast.LENGTH_SHORT).show();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                if (isAdded()) {  // Verifica si el fragmento está adjunto antes de interactuar con la UI
+
+                    Toast.makeText(requireActivity(), "No se puede conectar: " + error.toString(), Toast.LENGTH_LONG).show();
+                }
                 progressDialog.hide();
-                Toast.makeText(requireActivity(), "No se puede conectar: " + error.toString(), Toast.LENGTH_LONG).show();
-                Log.d("ERROR: ", error.toString());
             }
         });
 

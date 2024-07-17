@@ -233,8 +233,14 @@ public class ActaRegisterFragment extends Fragment implements Response.Listener<
 
                     CargarWebService(codigo, Id_Accidente, Id_Audiencia, hora, Id_Zona, Id_Agente, fecha);
 
-                    NavController navController = Navigation.findNavController(v);
-                    navController.navigateUp();
+                    if (isAdded()) {
+                        try {
+                            NavController navController = Navigation.findNavController(v);
+                            navController.navigateUp();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
                     Toast.makeText(getContext(), "Acta Registrada", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -390,15 +396,21 @@ public class ActaRegisterFragment extends Fragment implements Response.Listener<
         jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, urlWS, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
+                if (isAdded()) {  // Verifica si el fragmento está adjunto antes de interactuar con la UI
+
+                    Toast.makeText(requireActivity(), "Zona registrado correctamente", Toast.LENGTH_SHORT).show();
+                    // preguntarle a chagua del runable
+                }
                 progressDialog.hide();
-                Toast.makeText(requireActivity(), "Infracción registrada correctamente", Toast.LENGTH_SHORT).show();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                if (isAdded()) {  // Verifica si el fragmento está adjunto antes de interactuar con la UI
+
+                    Toast.makeText(requireActivity(), "No se puede conectar: " + error.toString(), Toast.LENGTH_LONG).show();
+                }
                 progressDialog.hide();
-                Toast.makeText(requireActivity(), "No se puede conectar: " + error.toString(), Toast.LENGTH_LONG).show();
-                Log.d("ERROR: ", error.toString());
             }
         });
 
