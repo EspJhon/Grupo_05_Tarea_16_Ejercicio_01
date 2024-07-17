@@ -189,12 +189,12 @@ public class OficinaGobFragment extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                String errorMessage = error.getMessage();
+                String errorM = error.getMessage();
                 if (error.networkResponse != null) {
-                    errorMessage += " Status Code: " + error.networkResponse.statusCode;
+                    errorM += " Estado: " + error.networkResponse.statusCode;
                 }
-                Log.e("EliminarWebService", "Error: " + errorMessage);
-                Toast.makeText(requireActivity(), "No se ha podido conectar: " + errorMessage, Toast.LENGTH_SHORT).show();
+                Log.e("EliminarWebService", "Error: " + errorM);
+                //Toast.makeText(requireActivity(), "No se ha podido conectar: " + errorM, Toast.LENGTH_SHORT).show();
                 progressDialog.hide();
             }
         });
