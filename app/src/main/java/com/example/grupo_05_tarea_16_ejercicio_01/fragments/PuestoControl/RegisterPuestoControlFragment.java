@@ -122,7 +122,7 @@ public class RegisterPuestoControlFragment extends Fragment implements OnMapRead
         return view;
     }
     String latitud, longitud, titulo;
-    private int IdZona;
+    private int Id_Zona;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -143,14 +143,14 @@ public class RegisterPuestoControlFragment extends Fragment implements OnMapRead
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Zona zonaselecionada = zonas.get(position);
-                IdZona = zonaselecionada.getIdZona();
+                Id_Zona = zonaselecionada.getIdZona();
                 latitud = zonaselecionada.getLatitud();
                 longitud = zonaselecionada.getLongitud();
                 titulo = zonaselecionada.getTitulo();
                 if (mMap != null) {
                     updateMarker();
                     mMap.clear();
-                    Listar_Marcadores(IdZona);
+                    Listar_Marcadores(Id_Zona);
                 }
             }
 
@@ -162,7 +162,7 @@ public class RegisterPuestoControlFragment extends Fragment implements OnMapRead
         btn_registrar_puesto_control.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int id_zon = IdZona;
+                int id_zon = Id_Zona;
                 String title = edt_register_titulo_puesto_control.getText().toString();
                 String referencia = edt_register_referencia_puesto_control.getText().toString();
                 String slatitud = edt_register_latitud_puesto_control.getText().toString();
@@ -195,8 +195,8 @@ public class RegisterPuestoControlFragment extends Fragment implements OnMapRead
             layout_btn_actualizar.setVisibility(View.VISIBLE);
             layout_edt_registrar.setVisibility(View.VISIBLE);
             sp_zona.setEnabled(false);
-            String IdZona = getArguments().getString("IdZona");
-            Zona zona = dbHelper.get_Zona_Puesto(IdZona);
+            String AIdZona = getArguments().getString("IdZona");
+            Zona zona = dbHelper.get_Zona_Puesto(AIdZona);
             String nombre = zona.getTitulo();
             int spinnerPosition = adapter.getPosition(nombre);
             sp_zona.setSelection(spinnerPosition);
@@ -213,7 +213,7 @@ public class RegisterPuestoControlFragment extends Fragment implements OnMapRead
                                     public void onClick(DialogInterface dialog, int which) {
                                         PuestoControl puestoControl = dbHelper.get_Puesto_Control(idPuestoControlSeleccionado);
                                         dbHelper.Eliminar_Puesto_Control(puestoControl);
-                                        ArrayList<PuestoControl> comprobacion = dbHelper.get_all_Puesto_Controls_Zona(Integer.parseInt(IdZona));
+                                        ArrayList<PuestoControl> comprobacion = dbHelper.get_all_Puesto_Controls_Zona(Integer.parseInt(AIdZona));
 
                                         // Navegar hacia arriba si la lista está vacía
                                         if (comprobacion.isEmpty()) {
@@ -224,7 +224,7 @@ public class RegisterPuestoControlFragment extends Fragment implements OnMapRead
                                             Toast.makeText(requireContext(), "Puesto eliminado correctamente", Toast.LENGTH_SHORT).show();
                                             idPuestoControlSeleccionado = 0;
                                             mMap.clear();
-                                            Listar_Marcadores(Integer.parseInt(IdZona));
+                                            Listar_Marcadores(Integer.parseInt(AIdZona));
                                             edt_register_titulo_puesto_control.setText("");
                                             edt_register_latitud_puesto_control.setText("");
                                             edt_register_longitud_puesto_control.setText("");
@@ -281,8 +281,18 @@ public class RegisterPuestoControlFragment extends Fragment implements OnMapRead
                             .setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    PuestoControl puestoControl = dbHelper.get_Puesto_Control(Integer.parseInt(IdZona));
-                                    dbHelper.Eliminar_Puesto_Control_Zona(puestoControl.getIdZona());
+                                    PuestoControl puestoControl = dbHelper.get_Puesto_Control(Integer.parseInt(AIdZona));
+                                    Log.d("Malos", puestoControl.getIdZona()+"");
+                                    Log.d("Malos", puestoControl.getIdZona()+"");
+                                    Log.d("Malos", puestoControl.getIdZona()+"");
+                                    Log.d("Malos", puestoControl.getIdZona()+"");
+                                    Log.d("Malos", puestoControl.getIdZona()+"");
+                                    Log.d("Malos", puestoControl.getIdZona()+"");
+                                    Log.d("Malos", puestoControl.getIdZona()+"");
+                                    Log.d("Malos", puestoControl.getIdZona()+"");
+                                    Log.d("Malos", puestoControl.getIdZona()+"");
+
+                                    //dbHelper.Eliminar_Puesto_Control_Zona(puestoControl.getIdZona());
                                     NavController navController = Navigation.findNavController(v);
                                     navController.navigateUp();
                                     Toast.makeText(requireContext(), "Puestos de la Zona eliminados correctamente", Toast.LENGTH_SHORT).show();
@@ -314,7 +324,7 @@ public class RegisterPuestoControlFragment extends Fragment implements OnMapRead
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.setMinZoomPreference(16);
         mMap.setMaxZoomPreference(17);
-        Listar_Marcadores(IdZona);
+        Listar_Marcadores(Id_Zona);
         if (latitud != null && longitud != null) {
             updateMarker();
         }
@@ -343,7 +353,7 @@ public class RegisterPuestoControlFragment extends Fragment implements OnMapRead
                     edt_register_latitud_puesto_control.setText(String.valueOf(latLng.latitude));
                     edt_register_longitud_puesto_control.setText(String.valueOf(latLng.longitude));
                     mMap.clear();
-                    Listar_Marcadores(IdZona);
+                    Listar_Marcadores(Id_Zona);
                     LatLng puestoCon = new LatLng(latLng.latitude,latLng.longitude);
                     mMap.addMarker(new MarkerOptions().position(puestoCon));
                 }
@@ -387,13 +397,14 @@ public class RegisterPuestoControlFragment extends Fragment implements OnMapRead
         progreso = new ProgressDialog(requireActivity());
         progreso.setMessage("Cargando...");
         progreso.show();
-        List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.1.6");
+        List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.1.6", "192.168.1.2");
         // Puedes añadir más IPs según sea necesario
         String selectedIp = "";
         Map<String, String> userIpMap = new HashMap<>();
         userIpMap.put("jhon", ips.get(0));
         userIpMap.put("chagua", ips.get(1));
-        userIpMap.put("matias", ips.get(2)); // Assuming all three get IP1 for now
+        userIpMap.put("matias", ips.get(2));
+        userIpMap.put("calixto", ips.get(3));
 
         ArrayList<Usuario> usuarios = dbHelper.get_all_Usuarios();
         for (Usuario usuario : usuarios) {
