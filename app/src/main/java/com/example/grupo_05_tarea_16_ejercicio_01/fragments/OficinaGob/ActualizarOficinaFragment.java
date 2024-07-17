@@ -231,13 +231,14 @@ public class ActualizarOficinaFragment extends Fragment implements OnMapReadyCal
         progressDialog.setMessage("Actualizando...");
         progressDialog.show();
 
-        List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.1.6");
+        List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.1.6", "192.168.1.2");
         // Puedes añadir más IPs según sea necesario
         String selectedIp = "";
         Map<String, String> userIpMap = new HashMap<>();
         userIpMap.put("jhon", ips.get(0));
         userIpMap.put("chagua", ips.get(1));
         userIpMap.put("matias", ips.get(2));
+        userIpMap.put("calixto", ips.get(3));
 
         ArrayList<Usuario> usuarios = dbHelper.get_all_Usuarios();
         for (Usuario usuario : usuarios) {
