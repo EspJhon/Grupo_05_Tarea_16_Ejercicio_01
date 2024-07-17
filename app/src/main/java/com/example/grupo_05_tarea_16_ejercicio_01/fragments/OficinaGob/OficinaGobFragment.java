@@ -168,7 +168,7 @@ public class OficinaGobFragment extends Fragment {
             }
         }
 
-        String urlWS = "http://" + selectedIp + "db_grupo_05_tarea_16_ejercicio_01/OficinaEliminar.php?" +
+        String urlWS = "http://" + selectedIp + "/db_grupo_05_tarea_16_ejercicio_01/OficinaEliminar.php?" +
                 "idoficinagob="+idoficinagobE;
 
         stringRequest = new StringRequest(Request.Method.GET, urlWS, new Response.Listener<String>() {
