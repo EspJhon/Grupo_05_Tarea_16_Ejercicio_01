@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="10dp"
+    android:background="@drawable/rounded_item"
     android:elevation="20dp">
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,13 +20,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Titulo: "
+                android:textColor="@color/black"
                 android:textStyle="bold"
-                android:textSize="16sp"/>
+                android:textSize="18sp"/>
             <EditText
                 android:id="@+id/edt_titulo_zona"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
+                android:layout_margin="2dp"
+                android:background="@drawable/rounded_edittext"
                 android:enabled="false"/>
         </LinearLayout>
         <LinearLayout
@@ -38,11 +42,14 @@
                 android:layout_height="wrap_content"
                 android:text="Departamento: "
                 android:textStyle="bold"
-                android:textSize="16sp"/>
+                android:textColor="@color/black"
+                android:textSize="18sp"/>
             <EditText
                 android:id="@+id/edt_departamento_zona"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:background="@drawable/rounded_edittext"
                 android:textSize="14sp"
                 android:enabled="false"/>
         </LinearLayout>
@@ -61,13 +68,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Provincia: "
+                android:textColor="@color/black"
                 android:textStyle="bold"
-                android:textSize="16sp"/>
+                android:textSize="18sp"/>
             <EditText
                 android:id="@+id/edt_provincia_zona"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
+                android:layout_margin="2dp"
+                android:background="@drawable/rounded_edittext"
                 android:enabled="false"/>
         </LinearLayout>
         <LinearLayout
@@ -80,12 +90,15 @@
                 android:layout_height="wrap_content"
                 android:text="Distrito: "
                 android:textStyle="bold"
-                android:textSize="16sp"/>
+                android:textColor="@color/black"
+                android:textSize="18sp"/>
             <EditText
                 android:id="@+id/edt_distrito_zona"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
+                android:layout_margin="2dp"
+                android:background="@drawable/rounded_edittext"
                 android:enabled="false"/>
         </LinearLayout>
     </LinearLayout>

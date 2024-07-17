@@ -20,6 +20,8 @@
                 android:id="@+id/btn_nuevoAccidente"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/rounded_button_black"
                 android:text="Nuevo"/>
 
             <ListView
@@ -28,5 +30,7 @@
                 android:layout_height="match_parent"/>
 
         </LinearLayout>
+
     </LinearLayout>
+
 </FrameLayout>

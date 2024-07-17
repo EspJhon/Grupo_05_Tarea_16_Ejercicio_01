@@ -19,7 +19,7 @@
                 android:id="@+id/sp_zona"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp" />
+                android:padding="10dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -37,7 +37,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Titulo: "
-                        android:textSize="16sp"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <EditText
@@ -45,6 +46,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:padding="10dp"
+                        android:background="@drawable/rounded_edittext"
+                        android:layout_margin="2dp"
                         android:textSize="14sp" />
                 </LinearLayout>
 
@@ -58,13 +61,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Referencia: "
-                        android:textSize="16sp"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <EditText
                         android:id="@+id/edt_register_Referencia_puesto_control"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@drawable/rounded_edittext"
+                        android:layout_margin="2dp"
                         android:padding="10dp"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -86,13 +92,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Latitud"
-                        android:textSize="16sp"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <EditText
                         android:id="@+id/edt_register_latitud_puesto_control"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@drawable/rounded_edittext"
+                        android:layout_margin="2dp"
                         android:padding="10dp"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -106,13 +115,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Longitud"
-                        android:textSize="16sp"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <EditText
                         android:id="@+id/edt_register_longitud_puesto_control"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@drawable/rounded_edittext"
+                        android:layout_margin="2dp"
                         android:padding="10dp"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -139,7 +151,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:padding="10dp"
+            android:background="@drawable/rounded_button_black"
             android:text="FINALIZAR"
+            android:layout_margin="5dp"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -149,6 +163,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:padding="10dp"
+            android:layout_margin="5dp"
+            android:background="@drawable/rounded_button_black"
             android:text="REGISTRAR"
             android:textSize="16sp"
             android:textStyle="bold" />

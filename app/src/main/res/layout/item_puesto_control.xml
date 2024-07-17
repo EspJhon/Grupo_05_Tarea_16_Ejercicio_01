@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="10dp"
+    android:background="@drawable/rounded_item"
     android:elevation="20dp">
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,13 +20,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Zona: "
+                android:textColor="@color/black"
                 android:textStyle="bold"
-                android:textSize="16sp"/>
+                android:textSize="18sp"/>
             <EditText
                 android:id="@+id/edt_zona_puesto_control"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
+                android:layout_margin="5dp"
+                android:background="@drawable/rounded_edittext"
                 android:enabled="false"/>
         </LinearLayout>
         <LinearLayout
@@ -38,12 +42,15 @@
                 android:layout_height="wrap_content"
                 android:text="Total de Puestos: "
                 android:textStyle="bold"
-                android:textSize="16sp"/>
+                android:layout_margin="2dp"
+                android:textColor="@color/black"
+                android:textSize="18sp"/>
             <TextView
                 android:id="@+id/txt_total_puestos"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="xxxxxx"
+                android:layout_margin="2dp"
                 android:textSize="14sp"/>
         </LinearLayout>
     </LinearLayout>
