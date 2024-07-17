@@ -231,14 +231,7 @@ public class ActaRegisterFragment extends Fragment implements Response.Listener<
                     Acta acta = new Acta(codigo, Id_Accidente, Id_Audiencia, hora, Id_Zona, Id_Agente, fecha);
                     dbHelper.insertarActa(acta);
 
-                    Runnable runnable = new Runnable() {
-                        @Override
-                        public void run() {
-                            requireActivity().getSupportFragmentManager().popBackStack();
-                        }
-                    };
-
-                    CargarWebService(codigo, Id_Accidente, Id_Audiencia, hora, Id_Zona, Id_Agente, fecha, runnable);
+                    CargarWebService(codigo, Id_Accidente, Id_Audiencia, hora, Id_Zona, Id_Agente, fecha);
 
                     NavController navController = Navigation.findNavController(v);
                     navController.navigateUp();
@@ -360,7 +353,7 @@ public class ActaRegisterFragment extends Fragment implements Response.Listener<
         timePickerDialog.show();
     }
 
-    private void CargarWebService(int codigo, int idaccidente, int idaudiencia, String hora, int idzona, int idagente, String fecha, Runnable runnable) {
+    private void CargarWebService(int codigo, int idaccidente, int idaudiencia, String hora, int idzona, int idagente, String fecha) {
         progressDialog = new ProgressDialog(requireActivity());
         progressDialog.setMessage("Registrando...");
         progressDialog.show();
@@ -399,9 +392,6 @@ public class ActaRegisterFragment extends Fragment implements Response.Listener<
             public void onResponse(JSONObject response) {
                 progressDialog.hide();
                 Toast.makeText(requireActivity(), "Infracción registrada correctamente", Toast.LENGTH_SHORT).show();
-                if (runnable != null) {
-                    runnable.run();
-                }
             }
         }, new Response.ErrorListener() {
             @Override

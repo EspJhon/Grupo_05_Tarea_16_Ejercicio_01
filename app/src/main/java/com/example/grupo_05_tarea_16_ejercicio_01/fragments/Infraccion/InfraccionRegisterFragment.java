@@ -201,14 +201,8 @@ public class InfraccionRegisterFragment extends Fragment implements Response.Lis
                 } else {
                     Infraccion infraccion = new Infraccion(Id_Agente,Id_vehiculo,multa,fecha,Id_Norma,hora);
                     dbHelper.Insertar_Infraccion(infraccion);
-                    Runnable runnable = new Runnable() {
-                        @Override
-                        public void run() {
-                            requireActivity().getSupportFragmentManager().popBackStack();
-                        }
-                    };
 
-                    CargarWebService(Id_Agente, Id_vehiculo, multa, fecha, Id_Norma, hora,runnable);
+                    CargarWebService(Id_Agente, Id_vehiculo, multa, fecha, Id_Norma, hora);
 
                     NavController navController = Navigation.findNavController(v);
                     navController.navigateUp();
@@ -322,7 +316,7 @@ public class InfraccionRegisterFragment extends Fragment implements Response.Lis
         timePickerDialog.show();
     }
 
-    private void CargarWebService(int idagente, int idvehiculo, String valormulta, String fecha, int idnorma, String hora, Runnable runnable) {
+    private void CargarWebService(int idagente, int idvehiculo, String valormulta, String fecha, int idnorma, String hora) {
         progressDialog = new ProgressDialog(requireActivity());
         progressDialog.setMessage("Registrando...");
         progressDialog.show();
@@ -360,9 +354,6 @@ public class InfraccionRegisterFragment extends Fragment implements Response.Lis
             public void onResponse(JSONObject response) {
                 progressDialog.hide();
                 Toast.makeText(requireActivity(), "Infracción registrada correctamente", Toast.LENGTH_SHORT).show();
-                if (runnable != null) {
-                    runnable.run();
-                }
             }
         }, new Response.ErrorListener() {
             @Override
