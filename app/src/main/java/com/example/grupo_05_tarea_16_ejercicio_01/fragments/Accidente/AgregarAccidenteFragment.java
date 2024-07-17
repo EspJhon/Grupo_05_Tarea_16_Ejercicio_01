@@ -242,7 +242,9 @@ public class AgregarAccidenteFragment extends Fragment implements OnMapReadyCall
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                requireActivity().getSupportFragmentManager().popBackStack();
+                if (isAdded()) { // Check if the fragment is attached
+                    requireActivity().getSupportFragmentManager().popBackStack();
+                }
             }
         };
 
@@ -355,12 +357,6 @@ public class AgregarAccidenteFragment extends Fragment implements OnMapReadyCall
         progressDialog.setMessage("Registrando...");
         progressDialog.show();
 
-        //IMPORTANTE
-        //IMPORTANTE
-        //IMPORTANTE
-        //Este web service funcionará solamente con los ids de los campos registrados en la bd de xampp, no los
-        //que se encuentran de manera local, avisados están uwu
-
         List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.1.6");
         // Puedes añadir más IPs según sea necesario
         String selectedIp = "";
@@ -377,7 +373,6 @@ public class AgregarAccidenteFragment extends Fragment implements OnMapReadyCall
             }
         }
          // Cambia el índice según tu lógica de selección
-
 
 
         String urlWS = "http://"+ selectedIp + "/db_grupo_05_tarea_16_ejercicio_01/AccidenteRegistro.php?" +
@@ -411,6 +406,9 @@ public class AgregarAccidenteFragment extends Fragment implements OnMapReadyCall
                 progressDialog.hide();
                 Toast.makeText(requireActivity(), "No se puede conectar: " + error.toString(), Toast.LENGTH_LONG).show();
                 Log.d("ERROR: ", error.toString());
+                if (runnable != null) {
+                    runnable.run();
+                }
             }
         });
 
