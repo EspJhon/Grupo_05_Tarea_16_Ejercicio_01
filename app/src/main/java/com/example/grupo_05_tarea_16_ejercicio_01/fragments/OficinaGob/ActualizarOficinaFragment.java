@@ -225,8 +225,7 @@ public class ActualizarOficinaFragment extends Fragment implements OnMapReadyCal
         }
     }
 
-    private void ActualizarWebService(String valorvehiculoA, int npolizaA, int idvehiculoA, String ubicacionA,
-                                      String latitudA, String longitudA, int idoficinagobA) {
+    private void ActualizarWebService(String valorvehiculoA, int npolizaA, int idvehiculoA, String ubicacionA, String latitudA, String longitudA, int idoficinagobA) {
         progressDialog = new ProgressDialog(requireActivity());
         progressDialog.setMessage("Actualizando...");
         progressDialog.show();
