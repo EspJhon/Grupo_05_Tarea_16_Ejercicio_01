@@ -201,9 +201,7 @@ public class ActualizarOficinaFragment extends Fragment implements OnMapReadyCal
 
         dbHelper.Actualizar_Oficina(oficinaGob);
 
-        ActualizarWebService(valorVehiculoA,numPolizaA,numPlacaA,ubicacionA,oficinaGob.getLatitud(),oficinaGob.getLongitud(),oficinaGob.getIdOficina());
-
-        //requireActivity().getSupportFragmentManager().popBackStack();
+        ActualizarWebService(valorVehiculoA,numPolizaA,numPlacaA,ubicacionA,latitud,longitud,oficinaGob.getIdOficina());
     }
 
     private void CargarDatosRegistrados(OficinaGob oficinaGob) {
@@ -214,11 +212,13 @@ public class ActualizarOficinaFragment extends Fragment implements OnMapReadyCal
         et_valorVehiculoA.setText(oficinaGob.getValor_vehiculo());
         et_numPolizaA.setText(String.valueOf(oficinaGob.getNpoliza()));
         et_ubicacionA.setText(oficinaGob.getUbicacion());
-        double latitud = Double.parseDouble(oficinaGob.getLatitud());
-        double longitud = Double.parseDouble(oficinaGob.getLongitud());
+        latitud = oficinaGob.getLatitud();
+        longitud = oficinaGob.getLongitud();
 
         if (mMap != null) {
-            LatLng lugarOficina = new LatLng(latitud, longitud);
+            double latitudObtenida = Double.parseDouble(latitud);
+            double longitudObtenida = Double.parseDouble(longitud);
+            LatLng lugarOficina = new LatLng(latitudObtenida, longitudObtenida);
             mMap.clear();
             mMap.addMarker(new MarkerOptions().position(lugarOficina).title("Ubicación de la oficina"));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lugarOficina, 15));
@@ -255,6 +255,7 @@ public class ActualizarOficinaFragment extends Fragment implements OnMapReadyCal
                 progressDialog.hide();
                 if (response.trim().equalsIgnoreCase("actualiza")) {
                     Toast.makeText(requireActivity(), "Oficina actualizada correctamente", Toast.LENGTH_SHORT).show();
+                    requireActivity().getSupportFragmentManager().popBackStack();
                 } else {
                     Toast.makeText(requireActivity(), "Oficina no se pudo actualizar", Toast.LENGTH_SHORT).show();
                     Log.i("RESPUESTA: ", "" + response);

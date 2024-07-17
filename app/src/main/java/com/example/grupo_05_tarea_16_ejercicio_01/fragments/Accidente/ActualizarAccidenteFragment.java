@@ -1,6 +1,7 @@
 package com.example.grupo_05_tarea_16_ejercicio_01.fragments.Accidente;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.ContextWrapper;
@@ -27,11 +28,19 @@ import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.grupo_05_tarea_16_ejercicio_01.R;
 import com.example.grupo_05_tarea_16_ejercicio_01.adapter.MapMoveFragment;
 import com.example.grupo_05_tarea_16_ejercicio_01.db.DBHelper;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Accidente;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Agente;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Usuario;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Vehiculo;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -46,7 +55,11 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 public class ActualizarAccidenteFragment extends Fragment implements OnMapReadyCallback {
@@ -64,6 +77,11 @@ public class ActualizarAccidenteFragment extends Fragment implements OnMapReadyC
     private ScrollView scrollView;
     ArrayAdapter<String> adapter_agente;
     ArrayAdapter<String> adapter_placa;
+
+
+    private ProgressDialog progressDialog;
+    RequestQueue request;
+    StringRequest stringRequest;
 
     public ActualizarAccidenteFragment() {
         // Required empty public constructor
@@ -104,6 +122,8 @@ public class ActualizarAccidenteFragment extends Fragment implements OnMapReadyC
 
         et_fechaA.setOnClickListener(v -> showDatePickerDialog());
         et_horaA.setOnClickListener(v -> showTimePickerDialog());
+
+        request = Volley.newRequestQueue(getContext());
 
         MapMoveFragment mapMoveFragment = (MapMoveFragment) getChildFragmentManager().findFragmentById(R.id.fr_ubicacionAccidenteA);
         if (mapMoveFragment != null) {
@@ -277,7 +297,7 @@ public class ActualizarAccidenteFragment extends Fragment implements OnMapReadyC
 
         dbHelper.Actualizar_Accidente(accidente);
 
-        requireActivity().getSupportFragmentManager().popBackStack();
+        ActualizarWebService(placaA,agenteA,horaA,fechaA,tituloA,descripcionA,URL,lugarA,latitud,longitud,accidente.getIdaccidente());
     }
 
     private void ActivarCam() {
@@ -370,5 +390,80 @@ public class ActualizarAccidenteFragment extends Fragment implements OnMapReadyC
         timePickerDialog.show();
     }
 
+    private void ActualizarWebService(int idvehiculoA, int idagenteA, String horaA, String fechaA,String tituloA, String descripcionA,
+                                      String urlA, String lugarA, String latitudA, String longitudA, int idaccidenteA) {
+        progressDialog = new ProgressDialog(requireActivity());
+        progressDialog.setMessage("Actualizando...");
+        progressDialog.show();
+
+        List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.1.6");
+        // Puedes añadir más IPs según sea necesario
+        String selectedIp = "";
+        Map<String, String> userIpMap = new HashMap<>();
+        userIpMap.put("jhon", ips.get(0));
+        userIpMap.put("chagua", ips.get(1));
+        userIpMap.put("matias", ips.get(2));
+
+        ArrayList<Usuario> usuarios = dbHelper.get_all_Usuarios();
+        for (Usuario usuario : usuarios) {
+            selectedIp = userIpMap.get(usuario.getUsername());
+            if (selectedIp != null) {
+                break;
+            }
+        }
+
+        String urlWS = "http://" + selectedIp + "/db_grupo_05_tarea_16_ejercicio_01/AccidenteActualizar.php";
+
+        stringRequest = new StringRequest(Request.Method.POST, urlWS, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                progressDialog.hide();
+                if (response.trim().equalsIgnoreCase("actualiza")) {
+                    Toast.makeText(requireActivity(), "Accidente actualizado correctamente", Toast.LENGTH_SHORT).show();
+                    requireActivity().getSupportFragmentManager().popBackStack();
+                } else {
+                    Toast.makeText(requireActivity(), "Accidente no se pudo actualizar", Toast.LENGTH_SHORT).show();
+                    Log.i("RESPUESTA: ", "" + response);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(requireActivity(), "No se ha podido conectar", Toast.LENGTH_SHORT).show();
+                progressDialog.hide();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                int idvehiculo = idvehiculoA;
+                int idagente = idagenteA;
+                String hora = horaA;
+                String fecha = fechaA;
+                String titulo = tituloA;
+                String descripcion = descripcionA;
+                String url = urlA;
+                String lugar = lugarA;
+                String latitud = latitudA;
+                String longitud = longitudA;
+                int idaccidente = idaccidenteA;
+
+                Map<String,String> parametros = new HashMap<>();
+                parametros.put("idvehiculo",String.valueOf(idvehiculo));
+                parametros.put("idagente", String.valueOf(idagente));
+                parametros.put("hora", hora);
+                parametros.put("fecha",fecha);
+                parametros.put("titulo",titulo);
+                parametros.put("descripcion",descripcion);
+                parametros.put("url", url);
+                parametros.put("lugar", lugar);
+                parametros.put("latitud", latitud);
+                parametros.put("longitud", longitud);
+                parametros.put("idaccidente", String.valueOf(idaccidente));
+
+                return parametros;
+            }
+        };
+        request.add(stringRequest);
+    }
 
 }

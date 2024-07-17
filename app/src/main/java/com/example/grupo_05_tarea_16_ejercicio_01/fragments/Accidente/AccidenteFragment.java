@@ -1,6 +1,7 @@
 package com.example.grupo_05_tarea_16_ejercicio_01.fragments.Accidente;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,21 +23,36 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.grupo_05_tarea_16_ejercicio_01.MainActivity;
 import com.example.grupo_05_tarea_16_ejercicio_01.R;
 import com.example.grupo_05_tarea_16_ejercicio_01.adapter.AccidenteAdapter;
 import com.example.grupo_05_tarea_16_ejercicio_01.db.DBHelper;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Accidente;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Agente;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Usuario;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Vehiculo;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class AccidenteFragment extends Fragment {
 
     private ListView lv_accidentes;
     private Button btn_nuevoAccidente;
     private DBHelper dbHelper;
+
+    private ProgressDialog progressDialog;
+    RequestQueue request;
+    StringRequest stringRequest;
 
     public AccidenteFragment() {
         // Required empty public constructor
@@ -66,6 +82,8 @@ public class AccidenteFragment extends Fragment {
 
         lv_accidentes=view.findViewById(R.id.lv_accidentes);
         btn_nuevoAccidente=view.findViewById(R.id.btn_nuevoAccidente);
+
+        request = Volley.newRequestQueue(getContext());
 
         return view;
     }
@@ -128,12 +146,67 @@ public class AccidenteFragment extends Fragment {
                                 break;
                             case 1:
                                 dbHelper.Eliminar_Accidente(accidente);
+                                EliminarWebService(accidente.getIdaccidente());
                                 ListarAccidentes();
                                 break;
                         }
                     }
                 });
         builder.create().show();
+    }
+
+    private void EliminarWebService(int idaccidenteE){
+        progressDialog = new ProgressDialog(requireActivity());
+        progressDialog.setMessage("Eliminando...");
+        progressDialog.show();
+
+        List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.1.6");
+        // Puedes añadir más IPs según sea necesario
+        String selectedIp = "";
+        Map<String, String> userIpMap = new HashMap<>();
+        userIpMap.put("jhon", ips.get(0));
+        userIpMap.put("chagua", ips.get(1));
+        userIpMap.put("matias", ips.get(2));
+
+        ArrayList<Usuario> usuarios = dbHelper.get_all_Usuarios();
+        for (Usuario usuario : usuarios) {
+            selectedIp = userIpMap.get(usuario.getUsername());
+            if (selectedIp != null) {
+                break;
+            }
+        }
+
+        String urlWS = "http://" + selectedIp + "/db_grupo_05_tarea_16_ejercicio_01/AccidenteEliminar.php?" +
+                "idaccidente="+idaccidenteE;
+
+        stringRequest = new StringRequest(Request.Method.GET, urlWS, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                progressDialog.hide();
+
+                if (response.trim().equalsIgnoreCase("elimina")) {
+                    Toast.makeText(requireActivity(), "Accidente eliminado correctamente", Toast.LENGTH_SHORT).show();
+                } else {
+                    if (response.trim().equalsIgnoreCase("noExiste")) {
+                        Toast.makeText(requireActivity(), "No se encuentra el accidente", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(requireActivity(), "No se ha eliminado", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                String errorM = error.getMessage();
+                if (error.networkResponse != null) {
+                    errorM += " Estado: " + error.networkResponse.statusCode;
+                }
+                Log.e("EliminarWebService", "Error: " + errorM);
+                Toast.makeText(requireActivity(), "No se ha podido conectar: " + errorM, Toast.LENGTH_SHORT).show();
+                progressDialog.hide();
+            }
+        });
+        request.add(stringRequest);
     }
 
 }
