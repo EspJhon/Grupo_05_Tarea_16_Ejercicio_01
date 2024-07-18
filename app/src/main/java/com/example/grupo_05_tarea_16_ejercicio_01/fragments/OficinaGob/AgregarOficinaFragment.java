@@ -165,24 +165,30 @@ public class AgregarOficinaFragment extends Fragment implements OnMapReadyCallba
             return;
         }
 
-        String valorVehiculo = et_valorVehiculo.getText().toString().trim();
-        int numPoliza = Integer.parseInt(et_numPoliza.getText().toString().trim());
-        int numPlaca = IdVehiculo;
-        String ubicacion = et_ubicacion.getText().toString().trim();
+        try {
 
-        OficinaGob oficinaGob = new OficinaGob(valorVehiculo, numPoliza, numPlaca, ubicacion, latitud, longitud);
-        dbHelper.Insertar_Oficina(oficinaGob);
+            String valorVehiculo = et_valorVehiculo.getText().toString().trim();
+            int numPoliza = Integer.parseInt(et_numPoliza.getText().toString().trim());
+            int numPlaca = IdVehiculo;
+            String ubicacion = et_ubicacion.getText().toString().trim();
 
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                if (isAdded()) { // Check if the fragment is attached
-                    requireActivity().getSupportFragmentManager().popBackStack();
+            OficinaGob oficinaGob = new OficinaGob(valorVehiculo, numPoliza, numPlaca, ubicacion, latitud, longitud);
+            dbHelper.Insertar_Oficina(oficinaGob);
+
+            Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
+                    if (isAdded()) { // Check if the fragment is attached
+                        requireActivity().getSupportFragmentManager().popBackStack();
+                    }
                 }
-            }
-        };
+            };
 
-        CargarWebService(valorVehiculo, numPoliza, numPlaca, ubicacion, latitud, longitud, runnable);
+            CargarWebService(valorVehiculo, numPoliza, numPlaca, ubicacion, latitud, longitud, runnable);
+
+        } catch (NumberFormatException e) {
+            Toast.makeText(getActivity(), "Ingrese un número de poliza válido (9 dígitos)", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void CargarWebService(String valorvehiculo, int npoliza, int idvehiculo, String ubicacion,

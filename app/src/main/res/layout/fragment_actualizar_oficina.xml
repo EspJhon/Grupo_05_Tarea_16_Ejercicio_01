@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.OficinaGob.ActualizarOficinaFragment"
-    android:padding="20dp">
+    tools:context=".fragments.OficinaGob.ActualizarOficinaFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -86,7 +85,8 @@
                     android:id="@+id/fr_ubicacionOficinaA"
                     android:name="com.google.android.gms.maps.SupportMapFragment"
                     android:layout_width="match_parent"
-                    android:layout_height="350dp" />
+                    android:layout_marginTop="10dp"
+                    android:layout_height="320dp" />
 
             </LinearLayout>
 
@@ -95,7 +95,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/black"
-                android:layout_margin="5dp"
+                android:layout_margin="10dp"
                 android:background="@drawable/rounded_button_black"
                 android:text="Actualizar" />
 
