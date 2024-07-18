@@ -20,11 +20,13 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.grupo_05_tarea_16_ejercicio_01.R;
 import com.example.grupo_05_tarea_16_ejercicio_01.adapter.AgenteAdapter;
@@ -60,6 +62,9 @@ public class AgenteFragment extends Fragment implements Response.Listener<JSONOb
     private ProgressDialog progressDialog;
     RequestQueue request;
     JsonObjectRequest jsonObjectRequest;
+
+    StringRequest stringRequest;
+
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -247,6 +252,8 @@ public class AgenteFragment extends Fragment implements Response.Listener<JSONOb
                         // Actualizar en la base de datos
                         dbHelper.actualizarAgente(agente);
 
+                        ActualizarWebService(cedula,nombre,idPuestoControl,rango,agente.getIdagente());
+
                         // Actualizar la lista de agentes
                         actualizarListaAgentes();
 
@@ -402,6 +409,73 @@ public class AgenteFragment extends Fragment implements Response.Listener<JSONOb
         });
 
         request.add(jsonObjectRequest);
+    }
+
+
+    private void ActualizarWebService(int cedulaag, String nombre, int idpuestodecontrol, String rango, int idagente) {
+        progressDialog = new ProgressDialog(requireActivity());
+        progressDialog.setMessage("Actualizando...");
+        progressDialog.show();
+
+        List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.1.6");
+        String selectedIp = "";
+        Map<String, String> userIpMap = new HashMap<>();
+        userIpMap.put("jhon", ips.get(0));
+        userIpMap.put("chagua", ips.get(1));
+        userIpMap.put("matias", ips.get(2));
+
+        ArrayList<Usuario> usuarios = dbHelper.get_all_Usuarios();
+        for (Usuario usuario : usuarios) {
+            selectedIp = userIpMap.get(usuario.getUsername());
+            if (selectedIp != null) {
+                break;
+            }
+        }
+
+        if (selectedIp.isEmpty()) {
+            progressDialog.hide();
+            Toast.makeText(requireActivity(), "No se pudo determinar la IP", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String urlWS = "http://" + selectedIp + "/db_grupo_05_tarea_16_ejercicio_01/AgenteActualizar.php";
+        Log.d("URLWebService", "URL: " + urlWS);
+
+        stringRequest = new StringRequest(Request.Method.POST, urlWS, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                progressDialog.hide();
+                Toast.makeText(requireActivity(), "Agente actualizado con éxito", Toast.LENGTH_SHORT).show();
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                progressDialog.hide();
+                if (error.networkResponse != null && error.networkResponse.data != null) {
+                    String errorResponse = new String(error.networkResponse.data);
+                    Log.e("VolleyError", errorResponse);
+                } else {
+                    Log.e("VolleyError", error.toString());
+                }
+                Toast.makeText(requireActivity(), "No se ha podido conectar", Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> parametros = new HashMap<>();
+
+                parametros.put("cedulaag", String.valueOf(cedulaag));
+                parametros.put("nombre", nombre);
+                parametros.put("idpuestodecontrol", String.valueOf(idpuestodecontrol));
+                parametros.put("rango", rango);
+                parametros.put("idagente",String.valueOf(idagente));
+
+                Log.d("Params", "cedulaag: " + cedulaag + ", Nombre: " + nombre + ", idpuestodecontrol: " + idpuestodecontrol + ", rango: " + rango + ", idagente: " + idagente);
+                return parametros;
+            }
+        };
+        request.add(stringRequest);
     }
     @Override
     public void onErrorResponse(VolleyError error) {

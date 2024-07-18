@@ -20,12 +20,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.grupo_05_tarea_16_ejercicio_01.R;
 import com.example.grupo_05_tarea_16_ejercicio_01.adapter.Vehiculo_Adapter;
@@ -62,6 +64,7 @@ public class VehiculoFragment extends Fragment implements Vehiculo_Adapter.OnIte
     JsonObjectRequest jsonObjectRequest;
 
 
+    StringRequest stringRequest;
     public VehiculoFragment() {
     }
 
@@ -341,6 +344,8 @@ public class VehiculoFragment extends Fragment implements Vehiculo_Adapter.OnIte
 
             dbHelper.Actualizar_Vehiculo(vehiculo);
 
+            ActualizarWebService(nuevoNumPlaca,nuevaMarca,nuevoModelo,nuevoMotor,nuevaFecha,propietarioSeleccionado.getIdPropietario(),vehiculoSeleccionado.getIdVehiculo());
+
             Toast.makeText(getContext(), "Dirección actualizada", Toast.LENGTH_SHORT).show();
             cargarVehiculos();
         });
@@ -412,6 +417,65 @@ public class VehiculoFragment extends Fragment implements Vehiculo_Adapter.OnIte
         });
 
         request.add(jsonObjectRequest);
+    }
+
+    private void ActualizarWebService(int numplaca, String marca, String modelo,String motor, String f_ano, int idpropietario, int idvehiculo) {
+        progressDialog = new ProgressDialog(requireActivity());
+        progressDialog.setMessage("Actualizando...");
+        progressDialog.show();
+
+        List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.1.6");
+        // Puedes añadir más IPs según sea necesario
+        String selectedIp = "";
+        Map<String, String> userIpMap = new HashMap<>();
+        userIpMap.put("jhon", ips.get(0));
+        userIpMap.put("chagua", ips.get(1));
+        userIpMap.put("matias", ips.get(2));
+
+        ArrayList<Usuario> usuarios = dbHelper.get_all_Usuarios();
+        for (Usuario usuario : usuarios) {
+            selectedIp = userIpMap.get(usuario.getUsername());
+            if (selectedIp != null) {
+                break;
+            }
+        }
+
+        String urlWS = "http://" + selectedIp + "/db_grupo_05_tarea_16_ejercicio_01/VehiculoActualizar.php";
+
+        stringRequest = new StringRequest(Request.Method.POST, urlWS, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                progressDialog.hide();
+                if (response.trim().equalsIgnoreCase("actualiza")) {
+                    Toast.makeText(requireActivity(), "Vehiculo actualizado correctamente", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(requireActivity(), "Vehiculo no se pudo actualizar", Toast.LENGTH_SHORT).show();
+                    Log.i("RESPUESTA: ", "" + response);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(requireActivity(), "No se ha podido conectar", Toast.LENGTH_SHORT).show();
+                progressDialog.hide();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String,String> parametros = new HashMap<>();
+                parametros.put("numplaca",String.valueOf(numplaca));
+                parametros.put("marca", marca);
+                parametros.put("modelo",modelo);
+                parametros.put("motor",motor);
+                parametros.put("f_ano",f_ano);
+                parametros.put("idpropietario", String.valueOf(idpropietario));
+                parametros.put("idvehiculo", String.valueOf(idvehiculo));
+
+                return parametros;
+            }
+        };
+        request.add(stringRequest);
     }
 
     @Override

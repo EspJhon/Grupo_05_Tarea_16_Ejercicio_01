@@ -152,13 +152,14 @@ public class OficinaGobFragment extends Fragment {
         progressDialog.setMessage("Eliminando...");
         progressDialog.show();
 
-        List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.1.6");
+        List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.1.6", "192.168.1.2");
         // Puedes añadir más IPs según sea necesario
         String selectedIp = "";
         Map<String, String> userIpMap = new HashMap<>();
         userIpMap.put("jhon", ips.get(0));
         userIpMap.put("chagua", ips.get(1));
         userIpMap.put("matias", ips.get(2));
+        userIpMap.put("calixto", ips.get(3));
 
         ArrayList<Usuario> usuarios = dbHelper.get_all_Usuarios();
         for (Usuario usuario : usuarios) {
@@ -189,12 +190,12 @@ public class OficinaGobFragment extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                String errorMessage = error.getMessage();
+                String errorM = error.getMessage();
                 if (error.networkResponse != null) {
-                    errorMessage += " Status Code: " + error.networkResponse.statusCode;
+                    errorM += " Estado: " + error.networkResponse.statusCode;
                 }
-                Log.e("EliminarWebService", "Error: " + errorMessage);
-                Toast.makeText(requireActivity(), "No se ha podido conectar: " + errorMessage, Toast.LENGTH_SHORT).show();
+                Log.e("EliminarWebService", "Error: " + errorM);
+                //Toast.makeText(requireActivity(), "No se ha podido conectar: " + errorM, Toast.LENGTH_SHORT).show();
                 progressDialog.hide();
             }
         });
