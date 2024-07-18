@@ -35,6 +35,7 @@ import com.example.grupo_05_tarea_16_ejercicio_01.adapter.AccidenteAdapter;
 import com.example.grupo_05_tarea_16_ejercicio_01.adapter.IPUtilizada;
 import com.example.grupo_05_tarea_16_ejercicio_01.db.DBHelper;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Accidente;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Acta;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Agente;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Usuario;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Vehiculo;
@@ -81,8 +82,8 @@ public class AccidenteFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_accidente, container, false);
 
-        lv_accidentes=view.findViewById(R.id.lv_accidentes);
-        btn_nuevoAccidente=view.findViewById(R.id.btn_nuevoAccidente);
+        lv_accidentes = view.findViewById(R.id.lv_accidentes);
+        btn_nuevoAccidente = view.findViewById(R.id.btn_nuevoAccidente);
 
         request = Volley.newRequestQueue(getContext());
 
@@ -129,11 +130,11 @@ public class AccidenteFragment extends Fragment {
 
     public void ListarAccidentes() {
         ArrayList<Accidente> accidentes = dbHelper.get_all_Accidentes();
-        AccidenteAdapter adapter = new AccidenteAdapter(getActivity(),accidentes);
+        AccidenteAdapter adapter = new AccidenteAdapter(getActivity(), accidentes);
         lv_accidentes.setAdapter(adapter);
     }
 
-    public void OpcionesDialog(Accidente accidente){
+    public void OpcionesDialog(Accidente accidente) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Seleccione una opción")
                 .setItems(new String[]{"Editar", "Eliminar"}, new DialogInterface.OnClickListener() {
@@ -143,7 +144,7 @@ public class AccidenteFragment extends Fragment {
                                 Bundle bundle = new Bundle();
                                 bundle.putSerializable("id", accidente.getIdaccidente());
                                 NavController navController = Navigation.findNavController(getView());
-                                navController.navigate(R.id.action_accidenteFragment_to_actualizarAccidenteFragment,bundle);
+                                navController.navigate(R.id.action_accidenteFragment_to_actualizarAccidenteFragment, bundle);
                                 break;
                             case 1:
                                 AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
@@ -152,21 +153,37 @@ public class AccidenteFragment extends Fragment {
                                         .setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
-                                                dbHelper.Eliminar_Accidente(accidente);
-                                                EliminarWebService(accidente.getIdaccidente());
-                                                ListarAccidentes();
+
+                                                ArrayList<Acta> comprobar01 = dbHelper.getAllActas();
+
+                                                boolean exists = doesIdActaExist(comprobar01, accidente.getIdaccidente());
+                                                if (exists) {
+                                                    Toast.makeText(getContext(), "Existen Registros Dependientes", Toast.LENGTH_SHORT).show();
+                                                } else {
+                                                    dbHelper.Eliminar_Accidente(accidente);
+                                                    EliminarWebService(accidente.getIdaccidente());
+                                                    ListarAccidentes();
+                                                }
                                             }
                                         })
-                                        .setNegativeButton("Cancelar", null)
-                                        .create().show();
+                                                .
+
+                                        setNegativeButton("Cancelar", null)
+                                                .
+
+                                        create().
+
+                                        show();
                                 break;
                         }
                     }
                 });
-        builder.create().show();
+        builder.create().
+
+                show();
     }
 
-    private void EliminarWebService(int idaccidenteE){
+    private void EliminarWebService(int idaccidenteE) {
         progressDialog = new ProgressDialog(requireActivity());
         progressDialog.setMessage("Eliminando...");
         progressDialog.show();
@@ -182,7 +199,7 @@ public class AccidenteFragment extends Fragment {
         }
 
         String urlWS = "http://" + selectedIp + "/db_grupo_05_tarea_16_ejercicio_01/AccidenteEliminar.php?" +
-                "idaccidente="+idaccidenteE;
+                "idaccidente=" + idaccidenteE;
 
         stringRequest = new StringRequest(Request.Method.GET, urlWS, new Response.Listener<String>() {
             @Override
@@ -212,6 +229,17 @@ public class AccidenteFragment extends Fragment {
             }
         });
         request.add(stringRequest);
+
+    }
+
+    public static boolean doesIdActaExist
+            (ArrayList<Acta> actas, int idZonaToCheck) {
+        for (Acta acta : actas) {
+            if (acta.getIdaccidente() == idZonaToCheck) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
