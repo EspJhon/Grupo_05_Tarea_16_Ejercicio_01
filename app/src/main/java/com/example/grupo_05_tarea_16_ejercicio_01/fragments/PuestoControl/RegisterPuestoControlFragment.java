@@ -24,11 +24,13 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.grupo_05_tarea_16_ejercicio_01.R;
 import com.example.grupo_05_tarea_16_ejercicio_01.db.DBHelper;
@@ -66,6 +68,7 @@ public class RegisterPuestoControlFragment extends Fragment implements OnMapRead
     ProgressDialog progreso;
     RequestQueue request;
     JsonObjectRequest jsonObjectRequest;
+    StringRequest stringRequest;
     private int idPuestoControlSeleccionado = 0;
     boolean modoEdicion;
     private LinearLayout layout_edt_registrar, layout_btn_registrar, layout_btn_actualizar;
@@ -213,12 +216,20 @@ public class RegisterPuestoControlFragment extends Fragment implements OnMapRead
                                     public void onClick(DialogInterface dialog, int which) {
                                         PuestoControl puestoControl = dbHelper.get_Puesto_Control(idPuestoControlSeleccionado);
                                         dbHelper.Eliminar_Puesto_Control(puestoControl);
+                                        EliminarWebService(puestoControl.getIdPuestoControl());
                                         ArrayList<PuestoControl> comprobacion = dbHelper.get_all_Puesto_Controls_Zona(Integer.parseInt(AIdZona));
 
                                         // Navegar hacia arriba si la lista está vacía
                                         if (comprobacion.isEmpty()) {
-                                            NavController navController = Navigation.findNavController(v);
-                                            navController.navigateUp();
+                                            if (isAdded()) {
+                                                try {
+                                                    NavController navController = Navigation.findNavController(v);
+                                                    navController.navigateUp();
+                                                } catch (Exception e){
+
+                                                }
+                                            }
+
                                             Toast.makeText(requireContext(), "Puestos de la Zona eliminados correctamente", Toast.LENGTH_SHORT).show();
                                         } else {
                                             Toast.makeText(requireContext(), "Puesto eliminado correctamente", Toast.LENGTH_SHORT).show();
@@ -256,6 +267,7 @@ public class RegisterPuestoControlFragment extends Fragment implements OnMapRead
                             puestoControl.setLongitud(Aslongitud);
                             puestoControl.setTitulo(Atitle);
                             dbHelper.Actualizar_Puesto_Control(puestoControl);
+                            ActualizarWebService(AIdZona, Areferencia, Aslatitud, Aslongitud, Atitle, puestoControl.getIdPuestoControl());
                             puestoControl = null;
                             edt_register_titulo_puesto_control.setText("");
                             edt_register_latitud_puesto_control.setText("");
@@ -281,20 +293,16 @@ public class RegisterPuestoControlFragment extends Fragment implements OnMapRead
                             .setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    PuestoControl puestoControl = dbHelper.get_Puesto_Control(Integer.parseInt(AIdZona));
-                                    Log.d("Malos", puestoControl.getIdZona()+"");
-                                    Log.d("Malos", puestoControl.getIdZona()+"");
-                                    Log.d("Malos", puestoControl.getIdZona()+"");
-                                    Log.d("Malos", puestoControl.getIdZona()+"");
-                                    Log.d("Malos", puestoControl.getIdZona()+"");
-                                    Log.d("Malos", puestoControl.getIdZona()+"");
-                                    Log.d("Malos", puestoControl.getIdZona()+"");
-                                    Log.d("Malos", puestoControl.getIdZona()+"");
-                                    Log.d("Malos", puestoControl.getIdZona()+"");
+                                    dbHelper.Eliminar_Puesto_Control_Zona(Integer.parseInt(AIdZona));
+                                    Eliminar_ZonaWebService(Integer.parseInt(AIdZona));
+                                    if (isAdded()) {
+                                        try {
+                                            NavController navController = Navigation.findNavController(v);
+                                            navController.navigateUp();
+                                        } catch (Exception e){
 
-                                    //dbHelper.Eliminar_Puesto_Control_Zona(puestoControl.getIdZona());
-                                    NavController navController = Navigation.findNavController(v);
-                                    navController.navigateUp();
+                                        }
+                                    }
                                     Toast.makeText(requireContext(), "Puestos de la Zona eliminados correctamente", Toast.LENGTH_SHORT).show();
                                 }
                             })
@@ -443,5 +451,213 @@ public class RegisterPuestoControlFragment extends Fragment implements OnMapRead
         });
 
         request.add(jsonObjectRequest);
+    }
+
+    private void ActualizarWebService(int AId_Zona, String areferencia, String alatitud, String alongitud, String atitulo, int AId_PuestoControl) {
+        progreso = new ProgressDialog(requireActivity());
+        progreso.setMessage("Actualizando...");
+        progreso.show();
+
+        List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.1.6", "192.168.1.2");
+        // Puedes añadir más IPs según sea necesario
+        String selectedIp = "";
+        Map<String, String> userIpMap = new HashMap<>();
+        userIpMap.put("jhon", ips.get(0));
+        userIpMap.put("chagua", ips.get(1));
+        userIpMap.put("matias", ips.get(2));
+        userIpMap.put("calixto", ips.get(3));
+
+        ArrayList<Usuario> usuarios = dbHelper.get_all_Usuarios();
+        for (Usuario usuario : usuarios) {
+            selectedIp = userIpMap.get(usuario.getUsername());
+            if (selectedIp != null) {
+                break;
+            }
+        }
+
+        String urlWS = "http://" + selectedIp + "/db_grupo_05_tarea_16_ejercicio_01/PuestoControlActualizar.php";
+
+        stringRequest = new StringRequest(Request.Method.POST, urlWS, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                progreso.hide();
+                if (isAdded()) {
+                    if (response.trim().equalsIgnoreCase("actualiza")) {
+                        Toast.makeText(requireActivity(), "Zona actualizada correctamente", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(requireActivity(), "Zona no se pudo actualizar", Toast.LENGTH_SHORT).show();
+                        Log.i("RESPUESTA: ", "" + response);
+                    }
+                    progreso.hide();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (isAdded()) {
+                    Toast.makeText(requireActivity(), "No se ha podido conectar", Toast.LENGTH_SHORT).show();
+                    progreso.hide();
+                }
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                int idpuescontrol = AId_PuestoControl;
+                int idzona = AId_Zona;
+                String referencia = areferencia;
+                String latitud = alatitud;
+                String longitud = alongitud;
+                String titulo = atitulo;
+
+
+                Map<String,String> parametros = new HashMap<>();
+                parametros.put("idzona",String.valueOf(idzona));
+                parametros.put("referencia", referencia);
+                parametros.put("latitud",latitud);
+                parametros.put("longitud",longitud);
+                parametros.put("titulo",titulo);
+                parametros.put("idpuescontrol",String.valueOf(idpuescontrol));
+
+                Log.d("Params", "idzona: " + idzona + ", referencia: " + referencia + ", " +
+                        "latitud: " + latitud+ ", longitud: " + longitud+ ", " +
+                        "titulo: " + titulo + "idpuescontrol: " + idpuescontrol);
+                return parametros;
+            }
+        };
+        request.add(stringRequest);
+    }
+
+    private void EliminarWebService(int idPuestoControl){
+        progreso = new ProgressDialog(requireActivity());
+        progreso.setMessage("Eliminando...");
+        progreso.show();
+
+        List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.1.6");
+        // Puedes añadir más IPs según sea necesario
+        String selectedIp = "";
+        Map<String, String> userIpMap = new HashMap<>();
+        userIpMap.put("jhon", ips.get(0));
+        userIpMap.put("chagua", ips.get(1));
+        userIpMap.put("matias", ips.get(2));
+
+        ArrayList<Usuario> usuarios = dbHelper.get_all_Usuarios();
+        for (Usuario usuario : usuarios) {
+            selectedIp = userIpMap.get(usuario.getUsername());
+            if (selectedIp != null) {
+                break;
+            }
+        }
+
+        String urlWS = "http://" + selectedIp + "/db_grupo_05_tarea_16_ejercicio_01/PuestoControlEliminar.php?" +
+                "idpuescontrol="+idPuestoControl;
+
+        stringRequest = new StringRequest(Request.Method.GET, urlWS, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                progreso.hide();
+                if (isAdded()) {
+                    try {
+                        if (response.trim().equalsIgnoreCase("elimina")) {
+                            Toast.makeText(requireActivity(), "Oficina eliminada correctamente", Toast.LENGTH_SHORT).show();
+                        } else {
+                            if (response.trim().equalsIgnoreCase("noExiste")) {
+                                Toast.makeText(requireActivity(), "No se encuentra la oficina", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(requireActivity(), "No se ha eliminado", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    } catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (isAdded()) {
+                    try {
+                        String errorMessage = error.getMessage();
+                        if (error.networkResponse != null) {
+                            errorMessage += " Status Code: " + error.networkResponse.statusCode;
+                        }
+                        Log.e("EliminarWebService", "Error: " + errorMessage);
+                        Toast.makeText(requireActivity(), "No se ha podido conectar: " + errorMessage, Toast.LENGTH_SHORT).show();
+                        progreso.hide();
+                    } catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        });
+        request.add(stringRequest);
+    }
+
+    private void Eliminar_ZonaWebService(int idzona){
+        progreso = new ProgressDialog(requireActivity());
+        progreso.setMessage("Eliminando...");
+        progreso.show();
+
+        List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.1.6");
+        // Puedes añadir más IPs según sea necesario
+        String selectedIp = "";
+        Map<String, String> userIpMap = new HashMap<>();
+        userIpMap.put("jhon", ips.get(0));
+        userIpMap.put("chagua", ips.get(1));
+        userIpMap.put("matias", ips.get(2));
+
+        ArrayList<Usuario> usuarios = dbHelper.get_all_Usuarios();
+        for (Usuario usuario : usuarios) {
+            selectedIp = userIpMap.get(usuario.getUsername());
+            if (selectedIp != null) {
+                break;
+            }
+        }
+
+        String urlWS = "http://" + selectedIp + "/db_grupo_05_tarea_16_ejercicio_01/PuestoControlEliminarZona.php?" +
+                "idzona="+idzona;
+
+        stringRequest = new StringRequest(Request.Method.GET, urlWS, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                progreso.hide();
+                if (isAdded()) {
+                    try {
+                        if (response.trim().equalsIgnoreCase("elimina")) {
+                            Toast.makeText(requireActivity(), "Oficina eliminada correctamente", Toast.LENGTH_SHORT).show();
+                        } else {
+                            if (response.trim().equalsIgnoreCase("noExiste")) {
+                                Toast.makeText(requireActivity(), "No se encuentra la oficina", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(requireActivity(), "No se ha eliminado", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    } catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (isAdded()) {
+                    try {
+                        String errorMessage = error.getMessage();
+                        if (error.networkResponse != null) {
+                            errorMessage += " Status Code: " + error.networkResponse.statusCode;
+                        }
+                        Log.e("EliminarWebService", "Error: " + errorMessage);
+                        Toast.makeText(requireActivity(), "No se ha podido conectar: " + errorMessage, Toast.LENGTH_SHORT).show();
+                        progreso.hide();
+                    } catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        });
+        request.add(stringRequest);
     }
 }
