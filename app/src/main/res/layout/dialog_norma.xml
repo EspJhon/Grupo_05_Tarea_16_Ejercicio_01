@@ -2,23 +2,32 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp">
+    android:padding="20dp">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@drawable/c_menu_audiencia">
+        >
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center"
             android:padding="28dp">
+
             <ImageView
-                android:layout_width="200dp"
-                android:layout_height="200dp"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
                 android:src="@drawable/c_norma" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="NORMA"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium"
+                android:textSize="25sp"
+                android:textColor="@color/black" />
         </LinearLayout>
 
         <LinearLayout
@@ -48,7 +57,8 @@
                     android:padding="10dp"
                     android:background="@drawable/rounded_edittext"
                     android:layout_margin="3dp"
-                    android:textSize="14sp"  />
+                    android:textSize="14sp"
+                    android:inputType="number"/>
             </LinearLayout>
 
             <LinearLayout

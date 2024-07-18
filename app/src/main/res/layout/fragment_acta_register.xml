@@ -112,7 +112,8 @@
                     android:hint="Hora"
                     android:background="@drawable/rounded_edittext"
                     android:focusable="false"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:inputType="time"/>
             </LinearLayout>
 
             <LinearLayout
@@ -178,7 +179,8 @@
                     android:hint="Fecha"
                     android:background="@drawable/rounded_edittext"
                     android:focusable="false"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:inputType="date"/>
             </LinearLayout>
 
             <LinearLayout

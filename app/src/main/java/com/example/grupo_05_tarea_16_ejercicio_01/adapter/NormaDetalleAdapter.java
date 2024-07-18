@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -56,7 +57,7 @@ public class NormaDetalleAdapter extends RecyclerView.Adapter<NormaDetalleAdapte
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        EditText edt_numero_norma;
+       TextView edt_numero_norma;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

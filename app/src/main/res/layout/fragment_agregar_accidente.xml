@@ -15,15 +15,27 @@
             android:orientation="vertical"
             android:padding="10dp">
 
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Numero de placa:                    Agente:"
+                    android:layout_margin="5dp"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
+
 
                     <Spinner
                         android:id="@+id/sp_placa_accidente"
@@ -40,6 +52,16 @@
                         android:padding="10dp"/>
 
                 </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Fecha y Hora:"
+                    android:layout_margin="5dp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -53,6 +75,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/rounded_edittext"
                         android:layout_margin="2dp"
+                        android:inputType="time"
                         android:hint="Hora"
                         android:focusable="false"
                         android:clickable="true"/>
@@ -61,13 +84,13 @@
                         android:id="@+id/et_fecha"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="@drawable/rounded_edittext"
                         android:layout_margin="2dp"
-                        android:hint="Fecha"
-                        android:focusable="false"
+                        android:layout_weight="1"
+                        android:inputType="date"
+                        android:background="@drawable/rounded_edittext"
                         android:clickable="true"
-                        />
+                        android:focusable="false"
+                        android:hint="Fecha" />
 
                 </LinearLayout>
 
@@ -76,6 +99,15 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Titulo:"
+                        android:layout_margin="5dp"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:textColor="@color/black"/>
+
                     <EditText
                         android:id="@+id/et_titulo_accidente"
                         android:layout_width="match_parent"
@@ -83,6 +115,15 @@
                         android:hint="Titulo"
                         android:background="@drawable/rounded_edittext"
                         android:layout_margin="2dp"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Descripcion:"
+                        android:layout_margin="5dp"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:textColor="@color/black"/>
 
                     <EditText
                         android:id="@+id/et_descripcion_accidente"
@@ -138,13 +179,22 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Lugar:"
+                        android:layout_margin="5dp"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:textColor="@color/black"/>
+
                     <EditText
                         android:id="@+id/et_nombreLugar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Nombre del lugar"
                         android:background="@drawable/rounded_edittext"
-                        android:layout_margin="2dp"/>
+                        android:layout_margin="5dp"/>
 
                     <fragment
                         android:id="@+id/fr_ubicacionAccidente"

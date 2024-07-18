@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="20dp"
     tools:context=".fragments.OficinaGob.OficinaGobFragment">
 
     <LinearLayout
@@ -20,14 +21,17 @@
                 android:id="@+id/btn_nuevaOficina"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_margin="1dp"
+                android:textSize="20dp"
                 android:background="@drawable/rounded_button_black"
                 android:text="Nuevo"/>
 
             <ListView
                 android:id="@+id/lv_oficinas"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:layout_marginVertical="10dp"
+                />
 
         </LinearLayout>
 

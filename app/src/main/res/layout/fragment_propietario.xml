@@ -3,12 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.Propietario.PropietarioFragment">
+    tools:context=".fragments.Propietario.PropietarioFragment"
+    android:padding="15dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
+
         android:orientation="vertical">
 
         <Button
@@ -37,7 +38,9 @@
             android:layout_weight="1"
             android:background="@color/transparent"
             android:choiceMode="singleChoice"
-            android:listSelector="@android:color/transparent"/>
+            android:listSelector="@android:color/transparent"
+            android:layout_marginVertical="10dp"
+            android:padding="10dp"/>
 
     </LinearLayout>
 

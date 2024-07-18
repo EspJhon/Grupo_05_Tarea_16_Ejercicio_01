@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -59,7 +60,7 @@ public class ZonaAdapter extends RecyclerView.Adapter<ZonaAdapter.ViewHolder> {
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        EditText edt_titulo_zona, edt_departamento_zona, edt_provincia_zona, edt_distrito_zona;
+       TextView edt_titulo_zona, edt_departamento_zona, edt_provincia_zona, edt_distrito_zona;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

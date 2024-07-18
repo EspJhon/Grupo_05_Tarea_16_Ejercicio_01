@@ -119,7 +119,7 @@ public class PropietarioFragment extends Fragment implements Propietario_Adapter
         et_nombre = dialogView.findViewById(R.id.et_nombre);
         et_ciudad = dialogView.findViewById(R.id.et_ciudad);
 
-        builder.setTitle("Registrar Propietario");
+        builder.setTitle("");
         builder.setPositiveButton("Registrar", (dialogInterface, which) -> {
             String cedula = et_cedula.getText().toString();
             String nombre = et_nombre.getText().toString();
