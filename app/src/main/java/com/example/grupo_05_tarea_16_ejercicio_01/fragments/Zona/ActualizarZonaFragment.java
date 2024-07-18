@@ -1,5 +1,6 @@
 package com.example.grupo_05_tarea_16_ejercicio_01.fragments.Zona;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -9,6 +10,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +18,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.grupo_05_tarea_16_ejercicio_01.R;
 import com.example.grupo_05_tarea_16_ejercicio_01.db.DBHelper;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Usuario;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Zona;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -26,6 +36,12 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 public class ActualizarZonaFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMapClickListener{
@@ -39,6 +55,10 @@ public class ActualizarZonaFragment extends Fragment implements OnMapReadyCallba
     String ctitulo;
     String clatitud;
     String clongitud;
+    private ProgressDialog progressDialog;
+    RequestQueue request;
+    StringRequest stringRequest;
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -82,6 +102,7 @@ public class ActualizarZonaFragment extends Fragment implements OnMapReadyCallba
         btn_actualizar_zona = view.findViewById(R.id.btn_actualizar_zona);
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map_zona);
         mapFragment.getMapAsync(this);
+        request = Volley.newRequestQueue(getContext());
         return view;
     }
     @Override
@@ -160,6 +181,7 @@ public class ActualizarZonaFragment extends Fragment implements OnMapReadyCallba
                 zona.setLongitud(alongitud);
                 zona.setTitulo(atitulo);
                 dbHelper.Actualizar_Ubicacion(zona);
+                ActualizarWebService(adepartamento, aprovincia, adistrito, alatitud, alongitud, atitulo, zona.getIdZona());
                 zona = null;
                 Toast.makeText(getContext(), "Zona Actualizada", Toast.LENGTH_SHORT).show();
                 NavController navController = Navigation.findNavController(requireView());
@@ -173,11 +195,162 @@ public class ActualizarZonaFragment extends Fragment implements OnMapReadyCallba
         Zona zona = dbHelper.get_Zona(clatitud,clongitud);
         if (zona != null) {
             dbHelper.Eliminar_Zona(zona);
+            EliminarWebService(zona.getIdZona());
+            if (isAdded()) {
+                try {
+                    NavController navController = Navigation.findNavController(requireView());
+                    navController.popBackStack();
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+
+            }
             Toast.makeText(getContext(), "Zona Eliminada", Toast.LENGTH_SHORT).show();
-            NavController navController = Navigation.findNavController(requireView());
-            navController.popBackStack();
+
         } else {
             Toast.makeText(getContext(), "Zona no Eliminada", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void ActualizarWebService(String adepartamento, String aprovincia, String adistrito, String alatitud, String alongitud, String atitulo, int AId_Zona) {
+        progressDialog = new ProgressDialog(requireActivity());
+        progressDialog.setMessage("Actualizando...");
+        progressDialog.show();
+
+        List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.1.6", "192.168.1.2");
+        // Puedes añadir más IPs según sea necesario
+        String selectedIp = "";
+        Map<String, String> userIpMap = new HashMap<>();
+        userIpMap.put("jhon", ips.get(0));
+        userIpMap.put("chagua", ips.get(1));
+        userIpMap.put("matias", ips.get(2));
+        userIpMap.put("calixto", ips.get(3));
+
+        ArrayList<Usuario> usuarios = dbHelper.get_all_Usuarios();
+        for (Usuario usuario : usuarios) {
+            selectedIp = userIpMap.get(usuario.getUsername());
+            if (selectedIp != null) {
+                break;
+            }
+        }
+
+        String urlWS = "http://" + selectedIp + "/db_grupo_05_tarea_16_ejercicio_01/ZonaActualizar.php";
+
+        stringRequest = new StringRequest(Request.Method.POST, urlWS, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                progressDialog.hide();
+                if (isAdded()) {
+                    if (response.trim().equalsIgnoreCase("actualiza")) {
+                        Toast.makeText(requireActivity(), "Zona actualizada correctamente", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(requireActivity(), "Zona no se pudo actualizar", Toast.LENGTH_SHORT).show();
+                        Log.i("RESPUESTA: ", "" + response);
+                    }
+                    progressDialog.hide();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (isAdded()) {
+                    Toast.makeText(requireActivity(), "No se ha podido conectar", Toast.LENGTH_SHORT).show();
+                    progressDialog.hide();
+                }
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                String departamento = adepartamento;
+                String provincia = aprovincia;
+                String distrito = adistrito;
+                String latitud = alatitud;
+                String longitud = alongitud;
+                String titulo = atitulo;
+                int idzona = AId_Zona;
+
+                Map<String,String> parametros = new HashMap<>();
+                parametros.put("departamento",departamento);
+                parametros.put("provincia", provincia);
+                parametros.put("distrito", distrito);
+                parametros.put("latitud",latitud);
+                parametros.put("longitud",longitud);
+                parametros.put("titulo",titulo);
+                parametros.put("idzona",String.valueOf(idzona));
+
+                Log.d("Params", "departamento: " + departamento + ", provincia: " + provincia + ", " +
+                        "distrito: " + distrito + ", latitud: " + latitud+ ", longitud: " + longitud+ ", " +
+                        "titulo: " + titulo + "idzona: " + idzona);
+                return parametros;
+            }
+        };
+        request.add(stringRequest);
+    }
+
+    private void EliminarWebService(int idZona){
+        progressDialog = new ProgressDialog(requireActivity());
+        progressDialog.setMessage("Eliminando...");
+        progressDialog.show();
+
+        List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.1.6");
+        // Puedes añadir más IPs según sea necesario
+        String selectedIp = "";
+        Map<String, String> userIpMap = new HashMap<>();
+        userIpMap.put("jhon", ips.get(0));
+        userIpMap.put("chagua", ips.get(1));
+        userIpMap.put("matias", ips.get(2));
+
+        ArrayList<Usuario> usuarios = dbHelper.get_all_Usuarios();
+        for (Usuario usuario : usuarios) {
+            selectedIp = userIpMap.get(usuario.getUsername());
+            if (selectedIp != null) {
+                break;
+            }
+        }
+
+        String urlWS = "http://" + selectedIp + "/db_grupo_05_tarea_16_ejercicio_01/ZonaEliminar.php?" +
+                "idzona="+idZona;
+
+        stringRequest = new StringRequest(Request.Method.GET, urlWS, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                progressDialog.hide();
+                if (isAdded()) {
+                    try {
+                        if (response.trim().equalsIgnoreCase("elimina")) {
+                            Toast.makeText(requireActivity(), "Oficina eliminada correctamente", Toast.LENGTH_SHORT).show();
+                        } else {
+                            if (response.trim().equalsIgnoreCase("noExiste")) {
+                                Toast.makeText(requireActivity(), "No se encuentra la oficina", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(requireActivity(), "No se ha eliminado", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    } catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (isAdded()) {
+                    try {
+                        String errorMessage = error.getMessage();
+                        if (error.networkResponse != null) {
+                            errorMessage += " Status Code: " + error.networkResponse.statusCode;
+                        }
+                        Log.e("EliminarWebService", "Error: " + errorMessage);
+                        Toast.makeText(requireActivity(), "No se ha podido conectar: " + errorMessage, Toast.LENGTH_SHORT).show();
+                        progressDialog.hide();
+                    } catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        });
+        request.add(stringRequest);
     }
 }
