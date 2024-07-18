@@ -67,7 +67,7 @@ public class PuestoControlAdapter extends RecyclerView.Adapter<PuestoControlAdap
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        EditText edt_zona_puesto_control;
+        TextView edt_zona_puesto_control;
         TextView txt_total_puestos;
 
         public ViewHolder(@NonNull View itemView) {

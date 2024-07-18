@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:background="@drawable/rounded_item">
+    android:padding="16dp">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="bold"
-        android:textSize="20dp"
+        android:textSize="16dp"
         android:text="Cedula:"
         android:textColor="@color/black"/>
 
     <EditText
+
         android:id="@+id/et_actualizar_cedula"
-        android:layout_width="228dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Nueva Cédula"
         android:background="@drawable/rounded_edittext"
@@ -29,13 +29,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="bold"
-        android:textSize="20dp"
+        android:textSize="16dp"
         android:text="Nombre:"
         android:textColor="@color/black"/>
 
     <EditText
         android:id="@+id/et_actualizar_nombre"
-        android:layout_width="228dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Nombre"
         android:background="@drawable/rounded_edittext"
@@ -48,13 +48,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="bold"
-        android:textSize="20dp"
+        android:textSize="16dp"
         android:text="Ciudad:"
         android:textColor="@color/black"/>
 
     <EditText
         android:id="@+id/et_actualizar_ciudad"
-        android:layout_width="228dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Nueva Ciudad"
         android:inputType="text"

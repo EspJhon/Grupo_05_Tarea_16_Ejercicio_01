@@ -69,7 +69,7 @@ public class InfraccionAdapter extends RecyclerView.Adapter<InfraccionAdapter.Vi
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        EditText edt_agente_infraccion, edt_numero_placa_infraccion, edt_multa_infraccion, edt_fecha_infraccion;
+        TextView edt_agente_infraccion, edt_numero_placa_infraccion, edt_multa_infraccion, edt_fecha_infraccion;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

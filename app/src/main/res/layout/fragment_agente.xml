@@ -21,15 +21,7 @@
             android:text="Registrar Agente"
             android:layout_marginBottom="16dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Agentes Registrados"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:layout_gravity="center"
-            android:paddingBottom="16dp" />
+
 
         <ListView
             android:id="@+id/lv_agentes"

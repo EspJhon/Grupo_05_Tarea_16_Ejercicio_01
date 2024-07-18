@@ -138,7 +138,7 @@ public class VehiculoFragment extends Fragment implements Vehiculo_Adapter.OnIte
         // Cargar los nombres de los clientes en el Spinner
         cargarPropietariosEnSpinner(spPropietarios);
 
-        builder.setTitle("Registrar Dirección");
+        builder.setTitle("");
         builder.setPositiveButton("Registrar", (dialogInterface, which) -> {
             String numPlaca = etNumPlaca.getText().toString();
             String marca = etMarca.getText().toString();

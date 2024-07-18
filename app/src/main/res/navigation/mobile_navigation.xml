@@ -8,17 +8,17 @@
     <fragment
         android:id="@+id/propietarioFragment"
         android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.Propietario.PropietarioFragment"
-        android:label="fragment_propietario"
+        android:label="PROPIETARIOS REGISTRADOS"
         tools:layout="@layout/fragment_propietario" />
     <fragment
         android:id="@+id/vehiculoFragment"
         android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.Vehiculo.VehiculoFragment"
-        android:label="fragment_vehiculo"
+        android:label="VEHICULOS REGISTRADOS"
         tools:layout="@layout/fragment_vehiculo" />
     <fragment
         android:id="@+id/oficinaGobFragment"
         android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.OficinaGob.OficinaGobFragment"
-        android:label="fragment_oficina_gob"
+        android:label="OFICINAS REGISTRADAS"
         tools:layout="@layout/fragment_oficina_gob" >
         <action
             android:id="@+id/action_oficinaGobFragment_to_agregarOficinaFragment"
@@ -30,7 +30,7 @@
     <fragment
         android:id="@+id/accidenteFragment"
         android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.Accidente.AccidenteFragment"
-        android:label="fragment_accidente"
+        android:label="LISTA DE ACCIDENTES"
         tools:layout="@layout/fragment_accidente" >
         <action
             android:id="@+id/action_accidenteFragment_to_agregarAccidenteFragment"
@@ -42,7 +42,7 @@
     <fragment
         android:id="@+id/infraccionFragment"
         android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.Infraccion.InfraccionFragment"
-        android:label="fragment_infraccion"
+        android:label="LISTA DE INFRACCIONES"
         tools:layout="@layout/fragment_infraccion" >
         <action
             android:id="@+id/action_infraccionFragment_to_infraccionRegisterFragment"
@@ -51,22 +51,22 @@
     <fragment
         android:id="@+id/audienciaFragment"
         android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.Audiencia.AudienciaFragment"
-        android:label="fragment_audiencia"
+        android:label="LISTA DE AUDIENCIA"
         tools:layout="@layout/fragment_audiencia" />
     <fragment
         android:id="@+id/normaDetFragment"
         android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.NormaDet.NormaDetFragment"
-        android:label="fragment_norma_det"
+        android:label="NORMAS REGISTRADAS"
         tools:layout="@layout/fragment_norma_det" />
     <fragment
         android:id="@+id/agenteFragment"
         android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.Agente.AgenteFragment"
-        android:label="fragment_agente"
+        android:label="AGENTES REGISTRADOS"
         tools:layout="@layout/fragment_agente" />
     <fragment
         android:id="@+id/actaFragment"
         android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.Acta.ActaFragment"
-        android:label="fragment_acta"
+        android:label="ACTAS REGISTRADAS"
         tools:layout="@layout/fragment_acta" >
         <action
             android:id="@+id/action_actaFragment_to_actaRegisterFragment"
@@ -98,56 +98,56 @@
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.Login.LoginFragment"
-        android:label="fragment_login"
+        android:label="LOGIN"
         tools:layout="@layout/fragment_login" />
     <fragment
         android:id="@+id/registerFragment"
         android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.Register.RegisterFragment"
-        android:label="fragment_register"
+        android:label="REGISTRO DE USUARIO"
         tools:layout="@layout/fragment_register" />
     <fragment
         android:id="@+id/actualizarZonaFragment"
         android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.Zona.ActualizarZonaFragment"
-        android:label="fragment_actualizar_zona"
+        android:label="ACTUALIZAR ZONA"
         tools:layout="@layout/fragment_actualizar_zona" />
     <fragment
         android:id="@+id/registerPuestoControlFragment"
         android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.PuestoControl.RegisterPuestoControlFragment"
-        android:label="fragment_register_puesto_control"
+        android:label="REGISTRO DE PUESTO DE CONTROL"
         tools:layout="@layout/fragment_register_puesto_control" />
     <fragment
         android:id="@+id/mapsZonaFragment"
         android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.Zona.MapsZonaFragment"
-        android:label="Mapa"
+        android:label="MAPA"
         tools:layout="@layout/fragment_maps_zona" />
     <fragment
         android:id="@+id/agregarAccidenteFragment"
         android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.Accidente.AgregarAccidenteFragment"
-        android:label="fragment_agregar_accidente"
+        android:label="AGREGAR ACCIDENTE"
         tools:layout="@layout/fragment_agregar_accidente" />
     <fragment
         android:id="@+id/infraccionRegisterFragment"
         android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.Infraccion.InfraccionRegisterFragment"
-        android:label="fragment_infraccion_register"
+        android:label="AGREGAR INFRACCION"
         tools:layout="@layout/fragment_infraccion_register" />
     <fragment
         android:id="@+id/actualizarAccidenteFragment"
         android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.Accidente.ActualizarAccidenteFragment"
-        android:label="fragment_actualizar_accidente"
+        android:label="ACTUALIZAR ACCIDENTE"
         tools:layout="@layout/fragment_actualizar_accidente" />
     <fragment
         android:id="@+id/agregarOficinaFragment"
         android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.OficinaGob.AgregarOficinaFragment"
-        android:label="fragment_agregar_oficina"
+        android:label="AGREGAR OFICINA"
         tools:layout="@layout/fragment_agregar_oficina" />
     <fragment
         android:id="@+id/actualizarOficinaFragment"
         android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.OficinaGob.ActualizarOficinaFragment"
-        android:label="fragment_actualizar_oficina"
+        android:label="ACTUALIZAR OFICINA"
         tools:layout="@layout/fragment_actualizar_oficina" />
     <fragment
         android:id="@+id/actaRegisterFragment"
         android:name="com.example.grupo_05_tarea_16_ejercicio_01.fragments.Acta.ActaRegisterFragment"
-        android:label="fragment_acta_register"
+        android:label="REGISTRAR ACTA"
         tools:layout="@layout/fragment_acta_register" />
 </navigation>

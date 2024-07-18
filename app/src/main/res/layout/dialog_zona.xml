@@ -1,14 +1,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:orientation="vertical"
-    android:padding="10dp"
+    android:padding="15dp"
     android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center"
-        android:padding="28dp">
+        android:layout_margin="5dp"
+        >
 
         <TextView
             android:layout_width="wrap_content"
@@ -25,15 +26,15 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="10dp"
-        android:background="@drawable/c_menu_audiencia">
+        >
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="horizontal">
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Título"
+                android:text="Título:"
                 android:textStyle="bold"
                 android:textSize="20sp"
                 android:textColor="@color/black"/>
@@ -62,7 +63,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/rounded_edittext"
                 android:layout_margin="3dp"
-                android:textSize="16sp"/>
+                android:textSize="14sp"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"

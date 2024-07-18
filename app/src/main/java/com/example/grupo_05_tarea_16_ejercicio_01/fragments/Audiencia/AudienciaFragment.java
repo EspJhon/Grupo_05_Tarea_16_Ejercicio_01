@@ -126,7 +126,7 @@ public class AudienciaFragment extends Fragment implements Response.Listener<JSO
         builder.setView(dialogView);
 
         if (tipo == 1) { // Insertar
-            builder.setTitle("Añadir Audiencia");
+            builder.setTitle("");
             builder.setPositiveButton("Guardar", (dialog, which) -> {
                 int codigo = Integer.parseInt(et_codigo.getText().toString().trim());
                 String lugar = et_lugar.getText().toString().trim();

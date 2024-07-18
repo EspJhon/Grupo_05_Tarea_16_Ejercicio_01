@@ -141,7 +141,7 @@ public class NormaDetFragment extends Fragment implements Response.Listener<JSON
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         if (tipo == 1 && normasDet == null) {
-            builder.setTitle("Añadir Norma");
+            builder.setTitle("Agregar Norma");
             builder.setView(dialogView);
             // Set up the buttons
             builder.setPositiveButton("Guardar", new DialogInterface.OnClickListener() {

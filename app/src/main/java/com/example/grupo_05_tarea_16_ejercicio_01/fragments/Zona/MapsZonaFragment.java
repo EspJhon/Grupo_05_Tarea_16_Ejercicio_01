@@ -127,7 +127,7 @@ public class MapsZonaFragment extends Fragment implements OnMapReadyCallback{
                 final EditText longitud = dialogView.findViewById(R.id.edt_longitud);
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle("Enter Marker Title");
+                builder.setTitle("");
                 builder.setView(dialogView);
                 latitud.setText(String.valueOf(marker.getPosition().latitude));
                 longitud.setText(String.valueOf(marker.getPosition().longitude));

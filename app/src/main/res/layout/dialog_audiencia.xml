@@ -2,15 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/carropoli"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/carropoli">
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         android:background="#CC000000"
         android:gravity="center"
-        android:orientation="vertical">
+        android:padding="15dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -21,8 +23,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:orientation="vertical"
+                android:gravity="center"
                 android:padding="28dp">
 
                 <ImageView
@@ -33,60 +35,97 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="AGREGAR AUDIENCIA"
+                    android:textStyle="bold"
                     android:fontFamily="sans-serif-medium"
-                    android:text="AUDIENCIA"
-                    android:textColor="@color/white"
-                    android:textSize="45sp"
-                    android:textStyle="bold" />
+                    android:textSize="25sp"
+                    android:textColor="@color/white" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:background="@drawable/c_menu_audiencia"
-                android:elevation="10dp"
                 android:orientation="vertical"
-                android:padding="10dp">
+                android:padding="15dp"
+                android:layout_margin="5dp"
+                android:elevation="10dp"
+                android:background="@drawable/c_menu_audiencia">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    android:layout_margin="5dp"
+                    android:textColor="@color/black"
+                    android:text="Codigo:"/>
 
                 <EditText
                     android:id="@+id/et_codigo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
                     android:background="@drawable/rounded_edittext"
+                    android:layout_margin="2dp"
                     android:hint="Código"
                     android:inputType="number" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    android:layout_margin="3dp"
+                    android:textColor="@color/black"
+                    android:text="Lugar:"/>
 
                 <EditText
                     android:id="@+id/et_lugar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
                     android:background="@drawable/rounded_edittext"
+                    android:layout_margin="2dp"
                     android:hint="Lugar" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    android:layout_margin="3dp"
+                    android:textColor="@color/black"
+                    android:text="Fecha:"/>
 
                 <EditText
                     android:id="@+id/et_fecha"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
                     android:background="@drawable/rounded_edittext"
-                    android:clickable="true"
+                    android:layout_margin="2dp"
+                    android:hint="Fecha"
                     android:focusable="false"
-                    android:hint="Fecha" />
+                    android:clickable="true" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    android:layout_margin="3dp"
+                    android:textColor="@color/black"
+                    android:text="Hora:"/>
 
                 <EditText
                     android:id="@+id/et_hora"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:background="@drawable/rounded_edittext"
-                    android:clickable="true"
+                    android:hint="Hora"
                     android:focusable="false"
-                    android:hint="Hora" />
+                    android:background="@drawable/rounded_edittext"
+                    android:layout_margin="2dp"
+                    android:clickable="true" />
             </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>
+
 </LinearLayout>

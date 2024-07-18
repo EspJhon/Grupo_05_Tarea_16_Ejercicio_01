@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.OficinaGob.ActualizarOficinaFragment">
+    tools:context=".fragments.OficinaGob.ActualizarOficinaFragment"
+    android:padding="20dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,14 +16,32 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:layout_margin="3dp"
+                android:textColor="@color/black"
+                android:text="Valor del Vehiculo:"/>
 
             <EditText
                 android:id="@+id/et_valorVehiculoA"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/rounded_edittext"
-                android:layout_margin="2dp"
-                android:hint="Valor del vehículo" />
+                android:layout_margin="1dp"
+                android:textSize="16sp"
+                android:hint="Valor del vehículo"
+                android:inputType="number"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:layout_margin="3dp"
+                android:textColor="@color/black"
+                android:text="Número de Poliza:"/>
 
             <EditText
                 android:id="@+id/et_numPolizaA"
@@ -30,12 +49,23 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/rounded_edittext"
                 android:layout_margin="2dp"
-                android:hint="Número de Poliza" />
+                android:textSize="16sp"
+                android:hint="Número de Poliza"
+                android:inputType="number"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:layout_margin="3dp"
+                android:textColor="@color/black"
+                android:text="Número de Placa:"/>
 
             <Spinner
                 android:id="@+id/sp_numPlacaA_oficina"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+
                 android:padding="10dp" />
 
             <LinearLayout
@@ -49,6 +79,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/rounded_edittext"
                     android:layout_margin="2dp"
+                    android:textSize="16sp"
                     android:hint="Ubicación" />
 
                 <fragment

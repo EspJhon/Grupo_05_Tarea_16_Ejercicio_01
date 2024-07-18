@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="15dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -10,15 +11,29 @@
         android:orientation="vertical"
         android:background="@drawable/rounded_item"
         android:layout_margin="10dp">
-
-        <TextView
-            android:id="@+id/tv_numPlaca"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:text="0000"/>
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="N° de placa:"
+                android:paddingTop="5dp"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:id="@+id/tv_numPlaca"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="0000"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -29,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:text="Marca:"
                 android:paddingTop="5dp"
-                android:textSize="20sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="@color/black"/>
 
@@ -42,7 +57,7 @@
                 android:gravity="center"
                 android:lines="1"
                 android:text="**************"
-                android:textSize="22sp" />
+                android:textSize="15sp" />
 
         </LinearLayout>
 
@@ -55,7 +70,7 @@
                 android:layout_height="wrap_content"
                 android:text="Modelo:"
                 android:paddingTop="5dp"
-                android:textSize="20sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="@color/black"/>
 
@@ -68,7 +83,7 @@
                 android:gravity="center"
                 android:lines="1"
                 android:text="**************"
-                android:textSize="22sp" />
+                android:textSize="15sp" />
 
         </LinearLayout>
 
@@ -82,7 +97,7 @@
                 android:layout_height="wrap_content"
                 android:text="Motor:"
                 android:paddingTop="5dp"
-                android:textSize="20sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="@color/black"/>
 
@@ -95,7 +110,7 @@
                 android:layout_weight="1"
                 android:lines="1"
                 android:text="**************"
-                android:textSize="22sp" />
+                android:textSize="15sp" />
 
         </LinearLayout>
 
@@ -109,7 +124,7 @@
                 android:layout_height="wrap_content"
                 android:text="Fecha:"
                 android:paddingTop="5dp"
-                android:textSize="20sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="@color/black"/>
 
@@ -122,7 +137,7 @@
                 android:gravity="center"
                 android:lines="1"
                 android:text="**************"
-                android:textSize="22sp" />
+                android:textSize="15sp" />
 
         </LinearLayout>
 
@@ -135,7 +150,7 @@
                 android:layout_height="wrap_content"
                 android:text="Propietario:"
                 android:paddingTop="5dp"
-                android:textSize="20sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="@color/black"/>
 
@@ -148,7 +163,7 @@
                 android:layout_weight="1"
                 android:lines="1"
                 android:text="**************"
-                android:textSize="22sp" />
+                android:textSize="15sp" />
 
         </LinearLayout>
 

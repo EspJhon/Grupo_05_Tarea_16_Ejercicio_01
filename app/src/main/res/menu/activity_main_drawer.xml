@@ -25,13 +25,14 @@
             android:icon="@drawable/c_infraccion"
             android:title="Infraccion" />
         <item
-            android:id="@+id/audienciaFragment"
-            android:icon="@drawable/c_audiencia"
-            android:title="Audiencia" />
-        <item
             android:id="@+id/normaDetFragment"
             android:icon="@drawable/c_norma"
             android:title="Norma" />
+        <item
+            android:id="@+id/audienciaFragment"
+            android:icon="@drawable/c_audiencia"
+            android:title="Audiencia" />
+
         <item
             android:id="@+id/agenteFragment"
             android:icon="@drawable/c_registrar_agente"

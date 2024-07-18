@@ -2,29 +2,51 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    >
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
+        android:layout_margin="10dp"
+
+        android:elevation="10dp"
         android:orientation="vertical"
-        android:padding="28dp">
+        android:padding="15dp">
 
-        <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:src="@drawable/c_registro_vehi" />
-
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-medium"
-            android:text="REGISTRO VEHICULO"
-            android:textColor="@color/black"
-            android:textSize="25sp"
-            android:textStyle="bold" />
-    </LinearLayout>
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <LinearLayout
+                android:layout_width="200dp"
+                android:layout_height="150dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="@drawable/regstro_vehi_3">
+
+
+
+            </LinearLayout>
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="REGISTRO VEHICULO"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-medium"
+                    android:textSize="20sp"
+                    android:textColor="@color/black"
+                    android:gravity="center"/>
+
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -36,7 +58,7 @@
             android:layout_height="wrap_content"
             android:text="Número de Placa:"
             android:textColor="@color/black"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:textStyle="bold" />
 
         <EditText
@@ -46,6 +68,7 @@
             android:layout_margin="3dp"
             android:background="@drawable/rounded_edittext"
             android:hint="Ingrese Número de Placa"
+            android:textSize="15sp"
             android:inputType="number" />
     </LinearLayout>
 
@@ -59,7 +82,7 @@
             android:layout_height="wrap_content"
             android:text="Marca:"
             android:textColor="@color/black"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:textStyle="bold" />
 
         <EditText
@@ -67,6 +90,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="3dp"
+            android:textSize="15sp"
             android:background="@drawable/rounded_edittext"
             android:hint="Ingrese Marca" />
     </LinearLayout>
@@ -81,7 +105,8 @@
             android:layout_height="wrap_content"
             android:text="Modelo:"
             android:textColor="@color/black"
-            android:textSize="20sp"
+
+            android:textSize="16sp"
             android:textStyle="bold" />
 
         <EditText
@@ -90,6 +115,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="3dp"
             android:background="@drawable/rounded_edittext"
+            android:textSize="15sp"
             android:hint="Ingrese Modelo" />
     </LinearLayout>
 
@@ -103,7 +129,7 @@
             android:layout_height="wrap_content"
             android:text="Motor:"
             android:textColor="@color/black"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:textStyle="bold" />
 
         <EditText
@@ -111,6 +137,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="3dp"
+            android:textSize="15sp"
             android:background="@drawable/rounded_edittext"
             android:hint="Ingrese Motor" />
     </LinearLayout>
@@ -125,7 +152,7 @@
             android:layout_height="wrap_content"
             android:text="Fecha:"
             android:textColor="@color/black"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:textStyle="bold" />
 
         <EditText
@@ -136,6 +163,7 @@
             android:background="@drawable/rounded_edittext"
             android:clickable="true"
             android:focusable="false"
+            android:textSize="16sp"
             android:hint="Ingrese Año" />
     </LinearLayout>
 
@@ -149,7 +177,7 @@
             android:layout_height="wrap_content"
             android:text="Seleccione el Propietario"
             android:textColor="@color/black"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:textStyle="bold" />
 
         <Spinner
@@ -161,5 +189,7 @@
 
     </LinearLayout>
 
-
+    </LinearLayout>
+</LinearLayout>
+    </ScrollView>
 </LinearLayout>
