@@ -297,6 +297,8 @@ public class VehiculoFragment extends Fragment implements Vehiculo_Adapter.OnIte
         EditText etActualizarFecha = view.findViewById(R.id.et_actualizar_fecha);
         Spinner sp_ActualizarPropietario = view.findViewById(R.id.sp_actualizar_propietario);
 
+        etActualizarFecha.setOnClickListener(v -> showYearPickerDialog(etActualizarFecha));
+
         etActualizarNumPlaca.setText(String.valueOf(vehiculo.getNumplaca()));
         etActualizarMarca.setText(String.valueOf(vehiculo.getMarca()));
         etActualizarModelo.setText(vehiculo.getModelo());
@@ -497,6 +499,21 @@ public class VehiculoFragment extends Fragment implements Vehiculo_Adapter.OnIte
         DatePickerDialog datePickerDialog = new DatePickerDialog(requireContext(), android.R.style.Theme_Holo_Light_Dialog_NoActionBar, (view, year1, month1, dayOfMonth) -> {
             String selectedDate = String.valueOf(year1);
             et_fecha.setText(selectedDate);
+        }, year, 0, 1);
+
+        datePickerDialog.getDatePicker().setCalendarViewShown(false);
+        datePickerDialog.getDatePicker().setSpinnersShown(true);
+        datePickerDialog.setTitle("Seleccione el año");
+        datePickerDialog.show();
+    }
+
+    private void showYearPickerDialog2(final EditText et_actualizar_fecha) {
+        final Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(requireContext(), android.R.style.Theme_Holo_Light_Dialog_NoActionBar, (view, year1, month1, dayOfMonth) -> {
+            String selectedDate = String.valueOf(year1);
+            et_actualizar_fecha.setText(selectedDate);
         }, year, 0, 1);
 
         datePickerDialog.getDatePicker().setCalendarViewShown(false);
