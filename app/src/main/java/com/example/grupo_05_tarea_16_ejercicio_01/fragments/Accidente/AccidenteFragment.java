@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -86,7 +87,12 @@ public class AccidenteFragment extends Fragment {
         btn_nuevoAccidente = view.findViewById(R.id.btn_nuevoAccidente);
 
         request = Volley.newRequestQueue(getContext());
-
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                // No hacer nada para deshabilitar el botón de retroceso
+            }
+        });
         return view;
     }
 

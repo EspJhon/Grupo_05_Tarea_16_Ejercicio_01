@@ -8,7 +8,11 @@ import java.util.Map;
 public class IPUtilizada {
 
     private static IPUtilizada instance;
+<<<<<<< HEAD
     private List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.50.70", "192.168.1.2");
+=======
+    private List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.1.6", "192.168.1.2","192.168.50.90");
+>>>>>>> 6926f452f7a89917ce549e22b866974fd3035382
 
     private IPUtilizada() {
     }
@@ -26,6 +30,7 @@ public class IPUtilizada {
         userIpMap.put("chagua", ips.get(1));
         userIpMap.put("matias", ips.get(2));
         userIpMap.put("calixto", ips.get(3));
+        userIpMap.put("admin", ips.get(4));
 
         return userIpMap.get(username);
     }
