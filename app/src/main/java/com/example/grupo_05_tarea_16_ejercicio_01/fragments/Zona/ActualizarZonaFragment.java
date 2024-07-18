@@ -30,6 +30,8 @@ import com.android.volley.toolbox.Volley;
 import com.example.grupo_05_tarea_16_ejercicio_01.R;
 import com.example.grupo_05_tarea_16_ejercicio_01.adapter.IPUtilizada;
 import com.example.grupo_05_tarea_16_ejercicio_01.db.DBHelper;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Acta;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.PuestoControl;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Usuario;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Zona;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -203,19 +205,27 @@ public class ActualizarZonaFragment extends Fragment implements OnMapReadyCallba
                     public void onClick(DialogInterface dialog, int which) {
                         Zona zona = dbHelper.get_Zona(clatitud,clongitud);
                         if (zona != null) {
-                            dbHelper.Eliminar_Zona(zona);
-                            EliminarWebService(zona.getIdZona());
-                            if (isAdded()) {
-                                try {
-                                    NavController navController = Navigation.findNavController(requireView());
-                                    navController.popBackStack();
-                                } catch (Exception e){
-                                    e.printStackTrace();
+                            ArrayList<PuestoControl> comprobars01 = dbHelper.get_all_Puesto_Controls();
+                            ArrayList<Acta> comprobar02 = dbHelper.getAllActas();
+                            boolean exists = doesIdZonaExist(comprobar02, zona.getIdZona());
+                            boolean exists1 = doesIdPuestoExist(comprobars01, zona.getIdZona());
+                            if (exists1 || exists) {
+                                Toast.makeText(getContext(), "Existen Registros Dependientes", Toast.LENGTH_SHORT).show();
+                            } else {
+                                dbHelper.Eliminar_Zona(zona);
+                                EliminarWebService(zona.getIdZona());
+
+                                if (isAdded()) {
+                                    try {
+                                        NavController navController = Navigation.findNavController(requireView());
+                                        navController.popBackStack();
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+
                                 }
-
+                                Toast.makeText(getContext(), "Zona Eliminada", Toast.LENGTH_SHORT).show();
                             }
-                            Toast.makeText(getContext(), "Zona Eliminada", Toast.LENGTH_SHORT).show();
-
                         } else {
                             Toast.makeText(getContext(), "Zona no Eliminada", Toast.LENGTH_SHORT).show();
                         }
@@ -223,6 +233,23 @@ public class ActualizarZonaFragment extends Fragment implements OnMapReadyCallba
                 })
                 .setNegativeButton("Cancelar", null)
                 .create().show();
+    }
+
+    public static boolean doesIdZonaExist(ArrayList<Acta> actas, int idZonaToCheck) {
+        for (Acta acta : actas) {
+            if (acta.getIdZona() == idZonaToCheck) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public static boolean doesIdPuestoExist(ArrayList<PuestoControl> puestoControls, int idZonaToCheck) {
+        for (PuestoControl puestoControl : puestoControls) {
+            if (puestoControl.getIdZona() == idZonaToCheck) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void ActualizarWebService(String adepartamento, String aprovincia, String adistrito, String alatitud, String alongitud, String atitulo, int AId_Zona) {

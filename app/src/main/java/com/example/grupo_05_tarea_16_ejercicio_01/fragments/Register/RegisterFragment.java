@@ -101,6 +101,6 @@ public class RegisterFragment extends Fragment implements Response.Listener<JSON
     @Override
     public void onResponse(JSONObject response) {
         progreso.hide();
-        Toast.makeText(requireActivity(), "Mensaje: " + response.toString(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(requireActivity(), "Usario Registrado correctamente", Toast.LENGTH_SHORT).show();
     }
 }

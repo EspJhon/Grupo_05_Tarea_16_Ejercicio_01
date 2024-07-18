@@ -95,9 +95,7 @@ public class InfraccionFragment extends Fragment {
                 ArrayList<Vehiculo> prueba01 = dbHelper.get_all_Vehiculos();
                 ArrayList<Agente> prueba02 = dbHelper.getAllAgentes();
                 ArrayList<NormasDet> prueba03 = dbHelper.get_all_Normas_Detalle();
-                if (prueba01.isEmpty() || prueba02.isEmpty() || prueba03.isEmpty()) {
-                    Toast.makeText(getContext(), "No Existen Registro de Vehiculo, Agente y Norma", Toast.LENGTH_SHORT).show();
-                } else if (prueba01.isEmpty()) {
+                if (prueba01.isEmpty()) {
                     Toast.makeText(getContext(), "No Existe Vehiculo", Toast.LENGTH_SHORT).show();
                 } else if (prueba02.isEmpty()) {
                     Toast.makeText(getContext(), "No Existe Agente", Toast.LENGTH_SHORT).show();
