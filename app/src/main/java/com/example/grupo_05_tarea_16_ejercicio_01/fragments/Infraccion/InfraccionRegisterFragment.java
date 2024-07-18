@@ -282,15 +282,22 @@ public class InfraccionRegisterFragment extends Fragment implements Response.Lis
                 public void onClick(View v) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
                     builder.setTitle("Confirmar Eliminación")
-                            .setMessage("¿Estás seguro de eliminar esta Infraccion?")
+                            .setMessage("¿Estás seguro de eliminar esta Infracción?")
                             .setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     Infraccion ainfraccion = dbHelper.get_Infraccion(IdInfraccion);
                                     dbHelper.Eliminar_Infraccion(ainfraccion);
-                                    NavController navController = Navigation.findNavController(v);
-                                    navController.navigateUp();
-                                    Toast.makeText(requireContext(), "Infraccion eliminado correctamente", Toast.LENGTH_SHORT).show();
+                                    EliminarWebService(ainfraccion.getIdInfraccion());
+                                    if(isAdded()){
+                                        try {
+                                            NavController navController = Navigation.findNavController(v);
+                                            navController.navigateUp();
+                                        }catch(Exception e){
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                    Toast.makeText(requireContext(), "Infracción eliminado correctamente", Toast.LENGTH_SHORT).show();
                                 }
                             })
                             .setNegativeButton("Cancelar", null)
@@ -441,6 +448,64 @@ public class InfraccionRegisterFragment extends Fragment implements Response.Lis
                 return parametros;
             }
         };
+        request.add(stringRequest);
+    }
+
+    private void EliminarWebService(int idinfraccion){
+        progressDialog = new ProgressDialog(requireActivity());
+        progressDialog.setMessage("Eliminando...");
+        progressDialog.show();
+
+        List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.1.6");
+        // Puedes añadir más IPs según sea necesario
+        String selectedIp = "";
+        Map<String, String> userIpMap = new HashMap<>();
+        userIpMap.put("jhon", ips.get(0));
+        userIpMap.put("chagua", ips.get(1));
+        userIpMap.put("matias", ips.get(2));
+
+        ArrayList<Usuario> usuarios = dbHelper.get_all_Usuarios();
+        for (Usuario usuario : usuarios) {
+            selectedIp = userIpMap.get(usuario.getUsername());
+            if (selectedIp != null) {
+                break;
+            }
+        }
+
+        String urlWS = "http://" + selectedIp + "/db_grupo_05_tarea_16_ejercicio_01/InfraccionEliminar.php?" + "idinfraccion="+idinfraccion;
+
+        stringRequest = new StringRequest(Request.Method.GET, urlWS, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if (isAdded()) {
+                    if (response.trim().equalsIgnoreCase("elimina")) {
+                        Toast.makeText(requireActivity(), "Infracción eliminada correctamente", Toast.LENGTH_SHORT).show();
+                    } else {
+                        if (response.trim().equalsIgnoreCase("noExiste")) {
+                            Toast.makeText(requireActivity(), "No se encuentra la infracción", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(requireActivity(), "No se ha eliminado", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+                progressDialog.hide();
+            }
+
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+               if(isAdded()){
+                   String errorM = error.getMessage();
+                   if (error.networkResponse != null) {
+                       errorM += " Estado: " + error.networkResponse.statusCode;
+                   }
+                   Log.e("EliminarWebService", "Error: " + errorM);
+                   //Toast.makeText(requireActivity(), "No se ha podido conectar: " + errorM, Toast.LENGTH_SHORT).show();
+               }
+                progressDialog.hide();
+            }
+        });
         request.add(stringRequest);
     }
 

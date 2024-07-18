@@ -32,6 +32,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.grupo_05_tarea_16_ejercicio_01.R;
 import com.example.grupo_05_tarea_16_ejercicio_01.db.DBHelper;
@@ -64,6 +65,8 @@ public class ActaRegisterFragment extends Fragment implements Response.Listener<
     private ProgressDialog progressDialog;
     RequestQueue request;
     JsonObjectRequest jsonObjectRequest;
+    StringRequest stringRequest;
+
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -320,8 +323,17 @@ public class ActaRegisterFragment extends Fragment implements Response.Listener<
                                 public void onClick(DialogInterface dialog, int which) {
                                     Acta aacta = dbHelper.get_Acta(IdActa);
                                     dbHelper.eliminarActa(aacta);
-                                    NavController navController = Navigation.findNavController(v);
-                                    navController.navigateUp();
+
+                                    EliminarWebService(aacta.getIdActa());
+
+                                    if(isAdded()){
+                                        try {
+                                            NavController navController = Navigation.findNavController(v);
+                                            navController.navigateUp();
+                                        }catch(Exception e){
+                                            e.printStackTrace();
+                                        }
+                                    }
                                     Toast.makeText(requireContext(), "Acta eliminado correctamente", Toast.LENGTH_SHORT).show();
                                 }
                             })
@@ -416,6 +428,64 @@ public class ActaRegisterFragment extends Fragment implements Response.Listener<
         });
 
         request.add(jsonObjectRequest);
+    }
+
+    private void EliminarWebService(int idacta){
+        progressDialog = new ProgressDialog(requireActivity());
+        progressDialog.setMessage("Eliminando...");
+        progressDialog.show();
+
+        List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.1.6");
+        // Puedes añadir más IPs según sea necesario
+        String selectedIp = "";
+        Map<String, String> userIpMap = new HashMap<>();
+        userIpMap.put("jhon", ips.get(0));
+        userIpMap.put("chagua", ips.get(1));
+        userIpMap.put("matias", ips.get(2));
+
+        ArrayList<Usuario> usuarios = dbHelper.get_all_Usuarios();
+        for (Usuario usuario : usuarios) {
+            selectedIp = userIpMap.get(usuario.getUsername());
+            if (selectedIp != null) {
+                break;
+            }
+        }
+
+        String urlWS = "http://" + selectedIp + "/db_grupo_05_tarea_16_ejercicio_01/ActaEliminar.php?" + "idacta="+idacta;
+
+        stringRequest = new StringRequest(Request.Method.GET, urlWS, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                if(isAdded()){
+                    if (response.trim().equalsIgnoreCase("elimina")) {
+                        Toast.makeText(requireActivity(), "Acta eliminada correctamente", Toast.LENGTH_SHORT).show();
+                    } else {
+                        if (response.trim().equalsIgnoreCase("noExiste")) {
+                            Toast.makeText(requireActivity(), "No se encuentra el acta", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(requireActivity(), "No se ha eliminado", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+                progressDialog.hide();
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if(isAdded()){
+                    String errorM = error.getMessage();
+                    if (error.networkResponse != null) {
+                        errorM += " Estado: " + error.networkResponse.statusCode;
+                    }
+                    Log.e("EliminarWebService", "Error: " + errorM);
+                    Toast.makeText(requireActivity(), "No se ha podido conectar: " + errorM, Toast.LENGTH_SHORT).show();
+                }
+                progressDialog.hide();
+            }
+        });
+        request.add(stringRequest);
     }
 
     @Override
