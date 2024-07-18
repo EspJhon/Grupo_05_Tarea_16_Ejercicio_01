@@ -36,8 +36,10 @@ import com.example.grupo_05_tarea_16_ejercicio_01.adapter.NormaDetalleAdapter;
 import com.example.grupo_05_tarea_16_ejercicio_01.adapter.ZonaAdapter;
 import com.example.grupo_05_tarea_16_ejercicio_01.db.DBHelper;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Agente;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Infraccion;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.NormasDet;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Usuario;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Vehiculo;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Zona;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -206,11 +208,17 @@ public class NormaDetFragment extends Fragment implements Response.Listener<JSON
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     NormasDet normasDet = dbHelper.get_Norma_Detalle(IdNorma);
-                                    dbHelper.Eliminar_Norma_Detalle(normasDet);
-                                    EliminarWebService(normasDet.getIdnomra());
-                                    Listar_Normas();
+                                    ArrayList<Infraccion> comprobar = dbHelper.get_all_Infracciones();
+                                    boolean exists = doesIdNormaExist(comprobar, normasDet.getIdnomra());
+                                    if (exists) {
+                                        Toast.makeText(getContext(), "Existen Registros Dependientes", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        dbHelper.Eliminar_Norma_Detalle(normasDet);
+                                        EliminarWebService(normasDet.getIdnomra());
+                                        Listar_Normas();
 
-                                    Toast.makeText(requireContext(), "Norma eliminado correctamente", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(requireContext(), "Norma eliminado correctamente", Toast.LENGTH_SHORT).show();
+                                    }
                                 }
                             })
                             .setNegativeButton("Cancelar", null)
@@ -220,6 +228,15 @@ public class NormaDetFragment extends Fragment implements Response.Listener<JSON
         }
 
         builder.show();
+    }
+
+    public static boolean doesIdNormaExist(ArrayList<Infraccion> infracciones, int idInfraccionToCheck) {
+        for (Infraccion infraccion : infracciones) {
+            if (infraccion.getIdnomra() == idInfraccionToCheck) {
+                return true;
+            }
+        }
+        return false;
     }
     private void cargaWebService(String numnorma, String descripcion) {
         progreso = new ProgressDialog(requireActivity());

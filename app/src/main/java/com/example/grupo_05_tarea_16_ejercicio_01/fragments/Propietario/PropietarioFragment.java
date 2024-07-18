@@ -35,6 +35,7 @@ import com.example.grupo_05_tarea_16_ejercicio_01.adapter.Propietario_Adapter;
 import com.example.grupo_05_tarea_16_ejercicio_01.db.DBHelper;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Propietario;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Usuario;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Vehiculo;
 
 import org.json.JSONObject;
 
@@ -200,9 +201,25 @@ public class PropietarioFragment extends Fragment implements Propietario_Adapter
     }
 
     private void eliminarPropietario(Propietario propietario) {
-        dbHelper.Eliminar_Propietario(propietario);
-        Listar();
-        Toast.makeText(requireActivity(), "Propietario borrado: " + propietario.getNombre(), Toast.LENGTH_SHORT).show();
+
+        ArrayList<Vehiculo> comprobar = dbHelper.get_all_Vehiculos();
+        boolean exists = doesIdPropietarioExist(comprobar, propietario.getIdPropietario());
+        if (exists) {
+            Toast.makeText(getContext(), "Existen Registros Dependientes", Toast.LENGTH_SHORT).show();
+        } else {
+            dbHelper.Eliminar_Propietario(propietario);
+            Listar();
+            Toast.makeText(requireActivity(), "Propietario borrado: " + propietario.getNombre(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public static boolean doesIdPropietarioExist(ArrayList<Vehiculo> vehiculos, int idPropietarioToCheck) {
+        for (Vehiculo vehiculo : vehiculos) {
+            if (vehiculo.getIdPropietario() == idPropietarioToCheck) {
+                return true;
+            }
+        }
+        return false;
     }
 
     //MÉTODOS DE ACTUALIZACIÓN
