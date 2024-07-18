@@ -13,9 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -26,8 +24,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.grupo_05_tarea_16_ejercicio_01.R;
+import com.example.grupo_05_tarea_16_ejercicio_01.adapter.IPUtilizada;
 import com.example.grupo_05_tarea_16_ejercicio_01.db.DBHelper;
-import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Accidente;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.OficinaGob;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Usuario;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Vehiculo;
@@ -193,18 +191,11 @@ public class AgregarOficinaFragment extends Fragment implements OnMapReadyCallba
         progressDialog.setMessage("Registrando...");
         progressDialog.show();
 
-        List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.1.6", "192.168.1.2");
-        // Puedes añadir más IPs según sea necesario
         String selectedIp = "";
-        Map<String, String> userIpMap = new HashMap<>();
-        userIpMap.put("jhon", ips.get(0));
-        userIpMap.put("chagua", ips.get(1));
-        userIpMap.put("matias", ips.get(2));
-        userIpMap.put("calixto", ips.get(3));
 
         ArrayList<Usuario> usuarios = dbHelper.get_all_Usuarios();
         for (Usuario usuario : usuarios) {
-            selectedIp = userIpMap.get(usuario.getUsername());
+            selectedIp = IPUtilizada.getInstance().getSelectedIP(usuario.getUsername());
             if (selectedIp != null) {
                 break;
             }

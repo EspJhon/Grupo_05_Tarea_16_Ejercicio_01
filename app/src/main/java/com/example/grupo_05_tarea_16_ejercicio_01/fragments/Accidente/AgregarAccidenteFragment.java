@@ -36,6 +36,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.grupo_05_tarea_16_ejercicio_01.R;
+import com.example.grupo_05_tarea_16_ejercicio_01.adapter.IPUtilizada;
 import com.example.grupo_05_tarea_16_ejercicio_01.adapter.MapMoveFragment;
 import com.example.grupo_05_tarea_16_ejercicio_01.db.DBHelper;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Accidente;
@@ -357,23 +358,15 @@ public class AgregarAccidenteFragment extends Fragment implements OnMapReadyCall
         progressDialog.setMessage("Registrando...");
         progressDialog.show();
 
-        List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.1.6", "192.168.1.2");
-        // Puedes añadir más IPs según sea necesario
         String selectedIp = "";
-        Map<String, String> userIpMap = new HashMap<>();
-        userIpMap.put("jhon", ips.get(0));
-        userIpMap.put("chagua", ips.get(1));
-        userIpMap.put("matias", ips.get(2));
-        userIpMap.put("calixto", ips.get(3));
 
         ArrayList<Usuario> usuarios = dbHelper.get_all_Usuarios();
         for (Usuario usuario : usuarios) {
-            selectedIp = userIpMap.get(usuario.getUsername());
+            selectedIp = IPUtilizada.getInstance().getSelectedIP(usuario.getUsername());
             if (selectedIp != null) {
-                break; // Exit loop after finding a match
+                break;
             }
         }
-         // Cambia el índice según tu lógica de selección
 
 
         String urlWS = "http://"+ selectedIp + "/db_grupo_05_tarea_16_ejercicio_01/AccidenteRegistro.php?" +
