@@ -27,6 +27,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -303,9 +304,17 @@ public class ActaRegisterFragment extends Fragment implements Response.Listener<
                         aacta.setIdagente(AId_Agente);
                         aacta.setFecha(Afecha);
                         dbHelper.actualizarActa(aacta);
+
+                        ActualizarWebService(Acodigo,AId_Accidente,AId_Audiencia,Ahora,AId_Zona,AId_Agente,Afecha,aacta.getIdActa());
                         aacta = null;
-                        NavController navController = Navigation.findNavController(v);
-                        navController.navigateUp();
+                        if(isAdded()){
+                            try {
+                                NavController navController = Navigation.findNavController(v);
+                                navController.navigateUp();
+                            }catch(Exception e){
+                                e.printStackTrace();
+                            }
+                        }
                         Toast.makeText(getContext(), "Acta Actualizada", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(getContext(), "Acta no Actualizada", Toast.LENGTH_SHORT).show();
@@ -428,6 +437,74 @@ public class ActaRegisterFragment extends Fragment implements Response.Listener<
         });
 
         request.add(jsonObjectRequest);
+    }
+
+    private void ActualizarWebService(int codigo, int idaccidente, int idaudiencia, String hora,int idzona, int idagente, String fecha, int idacta) {
+        progressDialog = new ProgressDialog(requireActivity());
+        progressDialog.setMessage("Actualizando...");
+        progressDialog.show();
+
+        List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.1.6", "192.168.1.2");
+        // Puedes añadir más IPs según sea necesario
+        String selectedIp = "";
+        Map<String, String> userIpMap = new HashMap<>();
+        userIpMap.put("jhon", ips.get(0));
+        userIpMap.put("chagua", ips.get(1));
+        userIpMap.put("matias", ips.get(2));
+        userIpMap.put("calixto", ips.get(3));
+
+        ArrayList<Usuario> usuarios = dbHelper.get_all_Usuarios();
+        for (Usuario usuario : usuarios) {
+            selectedIp = userIpMap.get(usuario.getUsername());
+            if (selectedIp != null) {
+                break;
+            }
+        }
+
+        String urlWS = "http://" + selectedIp + "/db_grupo_05_tarea_16_ejercicio_01/ActaActualizar.php";
+
+        stringRequest = new StringRequest(Request.Method.POST, urlWS, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                if(isAdded()){
+                    if (response.trim().equalsIgnoreCase("actualiza")) {
+                        Toast.makeText(requireActivity(), "Acta actualizada correctamente", Toast.LENGTH_SHORT).show();
+                        requireActivity().getSupportFragmentManager().popBackStack();
+                    } else {
+                        Toast.makeText(requireActivity(), "Acta no se pudo actualizar", Toast.LENGTH_SHORT).show();
+                        Log.i("RESPUESTA: ", "" + response);
+                    }
+                }
+                progressDialog.hide();
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+               if(isAdded()){
+                   Toast.makeText(requireActivity(), "No se ha podido conectar", Toast.LENGTH_SHORT).show();
+               }
+                progressDialog.hide();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String,String> parametros = new HashMap<>();
+                parametros.put("codigo",String.valueOf(codigo));
+                parametros.put("idaccidente", String.valueOf(idaccidente));
+                parametros.put("idaudiencia", String.valueOf(idaudiencia));
+                parametros.put("hora",hora);
+                parametros.put("idzona",String.valueOf(idzona));
+                parametros.put("idagente",String.valueOf(idagente));
+                parametros.put("fecha", fecha);
+                parametros.put("idacta", String.valueOf(idacta));
+
+                return parametros;
+            }
+        };
+        request.add(stringRequest);
     }
 
     private void EliminarWebService(int idacta){

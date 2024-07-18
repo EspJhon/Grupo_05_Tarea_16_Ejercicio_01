@@ -140,7 +140,6 @@ public class AudienciaFragment extends Fragment implements Response.Listener<JSO
             });
             builder.setNegativeButton("Cancelar", (dialog, which) -> dialog.cancel());
         } else { // Actualizar o Eliminar
-            builder.setTitle("Actualizar Audiencia");
 
             et_lugar.setText(paudiencia.getLugar());
             et_fecha.setText(paudiencia.getFecha());

@@ -101,7 +101,8 @@
         android:hint="Nueva Fecha"
         android:background="@drawable/rounded_edittext"
         android:layout_margin="2dp"
-        android:inputType="text"
+        android:clickable="true"
+        android:focusable="false"
         android:padding="8dp"
         android:textSize="18sp"
         />

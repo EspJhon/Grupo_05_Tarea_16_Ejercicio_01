@@ -268,8 +268,14 @@ public class InfraccionRegisterFragment extends Fragment implements Response.Lis
                         dbHelper.Actualizar_Infraccion(ainfraccion);
                         ActualizarWebService(AId_Agente,AId_vehiculo,amulta,afecha,AId_Norma,ahora,ainfraccion.getIdInfraccion());
                         ainfraccion = null;
-                        NavController navController = Navigation.findNavController(v);
-                        navController.navigateUp();
+                        if (isAdded()) {
+                            try {
+                                NavController navController = Navigation.findNavController(v);
+                                navController.navigateUp();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
                         Toast.makeText(getContext(), "Infraccion Actualizada", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(getContext(), "Infraccion no Actualizada", Toast.LENGTH_SHORT).show();
@@ -418,19 +424,25 @@ public class InfraccionRegisterFragment extends Fragment implements Response.Lis
         stringRequest = new StringRequest(Request.Method.POST, urlWS, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                progressDialog.hide();
-                if (response.trim().equalsIgnoreCase("actualiza")) {
-                    Toast.makeText(requireActivity(), "Accidente actualizado correctamente", Toast.LENGTH_SHORT).show();
-                    requireActivity().getSupportFragmentManager().popBackStack();
-                } else {
-                    Toast.makeText(requireActivity(), "Accidente no se pudo actualizar", Toast.LENGTH_SHORT).show();
-                    Log.i("RESPUESTA: ", "" + response);
+
+                if(isAdded()){
+                    if (response.trim().equalsIgnoreCase("actualiza")) {
+                        Toast.makeText(requireActivity(), "Accidente actualizado correctamente", Toast.LENGTH_SHORT).show();
+                        requireActivity().getSupportFragmentManager().popBackStack();
+                    } else {
+                        Toast.makeText(requireActivity(), "Accidente no se pudo actualizar", Toast.LENGTH_SHORT).show();
+                        Log.i("RESPUESTA: ", "" + response);
+                    }
                 }
+                progressDialog.hide();
+
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(requireActivity(), "No se ha podido conectar", Toast.LENGTH_SHORT).show();
+                if(isAdded()){
+                    Toast.makeText(requireActivity(), "No se ha podido conectar", Toast.LENGTH_SHORT).show();
+                }
                 progressDialog.hide();
             }
         }){
