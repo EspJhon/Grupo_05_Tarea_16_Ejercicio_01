@@ -103,15 +103,13 @@ public class ActaFragment extends Fragment {
                 ArrayList<Agente> prueba02 = dbHelper.getAllAgentes();
                 ArrayList<Audiencia> prueba03 = dbHelper.get_all_Audiencias();
                 ArrayList<Zona> prueba04 = dbHelper.get_all_Zonas();
-                if (prueba01.isEmpty() || prueba02.isEmpty() || prueba03.isEmpty() || prueba04.isEmpty()) {
-                    Toast.makeText(getContext(), "No Existen los Registro necesarios", Toast.LENGTH_SHORT).show();
-                } else if (prueba01.isEmpty()) {
+                if (prueba01.isEmpty()) {
                     Toast.makeText(getContext(), "No Existe Accidente", Toast.LENGTH_SHORT).show();
                 } else if (prueba02.isEmpty()) {
                     Toast.makeText(getContext(), "No Existe Agente", Toast.LENGTH_SHORT).show();
                 } else if (prueba03.isEmpty()) {
                     Toast.makeText(getContext(), "No Existe Audiencia", Toast.LENGTH_SHORT).show();
-                } else if (prueba03.isEmpty()) {
+                } else if (prueba04.isEmpty()) {
                     Toast.makeText(getContext(), "No Existe Zona", Toast.LENGTH_SHORT).show();
                 } else {
                     NavController navController = Navigation.findNavController(v);

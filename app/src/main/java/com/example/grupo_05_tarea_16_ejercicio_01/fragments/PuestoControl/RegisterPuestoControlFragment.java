@@ -35,6 +35,8 @@ import com.android.volley.toolbox.Volley;
 import com.example.grupo_05_tarea_16_ejercicio_01.R;
 import com.example.grupo_05_tarea_16_ejercicio_01.adapter.IPUtilizada;
 import com.example.grupo_05_tarea_16_ejercicio_01.db.DBHelper;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Acta;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Agente;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Infraccion;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.PuestoControl;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Usuario;
@@ -215,32 +217,38 @@ public class RegisterPuestoControlFragment extends Fragment implements OnMapRead
                                 .setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
+                                        ArrayList<Agente> comprobars01 = dbHelper.getAllAgentes();
                                         PuestoControl puestoControl = dbHelper.get_Puesto_Control(idPuestoControlSeleccionado);
-                                        dbHelper.Eliminar_Puesto_Control(puestoControl);
-                                        EliminarWebService(puestoControl.getIdPuestoControl());
-                                        ArrayList<PuestoControl> comprobacion = dbHelper.get_all_Puesto_Controls_Zona(Integer.parseInt(AIdZona));
+                                        boolean exists = doesIdPuestoExist(comprobars01, puestoControl.getIdPuestoControl());
+                                        if (exists) {
+                                            Toast.makeText(getContext(), "Existen Registros Dependientes", Toast.LENGTH_SHORT).show();
+                                        }else{
+                                            dbHelper.Eliminar_Puesto_Control(puestoControl);
+                                            EliminarWebService(puestoControl.getIdPuestoControl());
+                                            ArrayList<PuestoControl> comprobacion = dbHelper.get_all_Puesto_Controls_Zona(Integer.parseInt(AIdZona));
 
-                                        // Navegar hacia arriba si la lista está vacía
-                                        if (comprobacion.isEmpty()) {
-                                            if (isAdded()) {
-                                                try {
-                                                    NavController navController = Navigation.findNavController(v);
-                                                    navController.navigateUp();
-                                                } catch (Exception e){
+                                            // Navegar hacia arriba si la lista está vacía
+                                            if (comprobacion.isEmpty()) {
+                                                if (isAdded()) {
+                                                    try {
+                                                        NavController navController = Navigation.findNavController(v);
+                                                        navController.navigateUp();
+                                                    } catch (Exception e) {
 
+                                                    }
                                                 }
-                                            }
 
-                                            Toast.makeText(requireContext(), "Puestos de la Zona eliminados correctamente", Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            Toast.makeText(requireContext(), "Puesto eliminado correctamente", Toast.LENGTH_SHORT).show();
-                                            idPuestoControlSeleccionado = 0;
-                                            mMap.clear();
-                                            Listar_Marcadores(Integer.parseInt(AIdZona));
-                                            edt_register_titulo_puesto_control.setText("");
-                                            edt_register_latitud_puesto_control.setText("");
-                                            edt_register_longitud_puesto_control.setText("");
-                                            edt_register_referencia_puesto_control.setText("");
+                                                Toast.makeText(requireContext(), "Puestos de la Zona eliminados correctamente", Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                Toast.makeText(requireContext(), "Puesto eliminado correctamente", Toast.LENGTH_SHORT).show();
+                                                idPuestoControlSeleccionado = 0;
+                                                mMap.clear();
+                                                Listar_Marcadores(Integer.parseInt(AIdZona));
+                                                edt_register_titulo_puesto_control.setText("");
+                                                edt_register_latitud_puesto_control.setText("");
+                                                edt_register_longitud_puesto_control.setText("");
+                                                edt_register_referencia_puesto_control.setText("");
+                                            }
                                         }
                                     }
                                 })
@@ -295,17 +303,26 @@ public class RegisterPuestoControlFragment extends Fragment implements OnMapRead
                             .setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    dbHelper.Eliminar_Puesto_Control_Zona(Integer.parseInt(AIdZona));
-                                    Eliminar_ZonaWebService(Integer.parseInt(AIdZona));
-                                    if (isAdded()) {
-                                        try {
-                                            NavController navController = Navigation.findNavController(v);
-                                            navController.navigateUp();
-                                        } catch (Exception e){
+                                    ArrayList<Agente> comprobars01 = dbHelper.getAllAgentes();
+                                    PuestoControl puestoControl = dbHelper.get_Puesto_Control(idPuestoControlSeleccionado);
+                                    boolean exists = doesIdPuestoExist(comprobars01, puestoControl.getIdPuestoControl());
+                                    if (exists) {
+                                        Toast.makeText(getContext(), "Existen Registros Dependientes", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        dbHelper.Eliminar_Puesto_Control_Zona(Integer.parseInt(AIdZona));
+                                        Eliminar_ZonaWebService(Integer.parseInt(AIdZona));
 
+
+                                        if (isAdded()) {
+                                            try {
+                                                NavController navController = Navigation.findNavController(v);
+                                                navController.navigateUp();
+                                            } catch (Exception e) {
+
+                                            }
                                         }
+                                        Toast.makeText(requireContext(), "Puestos de la Zona eliminados correctamente", Toast.LENGTH_SHORT).show();
                                     }
-                                    Toast.makeText(requireContext(), "Puestos de la Zona eliminados correctamente", Toast.LENGTH_SHORT).show();
                                 }
                             })
                             .setNegativeButton("Cancelar", null)
@@ -323,6 +340,14 @@ public class RegisterPuestoControlFragment extends Fragment implements OnMapRead
             });
 
         }
+    }
+    public static boolean doesIdPuestoExist(ArrayList<Agente> egentes, int idPuesto) {
+        for (Agente agente : egentes) {
+            if (agente.getIdPuestoControl() == idPuesto) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

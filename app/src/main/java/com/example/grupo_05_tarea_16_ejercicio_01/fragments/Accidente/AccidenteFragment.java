@@ -98,9 +98,7 @@ public class AccidenteFragment extends Fragment {
             public void onClick(View v) {
                 ArrayList<Vehiculo> prueba01 = dbHelper.get_all_Vehiculos();
                 ArrayList<Agente> prueba02 = dbHelper.getAllAgentes();
-                if (prueba01.isEmpty() && prueba02.isEmpty()) {
-                    Toast.makeText(getContext(), "No Existen Registro de Vehiculo y Agente", Toast.LENGTH_SHORT).show();
-                } else if (prueba01.isEmpty()) {
+                if (prueba01.isEmpty()) {
                     Toast.makeText(getContext(), "No Existe Vehiculo", Toast.LENGTH_SHORT).show();
                 } else if (prueba02.isEmpty()) {
                     Toast.makeText(getContext(), "No Existe Agente", Toast.LENGTH_SHORT).show();
