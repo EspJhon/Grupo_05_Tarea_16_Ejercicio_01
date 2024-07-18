@@ -36,8 +36,10 @@ import com.android.volley.toolbox.Volley;
 import com.example.grupo_05_tarea_16_ejercicio_01.R;
 import com.example.grupo_05_tarea_16_ejercicio_01.adapter.AudienciaAdapter;
 import com.example.grupo_05_tarea_16_ejercicio_01.db.DBHelper;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Acta;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Audiencia;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Usuario;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Vehiculo;
 
 import org.json.JSONObject;
 
@@ -173,11 +175,18 @@ public class AudienciaFragment extends Fragment implements Response.Listener<JSO
                 deleteBuilder.setTitle("Confirmar Eliminación")
                         .setMessage("¿Estás seguro de eliminar este Audiencia?")
                         .setPositiveButton("Eliminar", (dialog1, which1) -> {
-                            dbHelper.Eliminar_Audiencia(paudiencia);
-                            EliminarWebService(paudiencia.getIdAudiencia());
-                            ListarAudiencias();
-                            Toast.makeText(requireContext(), "Audiencia eliminada correctamente", Toast.LENGTH_SHORT).show();
-                        })
+
+
+                            ArrayList<Acta> comprobar = dbHelper.getAllActas();
+                            boolean exists = doesIdAudienciaExist(comprobar, paudiencia.getIdAudiencia());
+                            if (exists) {
+                                Toast.makeText(getContext(), "Existen Registros Dependientes", Toast.LENGTH_SHORT).show();
+                            } else {
+                                dbHelper.Eliminar_Audiencia(paudiencia);
+                                EliminarWebService(paudiencia.getIdAudiencia());
+                                ListarAudiencias();
+                                Toast.makeText(requireContext(), "Audiencia eliminada correctamente", Toast.LENGTH_SHORT).show();
+                            }})
                         .setNegativeButton("Cancelar", null)
                         .create().show();
             });
@@ -187,6 +196,15 @@ public class AudienciaFragment extends Fragment implements Response.Listener<JSO
 
         et_fecha.setOnClickListener(v -> showDatePickerDialog(et_fecha));
         et_hora.setOnClickListener(v -> showTimePickerDialog(et_hora));
+    }
+
+    public static boolean doesIdAudienciaExist(ArrayList<Acta> actas, int idAudienciaToCheck) {
+        for (Acta acta : actas) {
+            if (acta.getIdAudiencia() == idAudienciaToCheck) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void showDatePickerDialog(final EditText et_fecha) {

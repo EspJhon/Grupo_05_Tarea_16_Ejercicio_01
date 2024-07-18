@@ -32,6 +32,9 @@ import com.android.volley.toolbox.Volley;
 import com.example.grupo_05_tarea_16_ejercicio_01.R;
 import com.example.grupo_05_tarea_16_ejercicio_01.adapter.Vehiculo_Adapter;
 import com.example.grupo_05_tarea_16_ejercicio_01.db.DBHelper;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Accidente;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Infraccion;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.OficinaGob;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Propietario;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Usuario;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Vehiculo;
@@ -276,10 +279,50 @@ public class VehiculoFragment extends Fragment implements Vehiculo_Adapter.OnIte
     }
 
     private void eliminarVehiculo(Vehiculo vehiculo) {
-        dbHelper.Eliminar_Vehiculo(vehiculo);
+        ArrayList<OficinaGob> comprobar01 = dbHelper.get_all_Oficinas();
+        ArrayList<Accidente> comprobar02 = dbHelper.get_all_Accidentes();
+        ArrayList<Infraccion> comprobar03 = dbHelper.get_all_Infracciones();
 
-        Toast.makeText(getContext(), "Vehiculo eliminado", Toast.LENGTH_SHORT).show();
-        cargarVehiculos();
+        boolean exists = doesIdOficinaExist(comprobar01, vehiculo.getIdVehiculo());
+        boolean exists01 = doesIdAccidenteExist(comprobar02, vehiculo.getIdVehiculo());
+        boolean exists02 = doesIdInfraccionExist(comprobar03, vehiculo.getIdVehiculo());
+
+
+        if (exists || exists01 || exists02) {
+            Toast.makeText(getContext(), "Existen Registros Dependientes", Toast.LENGTH_SHORT).show();
+        } else {
+            dbHelper.Eliminar_Vehiculo(vehiculo);
+
+            Toast.makeText(getContext(), "Vehiculo eliminado", Toast.LENGTH_SHORT).show();
+            cargarVehiculos();
+        }
+    }
+
+    public static boolean doesIdOficinaExist(ArrayList<OficinaGob> oficinas, int idOficinaToCheck) {
+        for (OficinaGob oficina : oficinas) {
+            if (oficina.getIdVehiculo() == idOficinaToCheck) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean doesIdAccidenteExist(ArrayList<Accidente> accidentes, int idAccidenteToCheck) {
+        for (Accidente accidente : accidentes) {
+            if (accidente.getIdVehiculo() == idAccidenteToCheck) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean doesIdInfraccionExist(ArrayList<Infraccion> infracciones, int idInfraccionToCheck) {
+        for (Infraccion infraccion : infracciones) {
+            if (infraccion.getIdVehiculo() == idInfraccionToCheck) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void actualizarVehiculo(Vehiculo vehiculo) {
