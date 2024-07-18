@@ -30,6 +30,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.grupo_05_tarea_16_ejercicio_01.R;
+import com.example.grupo_05_tarea_16_ejercicio_01.adapter.IPUtilizada;
 import com.example.grupo_05_tarea_16_ejercicio_01.adapter.Vehiculo_Adapter;
 import com.example.grupo_05_tarea_16_ejercicio_01.db.DBHelper;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Propietario;
@@ -363,20 +364,14 @@ public class VehiculoFragment extends Fragment implements Vehiculo_Adapter.OnIte
         progressDialog = new ProgressDialog(requireActivity());
         progressDialog.setMessage("Registrando...");
         progressDialog.show();
-        List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.1.6", "192.168.1.2");
         // Puedes añadir más IPs según sea necesario
         String selectedIp = "";
-        Map<String, String> userIpMap = new HashMap<>();
-        userIpMap.put("jhon", ips.get(0));
-        userIpMap.put("chagua", ips.get(1));
-        userIpMap.put("matias", ips.get(2));
-        userIpMap.put("calixto", ips.get(3));
 
         ArrayList<Usuario> usuarios = dbHelper.get_all_Usuarios();
         for (Usuario usuario : usuarios) {
-            selectedIp = userIpMap.get(usuario.getUsername());
+            selectedIp = IPUtilizada.getInstance().getSelectedIP(usuario.getUsername());
             if (selectedIp != null) {
-                break; // Exit loop after finding a match
+                break;
             }
         }
 
@@ -427,17 +422,12 @@ public class VehiculoFragment extends Fragment implements Vehiculo_Adapter.OnIte
         progressDialog.setMessage("Actualizando...");
         progressDialog.show();
 
-        List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.1.6");
         // Puedes añadir más IPs según sea necesario
         String selectedIp = "";
-        Map<String, String> userIpMap = new HashMap<>();
-        userIpMap.put("jhon", ips.get(0));
-        userIpMap.put("chagua", ips.get(1));
-        userIpMap.put("matias", ips.get(2));
 
         ArrayList<Usuario> usuarios = dbHelper.get_all_Usuarios();
         for (Usuario usuario : usuarios) {
-            selectedIp = userIpMap.get(usuario.getUsername());
+            selectedIp = IPUtilizada.getInstance().getSelectedIP(usuario.getUsername());
             if (selectedIp != null) {
                 break;
             }
@@ -527,17 +517,12 @@ public class VehiculoFragment extends Fragment implements Vehiculo_Adapter.OnIte
         progressDialog.setMessage("Eliminando...");
         progressDialog.show();
 
-        List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.1.6");
         // Puedes añadir más IPs según sea necesario
         String selectedIp = "";
-        Map<String, String> userIpMap = new HashMap<>();
-        userIpMap.put("jhon", ips.get(0));
-        userIpMap.put("chagua", ips.get(1));
-        userIpMap.put("matias", ips.get(2));
 
         ArrayList<Usuario> usuarios = dbHelper.get_all_Usuarios();
         for (Usuario usuario : usuarios) {
-            selectedIp = userIpMap.get(usuario.getUsername());
+            selectedIp = IPUtilizada.getInstance().getSelectedIP(usuario.getUsername());
             if (selectedIp != null) {
                 break;
             }

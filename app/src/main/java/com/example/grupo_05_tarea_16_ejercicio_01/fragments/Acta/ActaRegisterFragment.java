@@ -36,6 +36,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.grupo_05_tarea_16_ejercicio_01.R;
+import com.example.grupo_05_tarea_16_ejercicio_01.adapter.IPUtilizada;
 import com.example.grupo_05_tarea_16_ejercicio_01.db.DBHelper;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Accidente;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Acta;
@@ -385,18 +386,12 @@ public class ActaRegisterFragment extends Fragment implements Response.Listener<
         progressDialog.setMessage("Registrando...");
         progressDialog.show();
 
-        List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.1.6", "192.168.1.2");
         // Puedes añadir más IPs según sea necesario
         String selectedIp = "";
-        Map<String, String> userIpMap = new HashMap<>();
-        userIpMap.put("jhon", ips.get(0));
-        userIpMap.put("chagua", ips.get(1));
-        userIpMap.put("matias", ips.get(2));
-        userIpMap.put("calixto", ips.get(3));
 
         ArrayList<Usuario> usuarios = dbHelper.get_all_Usuarios();
         for (Usuario usuario : usuarios) {
-            selectedIp = userIpMap.get(usuario.getUsername());
+            selectedIp = IPUtilizada.getInstance().getSelectedIP(usuario.getUsername());
             if (selectedIp != null) {
                 break;
             }
@@ -420,7 +415,7 @@ public class ActaRegisterFragment extends Fragment implements Response.Listener<
             public void onResponse(JSONObject response) {
                 if (isAdded()) {  // Verifica si el fragmento está adjunto antes de interactuar con la UI
 
-                    Toast.makeText(requireActivity(), "Zona registrado correctamente", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireActivity(), "Acta registrado correctamente", Toast.LENGTH_SHORT).show();
                     // preguntarle a chagua del runable
                 }
                 progressDialog.hide();
@@ -512,17 +507,12 @@ public class ActaRegisterFragment extends Fragment implements Response.Listener<
         progressDialog.setMessage("Eliminando...");
         progressDialog.show();
 
-        List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.1.6");
         // Puedes añadir más IPs según sea necesario
         String selectedIp = "";
-        Map<String, String> userIpMap = new HashMap<>();
-        userIpMap.put("jhon", ips.get(0));
-        userIpMap.put("chagua", ips.get(1));
-        userIpMap.put("matias", ips.get(2));
 
         ArrayList<Usuario> usuarios = dbHelper.get_all_Usuarios();
         for (Usuario usuario : usuarios) {
-            selectedIp = userIpMap.get(usuario.getUsername());
+            selectedIp = IPUtilizada.getInstance().getSelectedIP(usuario.getUsername());
             if (selectedIp != null) {
                 break;
             }
@@ -569,7 +559,6 @@ public class ActaRegisterFragment extends Fragment implements Response.Listener<
     public void onErrorResponse(VolleyError error) {
 
     }
-
     @Override
     public void onResponse(JSONObject response) {
 

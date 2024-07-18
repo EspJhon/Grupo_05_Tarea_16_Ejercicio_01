@@ -98,7 +98,7 @@ public class AccidenteFragment extends Fragment {
             public void onClick(View v) {
                 ArrayList<Vehiculo> prueba01 = dbHelper.get_all_Vehiculos();
                 ArrayList<Agente> prueba02 = dbHelper.getAllAgentes();
-                if (prueba01.isEmpty() || prueba02.isEmpty()) {
+                if (prueba01.isEmpty() && prueba02.isEmpty()) {
                     Toast.makeText(getContext(), "No Existen Registro de Vehiculo y Agente", Toast.LENGTH_SHORT).show();
                 } else if (prueba01.isEmpty()) {
                     Toast.makeText(getContext(), "No Existe Vehiculo", Toast.LENGTH_SHORT).show();
@@ -146,9 +146,19 @@ public class AccidenteFragment extends Fragment {
                                 navController.navigate(R.id.action_accidenteFragment_to_actualizarAccidenteFragment,bundle);
                                 break;
                             case 1:
-                                dbHelper.Eliminar_Accidente(accidente);
-                                EliminarWebService(accidente.getIdaccidente());
-                                ListarAccidentes();
+                                AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+                                builder.setTitle("Confirmar Eliminación")
+                                        .setMessage("¿Estás seguro de eliminar este Puesto?")
+                                        .setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dbHelper.Eliminar_Accidente(accidente);
+                                                EliminarWebService(accidente.getIdaccidente());
+                                                ListarAccidentes();
+                                            }
+                                        })
+                                        .setNegativeButton("Cancelar", null)
+                                        .create().show();
                                 break;
                         }
                     }

@@ -22,14 +22,6 @@
             android:textStyle="bold"
             android:text="Registrar propietario"/>
 
-        <Button
-            android:id="@+id/btn_logout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            android:background="@drawable/rounded_button_black"
-            android:text="Cerrar sesión"/>
 
         <ListView
             android:id="@+id/lv_propietarios"

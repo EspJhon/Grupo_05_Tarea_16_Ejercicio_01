@@ -30,6 +30,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.grupo_05_tarea_16_ejercicio_01.R;
+import com.example.grupo_05_tarea_16_ejercicio_01.adapter.IPUtilizada;
 import com.example.grupo_05_tarea_16_ejercicio_01.adapter.Propietario_Adapter;
 import com.example.grupo_05_tarea_16_ejercicio_01.db.DBHelper;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Propietario;
@@ -51,7 +52,6 @@ public class PropietarioFragment extends Fragment implements Propietario_Adapter
     private ArrayList<Propietario> datos;
     private Dialog dialog;
     private Propietario propietarioSeleccionado;
-    private Button btnLogout;
 
     private ProgressDialog progressDialog;
     ProgressDialog progreso;
@@ -72,7 +72,7 @@ public class PropietarioFragment extends Fragment implements Propietario_Adapter
         //LLAMADA AL DIALOG REGISTRAR
         view.findViewById(R.id.btn_registrar_propietario).setOnClickListener(this::onClick);
         lv_propietarios = view.findViewById(R.id.lv_propietarios);
-        btnLogout = view.findViewById(R.id.btn_logout);
+
 
         Listar();
 
@@ -88,7 +88,6 @@ public class PropietarioFragment extends Fragment implements Propietario_Adapter
         Button btnVolver = dialog.findViewById(R.id.btn_volver);
         btnVolver.setOnClickListener(v -> dialog.dismiss());
 
-        btnLogout.setOnClickListener(v -> logoutUser());
 
         // Implementar OnBackPressedCallback
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
@@ -256,20 +255,14 @@ public class PropietarioFragment extends Fragment implements Propietario_Adapter
         progreso.setMessage("Cargando...");
         progreso.show();
 
-        List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.1.6", "192.168.1.2");
         // Puedes añadir más IPs según sea necesario
         String selectedIp = "";
-        Map<String, String> userIpMap = new HashMap<>();
-        userIpMap.put("jhon", ips.get(0));
-        userIpMap.put("chagua", ips.get(1));
-        userIpMap.put("matias", ips.get(2));
-        userIpMap.put("calixto", ips.get(3));
 
         ArrayList<Usuario> usuarios = dbHelper.get_all_Usuarios();
         for (Usuario usuario : usuarios) {
-            selectedIp = userIpMap.get(usuario.getUsername());
+            selectedIp = IPUtilizada.getInstance().getSelectedIP(usuario.getUsername());
             if (selectedIp != null) {
-                break; // Exit loop after finding a match
+                break;
             }
         }
 
@@ -293,7 +286,7 @@ public class PropietarioFragment extends Fragment implements Propietario_Adapter
     @Override
     public void onResponse(JSONObject response) {
         progreso.hide();
-        Toast.makeText(requireActivity(), "Mensaje: " + response.toString(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(requireActivity(), "Propietario Registrado correctamente", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -303,16 +296,12 @@ public class PropietarioFragment extends Fragment implements Propietario_Adapter
         progressDialog.setMessage("Actualizando...");
         progressDialog.show();
 
-        List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.1.6");
+        // Puedes añadir más IPs según sea necesario
         String selectedIp = "";
-        Map<String, String> userIpMap = new HashMap<>();
-        userIpMap.put("jhon", ips.get(0));
-        userIpMap.put("chagua", ips.get(1));
-        userIpMap.put("matias", ips.get(2));
 
         ArrayList<Usuario> usuarios = dbHelper.get_all_Usuarios();
         for (Usuario usuario : usuarios) {
-            selectedIp = userIpMap.get(usuario.getUsername());
+            selectedIp = IPUtilizada.getInstance().getSelectedIP(usuario.getUsername());
             if (selectedIp != null) {
                 break;
             }
@@ -367,17 +356,12 @@ public class PropietarioFragment extends Fragment implements Propietario_Adapter
         progressDialog.setMessage("Eliminando...");
         progressDialog.show();
 
-        List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.1.6");
         // Puedes añadir más IPs según sea necesario
         String selectedIp = "";
-        Map<String, String> userIpMap = new HashMap<>();
-        userIpMap.put("jhon", ips.get(0));
-        userIpMap.put("chagua", ips.get(1));
-        userIpMap.put("matias", ips.get(2));
 
         ArrayList<Usuario> usuarios = dbHelper.get_all_Usuarios();
         for (Usuario usuario : usuarios) {
-            selectedIp = userIpMap.get(usuario.getUsername());
+            selectedIp = IPUtilizada.getInstance().getSelectedIP(usuario.getUsername());
             if (selectedIp != null) {
                 break;
             }

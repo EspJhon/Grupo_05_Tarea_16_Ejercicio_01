@@ -51,7 +51,8 @@
             android:title="Puesto de Control" />
         <item
             android:id="@+id/nav_cerrar"
-            android:icon="@drawable/ic_puesto_control_agregar"
-            android:title="Cerrar sesión" />
+            android:icon="@drawable/ic_cerrar_sesion"
+            android:title="Cerrar sesión"
+            android:background="@drawable/background_red" />
     </group>
 </menu>

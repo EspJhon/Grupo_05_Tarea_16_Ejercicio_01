@@ -34,6 +34,7 @@ import com.example.grupo_05_tarea_16_ejercicio_01.adapter.OficinaAdapter;
 import com.example.grupo_05_tarea_16_ejercicio_01.db.DBHelper;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Accidente;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.OficinaGob;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.PuestoControl;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Usuario;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Vehiculo;
 
@@ -138,9 +139,19 @@ public class OficinaGobFragment extends Fragment {
                                 navController.navigate(R.id.action_oficinaGobFragment_to_actualizarOficinaFragment,bundle);
                                 break;
                             case 1:
-                                dbHelper.Eliminar_Oficina(oficinaGob);
-                                EliminarWebService(oficinaGob.getIdOficina());
-                                ListarOficinas();
+                                AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+                                builder.setTitle("Confirmar Eliminación")
+                                        .setMessage("¿Estás seguro de eliminar este Puesto?")
+                                        .setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dbHelper.Eliminar_Oficina(oficinaGob);
+                                                EliminarWebService(oficinaGob.getIdOficina());
+                                                ListarOficinas();
+                                            }
+                                        })
+                                        .setNegativeButton("Cancelar", null)
+                                        .create().show();
                                 break;
                         }
                     }

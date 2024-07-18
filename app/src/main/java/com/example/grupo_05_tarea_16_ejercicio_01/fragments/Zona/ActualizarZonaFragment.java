@@ -1,6 +1,8 @@
 package com.example.grupo_05_tarea_16_ejercicio_01.fragments.Zona;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -26,6 +28,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.grupo_05_tarea_16_ejercicio_01.R;
+import com.example.grupo_05_tarea_16_ejercicio_01.adapter.IPUtilizada;
 import com.example.grupo_05_tarea_16_ejercicio_01.db.DBHelper;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Usuario;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Zona;
@@ -192,24 +195,34 @@ public class ActualizarZonaFragment extends Fragment implements OnMapReadyCallba
         }
     }
     private void eliminarZona() {
-        Zona zona = dbHelper.get_Zona(clatitud,clongitud);
-        if (zona != null) {
-            dbHelper.Eliminar_Zona(zona);
-            EliminarWebService(zona.getIdZona());
-            if (isAdded()) {
-                try {
-                    NavController navController = Navigation.findNavController(requireView());
-                    navController.popBackStack();
-                } catch (Exception e){
-                    e.printStackTrace();
-                }
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Confirmar Eliminación")
+                .setMessage("¿Estás seguro de eliminar este Puesto?")
+                .setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Zona zona = dbHelper.get_Zona(clatitud,clongitud);
+                        if (zona != null) {
+                            dbHelper.Eliminar_Zona(zona);
+                            EliminarWebService(zona.getIdZona());
+                            if (isAdded()) {
+                                try {
+                                    NavController navController = Navigation.findNavController(requireView());
+                                    navController.popBackStack();
+                                } catch (Exception e){
+                                    e.printStackTrace();
+                                }
 
-            }
-            Toast.makeText(getContext(), "Zona Eliminada", Toast.LENGTH_SHORT).show();
+                            }
+                            Toast.makeText(getContext(), "Zona Eliminada", Toast.LENGTH_SHORT).show();
 
-        } else {
-            Toast.makeText(getContext(), "Zona no Eliminada", Toast.LENGTH_SHORT).show();
-        }
+                        } else {
+                            Toast.makeText(getContext(), "Zona no Eliminada", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .setNegativeButton("Cancelar", null)
+                .create().show();
     }
 
     private void ActualizarWebService(String adepartamento, String aprovincia, String adistrito, String alatitud, String alongitud, String atitulo, int AId_Zona) {
@@ -217,18 +230,12 @@ public class ActualizarZonaFragment extends Fragment implements OnMapReadyCallba
         progressDialog.setMessage("Actualizando...");
         progressDialog.show();
 
-        List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.1.6", "192.168.1.2");
         // Puedes añadir más IPs según sea necesario
         String selectedIp = "";
-        Map<String, String> userIpMap = new HashMap<>();
-        userIpMap.put("jhon", ips.get(0));
-        userIpMap.put("chagua", ips.get(1));
-        userIpMap.put("matias", ips.get(2));
-        userIpMap.put("calixto", ips.get(3));
 
         ArrayList<Usuario> usuarios = dbHelper.get_all_Usuarios();
         for (Usuario usuario : usuarios) {
-            selectedIp = userIpMap.get(usuario.getUsername());
+            selectedIp = IPUtilizada.getInstance().getSelectedIP(usuario.getUsername());
             if (selectedIp != null) {
                 break;
             }
@@ -292,17 +299,12 @@ public class ActualizarZonaFragment extends Fragment implements OnMapReadyCallba
         progressDialog.setMessage("Eliminando...");
         progressDialog.show();
 
-        List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.1.6");
         // Puedes añadir más IPs según sea necesario
         String selectedIp = "";
-        Map<String, String> userIpMap = new HashMap<>();
-        userIpMap.put("jhon", ips.get(0));
-        userIpMap.put("chagua", ips.get(1));
-        userIpMap.put("matias", ips.get(2));
 
         ArrayList<Usuario> usuarios = dbHelper.get_all_Usuarios();
         for (Usuario usuario : usuarios) {
-            selectedIp = userIpMap.get(usuario.getUsername());
+            selectedIp = IPUtilizada.getInstance().getSelectedIP(usuario.getUsername());
             if (selectedIp != null) {
                 break;
             }
@@ -318,10 +320,10 @@ public class ActualizarZonaFragment extends Fragment implements OnMapReadyCallba
                 if (isAdded()) {
                     try {
                         if (response.trim().equalsIgnoreCase("elimina")) {
-                            Toast.makeText(requireActivity(), "Oficina eliminada correctamente", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(requireActivity(), "Zona eliminada correctamente", Toast.LENGTH_SHORT).show();
                         } else {
                             if (response.trim().equalsIgnoreCase("noExiste")) {
-                                Toast.makeText(requireActivity(), "No se encuentra la oficina", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(requireActivity(), "No se encuentra la Zona", Toast.LENGTH_SHORT).show();
                             } else {
                                 Toast.makeText(requireActivity(), "No se ha eliminado", Toast.LENGTH_SHORT).show();
                             }
