@@ -10,6 +10,7 @@
         android:id="@+id/sv_accidente"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -25,12 +26,11 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Numero de placa:                    Agente:"
                     android:layout_margin="5dp"
-                    android:textStyle="bold"
-                    android:textSize="16sp"
+                    android:text="Numero de placa:                    Agente:"
                     android:textColor="@color/black"
-                    />
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -50,19 +50,19 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:padding="10dp"/>
+                        android:padding="10dp" />
 
                 </LinearLayout>
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Fecha y Hora:"
                     android:layout_margin="5dp"
-                    android:textStyle="bold"
                     android:gravity="center"
-                    android:textSize="16sp"
+                    android:text="Fecha y Hora:"
                     android:textColor="@color/black"
-                    />
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -73,13 +73,13 @@
                         android:id="@+id/et_hora"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
                         android:layout_weight="1"
                         android:background="@drawable/rounded_edittext"
-                        android:layout_margin="2dp"
-                        android:inputType="time"
-                        android:hint="Hora"
+                        android:clickable="true"
                         android:focusable="false"
-                        android:clickable="true"/>
+                        android:hint="Hora"
+                        android:inputType="time" />
 
                     <EditText
                         android:id="@+id/et_fecha"
@@ -87,11 +87,11 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="2dp"
                         android:layout_weight="1"
-                        android:inputType="date"
                         android:background="@drawable/rounded_edittext"
                         android:clickable="true"
                         android:focusable="false"
-                        android:hint="Fecha" />
+                        android:hint="Fecha"
+                        android:inputType="date" />
 
                 </LinearLayout>
 
@@ -103,40 +103,40 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Titulo:"
                         android:layout_margin="5dp"
-                        android:textStyle="bold"
+                        android:text="Titulo:"
+                        android:textColor="@color/black"
                         android:textSize="16sp"
-                        android:textColor="@color/black"/>
+                        android:textStyle="bold" />
 
                     <EditText
                         android:id="@+id/et_titulo_accidente"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Titulo"
+                        android:layout_margin="2dp"
                         android:background="@drawable/rounded_edittext"
-                        android:layout_margin="2dp"/>
+                        android:hint="Titulo" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Descripcion:"
                         android:layout_margin="5dp"
-                        android:textStyle="bold"
+                        android:text="Descripcion:"
+                        android:textColor="@color/black"
                         android:textSize="16sp"
-                        android:textColor="@color/black"/>
+                        android:textStyle="bold" />
 
                     <EditText
                         android:id="@+id/et_descripcion_accidente"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:background="@drawable/rounded_edittext"
                         android:gravity="top"
                         android:hint="Descripcion"
                         android:inputType="textMultiLine"
                         android:maxLines="6"
                         android:minLines="4"
-                        android:background="@drawable/rounded_edittext"
-                        android:layout_margin="2dp"
                         android:overScrollMode="always"
                         android:padding="10dp" />
                 </LinearLayout>
@@ -144,13 +144,14 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
                     android:orientation="horizontal">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_gravity="center">
+                        android:layout_gravity="center"
+                        android:orientation="vertical">
 
                         <Button
                             android:id="@+id/btn_tomarFoto"
@@ -170,8 +171,12 @@
 
                     <ImageView
                         android:id="@+id/iv_imagenAccidente"
-                        android:layout_width="match_parent"
-                        android:layout_height="200dp" />
+                        android:layout_width="250dp"
+                        android:layout_height="200dp"
+                        android:layout_marginVertical="20dp"
+                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/bg_image_view"
+                        android:padding="3dp" />
 
                 </LinearLayout>
 
@@ -183,19 +188,19 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Lugar:"
                         android:layout_margin="5dp"
-                        android:textStyle="bold"
+                        android:text="Lugar:"
+                        android:textColor="@color/black"
                         android:textSize="16sp"
-                        android:textColor="@color/black"/>
+                        android:textStyle="bold" />
 
                     <EditText
                         android:id="@+id/et_nombreLugar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Nombre del lugar"
+                        android:layout_margin="5dp"
                         android:background="@drawable/rounded_edittext"
-                        android:layout_margin="5dp"/>
+                        android:hint="Nombre del lugar" />
 
                     <fragment
                         android:id="@+id/fr_ubicacionAccidente"
@@ -209,8 +214,8 @@
                     android:id="@+id/btn_agregarAccidente"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/rounded_button_black"
                     android:layout_margin="10dp"
+                    android:background="@drawable/rounded_button_black"
                     android:text="Añadir" />
 
             </LinearLayout>
