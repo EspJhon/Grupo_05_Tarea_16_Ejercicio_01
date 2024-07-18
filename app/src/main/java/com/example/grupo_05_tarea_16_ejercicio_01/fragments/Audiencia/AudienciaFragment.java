@@ -175,6 +175,7 @@ public class AudienciaFragment extends Fragment implements Response.Listener<JSO
                         .setMessage("¿Estás seguro de eliminar este Audiencia?")
                         .setPositiveButton("Eliminar", (dialog1, which1) -> {
                             dbHelper.Eliminar_Audiencia(paudiencia);
+                            EliminarWebService(paudiencia.getIdAudiencia());
                             ListarAudiencias();
                             Toast.makeText(requireContext(), "Audiencia eliminada correctamente", Toast.LENGTH_SHORT).show();
                         })
@@ -319,6 +320,61 @@ public class AudienciaFragment extends Fragment implements Response.Listener<JSO
                 return parametros;
             }
         };
+        request.add(stringRequest);
+    }
+
+    private void EliminarWebService(int idaudiencia){
+        progressDialog = new ProgressDialog(requireActivity());
+        progressDialog.setMessage("Eliminando...");
+        progressDialog.show();
+
+        List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.1.6");
+        // Puedes añadir más IPs según sea necesario
+        String selectedIp = "";
+        Map<String, String> userIpMap = new HashMap<>();
+        userIpMap.put("jhon", ips.get(0));
+        userIpMap.put("chagua", ips.get(1));
+        userIpMap.put("matias", ips.get(2));
+
+        ArrayList<Usuario> usuarios = dbHelper.get_all_Usuarios();
+        for (Usuario usuario : usuarios) {
+            selectedIp = userIpMap.get(usuario.getUsername());
+            if (selectedIp != null) {
+                break;
+            }
+        }
+
+        String urlWS = "http://" + selectedIp + "/db_grupo_05_tarea_16_ejercicio_01/AudienciaEliminar.php?" + "idaudiencia="+idaudiencia;
+
+        stringRequest = new StringRequest(Request.Method.GET, urlWS, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                progressDialog.hide();
+
+                if (response.trim().equalsIgnoreCase("elimina")) {
+                    Toast.makeText(requireActivity(), "Audiencia eliminada correctamente", Toast.LENGTH_SHORT).show();
+                } else {
+                    if (response.trim().equalsIgnoreCase("noExiste")) {
+                        Toast.makeText(requireActivity(), "No se encuentra la audiencia", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(requireActivity(), "No se ha eliminado", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                String errorM = error.getMessage();
+                if (error.networkResponse != null) {
+                    errorM += " Estado: " + error.networkResponse.statusCode;
+                }
+                Log.e("EliminarWebService", "Error: " + errorM);
+                //Toast.makeText(requireActivity(), "No se ha podido conectar: " + errorM, Toast.LENGTH_SHORT).show();
+                progressDialog.hide();
+            }
+        });
         request.add(stringRequest);
     }
 
