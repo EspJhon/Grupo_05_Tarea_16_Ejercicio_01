@@ -8,21 +8,23 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_margin="10dp"
         android:background="@drawable/rounded_item"
-        android:layout_margin="10dp">
+        android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="N° de placa:"
                 android:paddingTop="5dp"
+                android:text="N° de placa:"
+                android:textColor="@color/black"
                 android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="@color/black"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tv_numPlaca"
@@ -39,24 +41,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Marca:"
                 android:paddingTop="5dp"
+                android:text="Marca:"
+                android:textColor="@color/black"
                 android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="@color/black"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tv_marca"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:paddingTop="5dp"
                 android:gravity="center"
                 android:lines="1"
+                android:paddingTop="5dp"
                 android:text="**************"
+                android:textColor="@color/black"
                 android:textSize="15sp" />
 
         </LinearLayout>
@@ -65,24 +69,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Modelo:"
                 android:paddingTop="5dp"
+                android:text="Modelo:"
+                android:textColor="@color/black"
                 android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="@color/black"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tv_modelo"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:paddingTop="5dp"
                 android:gravity="center"
                 android:lines="1"
+                android:paddingTop="5dp"
                 android:text="**************"
+                android:textColor="@color/black"
                 android:textSize="15sp" />
 
         </LinearLayout>
@@ -95,21 +101,22 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Motor:"
                 android:paddingTop="5dp"
+                android:text="Motor:"
+                android:textColor="@color/black"
                 android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="@color/black"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tv_motor"
                 android:layout_width="0dp"
-                android:paddingTop="5dp"
-                android:gravity="center"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:gravity="center"
                 android:lines="1"
+                android:paddingTop="5dp"
                 android:text="**************"
+                android:textColor="@color/black"
                 android:textSize="15sp" />
 
         </LinearLayout>
@@ -122,21 +129,22 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Fecha:"
                 android:paddingTop="5dp"
+                android:text="Fecha:"
+                android:textColor="@color/black"
                 android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="@color/black"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tv_fecha"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:paddingTop="5dp"
                 android:gravity="center"
                 android:lines="1"
+                android:paddingTop="5dp"
                 android:text="**************"
+                android:textColor="@color/black"
                 android:textSize="15sp" />
 
         </LinearLayout>
@@ -145,24 +153,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Propietario:"
                 android:paddingTop="5dp"
+                android:text="Propietario:"
+                android:textColor="@color/black"
                 android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="@color/black"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tv_propietario"
                 android:layout_width="0dp"
-                android:paddingTop="5dp"
-                android:gravity="center"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:gravity="center"
                 android:lines="1"
+                android:paddingTop="5dp"
                 android:text="**************"
+                android:textColor="@color/black"
                 android:textSize="15sp" />
 
         </LinearLayout>

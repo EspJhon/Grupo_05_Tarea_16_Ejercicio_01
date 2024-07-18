@@ -33,6 +33,7 @@
                     android:id="@+id/tv_lugar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:textSize="16sp"
                     android:text="[Lugar]"
                     android:textStyle="bold" />
@@ -56,6 +57,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
                     android:text="[Hora]"
+                    android:textColor="@color/black"
                     android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
@@ -83,6 +85,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
                     android:text="[Código]"
+                    android:textColor="@color/black"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -102,6 +105,7 @@
                     android:id="@+id/tv_hora"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="[Fecha]"
                     android:textSize="16sp"
                     android:textStyle="bold" />

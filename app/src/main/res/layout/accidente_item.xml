@@ -83,7 +83,7 @@
             android:textColor="@color/black"/>
 
         <TextView
-            android:id="@+id/tv_descripcion"
+            android:id="@+id/tv_titulo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="[Descripción]"

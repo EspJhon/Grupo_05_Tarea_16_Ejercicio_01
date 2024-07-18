@@ -32,8 +32,10 @@ import com.example.grupo_05_tarea_16_ejercicio_01.R;
 import com.example.grupo_05_tarea_16_ejercicio_01.adapter.AgenteAdapter;
 import com.example.grupo_05_tarea_16_ejercicio_01.adapter.IPUtilizada;
 import com.example.grupo_05_tarea_16_ejercicio_01.db.DBHelper;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Accidente;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Acta;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Agente;
+import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Infraccion;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.NormasDet;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.PuestoControl;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Usuario;
@@ -349,11 +351,27 @@ public class AgenteFragment extends Fragment implements Response.Listener<JSONOb
                 .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+
                         Agente agente = agenteList.get(position);
-                        dbHelper.eliminarAgente(agente.getIdagente());
-                        EliminarWebService(agente.getIdagente());
-                        actualizarListaAgentes();
-                        Toast.makeText(requireContext(), "Agente eliminado correctamente", Toast.LENGTH_SHORT).show();
+
+                        ArrayList<Acta> comprobar01 = dbHelper.getAllActas();
+                        ArrayList<Accidente> comprobar02 = dbHelper.get_all_Accidentes();
+                        ArrayList<Infraccion> comprobar03 = dbHelper.get_all_Infracciones();
+
+                        boolean exists01 = doesIdActaExist(comprobar01, agente.getIdagente());
+                        boolean exists02 = doesIdAccidenteExist(comprobar02, agente.getIdagente());
+                        boolean exists03 = doesIdInfraccionExist(comprobar03, agente.getIdagente());
+
+                        if (exists01 || exists02 || exists03) {
+                            Toast.makeText(getContext(), "Existen Registros Dependientes", Toast.LENGTH_SHORT).show();
+                        } else {
+
+                            dbHelper.eliminarAgente(agente.getIdagente());
+                            EliminarWebService(agente.getIdagente());
+                            actualizarListaAgentes();
+                            Toast.makeText(requireContext(), "Agente eliminado correctamente", Toast.LENGTH_SHORT).show();
+
+                        }
                     }
                 })
                 .setNegativeButton("No", null);
@@ -529,4 +547,32 @@ public class AgenteFragment extends Fragment implements Response.Listener<JSONOb
     public void onResponse(JSONObject response) {
 
     }
+
+    public static boolean doesIdActaExist(ArrayList<Acta> actas, int idActaToCheck) {
+        for (Acta acta : actas) {
+            if (acta.getIdagente() == idActaToCheck) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean doesIdAccidenteExist(ArrayList<Accidente> accidentes, int idAccidenteToCheck) {
+        for (Accidente accidente : accidentes) {
+            if (accidente.getIdagente() == idAccidenteToCheck) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean doesIdInfraccionExist(ArrayList<Infraccion> infracciones, int idInfraccionToCheck) {
+        for (Infraccion infraccion : infracciones) {
+            if (infraccion.getIdagente() == idInfraccionToCheck) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
