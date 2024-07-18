@@ -80,11 +80,8 @@ public class RegisterFragment extends Fragment implements Response.Listener<JSON
         progreso.setMessage("Cargando...");
         progreso.show();
 
-<<<<<<< HEAD
-        String url = "http://192.168.50.70/db_grupo_05_tarea_16_ejercicio_01/UsuarioRegistro.php?usuario=" + usuario + "&contrasena=" + contrasena;
-=======
+
         String url = "http://192.168.50.90/db_grupo_05_tarea_16_ejercicio_01/UsuarioRegistro.php?usuario=" + usuario + "&contrasena=" + contrasena;
->>>>>>> 6926f452f7a89917ce549e22b866974fd3035382
 
         url = url.replace(" ", "%20");
                                                                                                                                                                                             
