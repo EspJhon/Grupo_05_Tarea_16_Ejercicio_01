@@ -33,6 +33,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.grupo_05_tarea_16_ejercicio_01.R;
+import com.example.grupo_05_tarea_16_ejercicio_01.adapter.IPUtilizada;
 import com.example.grupo_05_tarea_16_ejercicio_01.db.DBHelper;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.Infraccion;
 import com.example.grupo_05_tarea_16_ejercicio_01.modelo.PuestoControl;
@@ -274,6 +275,7 @@ public class RegisterPuestoControlFragment extends Fragment implements OnMapRead
                             edt_register_longitud_puesto_control.setText("");
                             edt_register_referencia_puesto_control.setText("");
                             idPuestoControlSeleccionado = 0;
+                            Listar_Marcadores(AIdZona); // tener cuidado
                             Toast.makeText(getContext(), "Puesto Actualizado", Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(getContext(), "Puesto no Actualizado", Toast.LENGTH_SHORT).show();
@@ -405,20 +407,14 @@ public class RegisterPuestoControlFragment extends Fragment implements OnMapRead
         progreso = new ProgressDialog(requireActivity());
         progreso.setMessage("Cargando...");
         progreso.show();
-        List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.1.6", "192.168.1.2");
         // Puedes añadir más IPs según sea necesario
         String selectedIp = "";
-        Map<String, String> userIpMap = new HashMap<>();
-        userIpMap.put("jhon", ips.get(0));
-        userIpMap.put("chagua", ips.get(1));
-        userIpMap.put("matias", ips.get(2));
-        userIpMap.put("calixto", ips.get(3));
 
         ArrayList<Usuario> usuarios = dbHelper.get_all_Usuarios();
         for (Usuario usuario : usuarios) {
-            selectedIp = userIpMap.get(usuario.getUsername());
+            selectedIp = IPUtilizada.getInstance().getSelectedIP(usuario.getUsername());
             if (selectedIp != null) {
-                break; // Exit loop after finding a match
+                break;
             }
         }
 
@@ -458,18 +454,12 @@ public class RegisterPuestoControlFragment extends Fragment implements OnMapRead
         progreso.setMessage("Actualizando...");
         progreso.show();
 
-        List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.1.6", "192.168.1.2");
         // Puedes añadir más IPs según sea necesario
         String selectedIp = "";
-        Map<String, String> userIpMap = new HashMap<>();
-        userIpMap.put("jhon", ips.get(0));
-        userIpMap.put("chagua", ips.get(1));
-        userIpMap.put("matias", ips.get(2));
-        userIpMap.put("calixto", ips.get(3));
 
         ArrayList<Usuario> usuarios = dbHelper.get_all_Usuarios();
         for (Usuario usuario : usuarios) {
-            selectedIp = userIpMap.get(usuario.getUsername());
+            selectedIp = IPUtilizada.getInstance().getSelectedIP(usuario.getUsername());
             if (selectedIp != null) {
                 break;
             }
@@ -483,9 +473,9 @@ public class RegisterPuestoControlFragment extends Fragment implements OnMapRead
                 progreso.hide();
                 if (isAdded()) {
                     if (response.trim().equalsIgnoreCase("actualiza")) {
-                        Toast.makeText(requireActivity(), "Zona actualizada correctamente", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireActivity(), "Puesto actualizado correctamente", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(requireActivity(), "Zona no se pudo actualizar", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireActivity(), "Puesto no se pudo actualizar", Toast.LENGTH_SHORT).show();
                         Log.i("RESPUESTA: ", "" + response);
                     }
                     progreso.hide();
@@ -532,17 +522,12 @@ public class RegisterPuestoControlFragment extends Fragment implements OnMapRead
         progreso.setMessage("Eliminando...");
         progreso.show();
 
-        List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.1.6");
         // Puedes añadir más IPs según sea necesario
         String selectedIp = "";
-        Map<String, String> userIpMap = new HashMap<>();
-        userIpMap.put("jhon", ips.get(0));
-        userIpMap.put("chagua", ips.get(1));
-        userIpMap.put("matias", ips.get(2));
 
         ArrayList<Usuario> usuarios = dbHelper.get_all_Usuarios();
         for (Usuario usuario : usuarios) {
-            selectedIp = userIpMap.get(usuario.getUsername());
+            selectedIp = IPUtilizada.getInstance().getSelectedIP(usuario.getUsername());
             if (selectedIp != null) {
                 break;
             }
@@ -558,10 +543,10 @@ public class RegisterPuestoControlFragment extends Fragment implements OnMapRead
                 if (isAdded()) {
                     try {
                         if (response.trim().equalsIgnoreCase("elimina")) {
-                            Toast.makeText(requireActivity(), "Oficina eliminada correctamente", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(requireActivity(), "Puesto eliminado correctamente", Toast.LENGTH_SHORT).show();
                         } else {
                             if (response.trim().equalsIgnoreCase("noExiste")) {
-                                Toast.makeText(requireActivity(), "No se encuentra la oficina", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(requireActivity(), "No se encuentra el Puesto", Toast.LENGTH_SHORT).show();
                             } else {
                                 Toast.makeText(requireActivity(), "No se ha eliminado", Toast.LENGTH_SHORT).show();
                             }
@@ -599,17 +584,12 @@ public class RegisterPuestoControlFragment extends Fragment implements OnMapRead
         progreso.setMessage("Eliminando...");
         progreso.show();
 
-        List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.1.6");
         // Puedes añadir más IPs según sea necesario
         String selectedIp = "";
-        Map<String, String> userIpMap = new HashMap<>();
-        userIpMap.put("jhon", ips.get(0));
-        userIpMap.put("chagua", ips.get(1));
-        userIpMap.put("matias", ips.get(2));
 
         ArrayList<Usuario> usuarios = dbHelper.get_all_Usuarios();
         for (Usuario usuario : usuarios) {
-            selectedIp = userIpMap.get(usuario.getUsername());
+            selectedIp = IPUtilizada.getInstance().getSelectedIP(usuario.getUsername());
             if (selectedIp != null) {
                 break;
             }
@@ -625,10 +605,10 @@ public class RegisterPuestoControlFragment extends Fragment implements OnMapRead
                 if (isAdded()) {
                     try {
                         if (response.trim().equalsIgnoreCase("elimina")) {
-                            Toast.makeText(requireActivity(), "Oficina eliminada correctamente", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(requireActivity(), "Puesto eliminado correctamente", Toast.LENGTH_SHORT).show();
                         } else {
-                            if (response.trim().equalsIgnoreCase("noExiste")) {
-                                Toast.makeText(requireActivity(), "No se encuentra la oficina", Toast.LENGTH_SHORT).show();
+                            if (response.trim().equalsIgnoreCase("no Existe")) {
+                                Toast.makeText(requireActivity(), "No se encuentra el Puesto", Toast.LENGTH_SHORT).show();
                             } else {
                                 Toast.makeText(requireActivity(), "No se ha eliminado", Toast.LENGTH_SHORT).show();
                             }

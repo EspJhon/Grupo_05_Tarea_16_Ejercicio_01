@@ -42,10 +42,10 @@ public class AudienciaAdapter extends ArrayAdapter<Audiencia> {
         TextView tv_hora = convertView.findViewById(R.id.tv_hora);
 
 
-        tv_codigo.setText("Código: " + audiencias.get(position).getCodigo()+"");
-        tv_lugar.setText("Lugar: " + audiencias.get(position).getLugar());
-        tv_fecha.setText("Fecha: " + audiencias.get(position).getFecha());
-        tv_hora.setText("Hora: " + audiencias.get(position).getHora());
+        tv_codigo.setText(audiencias.get(position).getCodigo()+"");
+        tv_lugar.setText(audiencias.get(position).getLugar());
+        tv_fecha.setText( audiencias.get(position).getFecha());
+        tv_hora.setText(audiencias.get(position).getHora());
 
 
         return convertView;
