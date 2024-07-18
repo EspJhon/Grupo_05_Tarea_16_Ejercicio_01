@@ -8,7 +8,7 @@ import java.util.Map;
 public class IPUtilizada {
 
     private static IPUtilizada instance;
-    private List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.1.6", "192.168.1.2");
+    private List<String> ips = Arrays.asList("192.168.100.15", "192.168.10.106", "192.168.50.70", "192.168.1.2");
 
     private IPUtilizada() {
     }

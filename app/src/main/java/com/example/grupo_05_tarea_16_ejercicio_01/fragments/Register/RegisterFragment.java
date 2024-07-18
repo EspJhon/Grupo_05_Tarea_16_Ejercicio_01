@@ -80,10 +80,10 @@ public class RegisterFragment extends Fragment implements Response.Listener<JSON
         progreso.setMessage("Cargando...");
         progreso.show();
 
-        String url = "http://192.168.10.106/db_grupo_05_tarea_16_ejercicio_01/UsuarioRegistro.php?usuario=" + usuario + "&contrasena=" + contrasena;
+        String url = "http://192.168.50.70/db_grupo_05_tarea_16_ejercicio_01/UsuarioRegistro.php?usuario=" + usuario + "&contrasena=" + contrasena;
 
         url = url.replace(" ", "%20");
-
+                                                                                                                                                                                            
         Log.d("URLWebService", "URL: " + url);
 
         jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, this, this);
@@ -101,6 +101,6 @@ public class RegisterFragment extends Fragment implements Response.Listener<JSON
     @Override
     public void onResponse(JSONObject response) {
         progreso.hide();
-        Toast.makeText(requireActivity(), "Usario Registrado correctamente", Toast.LENGTH_SHORT).show();
+        Toast.makeText(requireActivity(), "Usuario Registrado correctamente", Toast.LENGTH_SHORT).show();
     }
 }
