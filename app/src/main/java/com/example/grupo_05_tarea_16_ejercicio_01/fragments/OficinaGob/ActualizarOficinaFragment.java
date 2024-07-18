@@ -51,7 +51,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ActualizarOficinaFragment extends Fragment implements OnMapReadyCallback{
+public class ActualizarOficinaFragment extends Fragment implements OnMapReadyCallback {
 
     private EditText et_valorVehiculoA, et_numPolizaA, et_ubicacionA;
     private Spinner sp_numPlacaA_oficina;
@@ -185,24 +185,30 @@ public class ActualizarOficinaFragment extends Fragment implements OnMapReadyCal
             return;
         }
 
-        String valorVehiculoA = et_valorVehiculoA.getText().toString().trim();
-        int numPolizaA = Integer.parseInt(et_numPolizaA.getText().toString().trim());
-        int numPlacaA = AIdVehiculo;
-        String ubicacionA = et_ubicacionA.getText().toString().trim();
+        try {
 
-        oficinaGob.setValor_vehiculo(valorVehiculoA);
-        oficinaGob.setNpoliza(numPolizaA);
-        oficinaGob.setIdVehiculo(numPlacaA);
-        oficinaGob.setUbicacion(ubicacionA);
+            String valorVehiculoA = et_valorVehiculoA.getText().toString().trim();
+            int numPolizaA = Integer.parseInt(et_numPolizaA.getText().toString().trim());
+            int numPlacaA = AIdVehiculo;
+            String ubicacionA = et_ubicacionA.getText().toString().trim();
 
-        if (latitud != null || longitud != null) {
-            oficinaGob.setLatitud(latitud);
-            oficinaGob.setLongitud(longitud);
+            oficinaGob.setValor_vehiculo(valorVehiculoA);
+            oficinaGob.setNpoliza(numPolizaA);
+            oficinaGob.setIdVehiculo(numPlacaA);
+            oficinaGob.setUbicacion(ubicacionA);
+
+            if (latitud != null || longitud != null) {
+                oficinaGob.setLatitud(latitud);
+                oficinaGob.setLongitud(longitud);
+            }
+
+            dbHelper.Actualizar_Oficina(oficinaGob);
+
+            ActualizarWebService(valorVehiculoA, numPolizaA, numPlacaA, ubicacionA, latitud, longitud, oficinaGob.getIdOficina());
+
+        } catch (NumberFormatException e) {
+            Toast.makeText(getActivity(), "Ingrese un número de poliza válido (9 dígitos)", Toast.LENGTH_SHORT).show();
         }
-
-        dbHelper.Actualizar_Oficina(oficinaGob);
-
-        ActualizarWebService(valorVehiculoA,numPolizaA,numPlacaA,ubicacionA,latitud,longitud,oficinaGob.getIdOficina());
     }
 
     private void CargarDatosRegistrados(OficinaGob oficinaGob) {
@@ -261,7 +267,7 @@ public class ActualizarOficinaFragment extends Fragment implements OnMapReadyCal
                 Toast.makeText(requireActivity(), "No se ha podido conectar", Toast.LENGTH_SHORT).show();
                 progressDialog.hide();
             }
-        }){
+        }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 String valorvehiculo = valorvehiculoA;
@@ -272,13 +278,13 @@ public class ActualizarOficinaFragment extends Fragment implements OnMapReadyCal
                 String longitud = longitudA;
                 int idoficinagob = idoficinagobA;
 
-                Map<String,String> parametros = new HashMap<>();
-                parametros.put("valorvehiculo",valorvehiculo);
+                Map<String, String> parametros = new HashMap<>();
+                parametros.put("valorvehiculo", valorvehiculo);
                 parametros.put("npoliza", String.valueOf(npoliza));
                 parametros.put("idvehiculo", String.valueOf(idvehiculo));
-                parametros.put("ubicacion",ubicacion);
-                parametros.put("latitud",latitud);
-                parametros.put("longitud",longitud);
+                parametros.put("ubicacion", ubicacion);
+                parametros.put("latitud", latitud);
+                parametros.put("longitud", longitud);
                 parametros.put("idoficinagob", String.valueOf(idoficinagob));
 
                 return parametros;

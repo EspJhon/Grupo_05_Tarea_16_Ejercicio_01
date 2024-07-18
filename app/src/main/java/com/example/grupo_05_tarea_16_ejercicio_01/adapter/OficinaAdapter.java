@@ -41,7 +41,7 @@ public class OficinaAdapter extends ArrayAdapter<OficinaGob> {
         TextView tv_numPlaca = convertView.findViewById(R.id.tv_numPlaca);
         TextView tv_ubicacion = convertView.findViewById(R.id.tv_ubicacion);
 
-        tv_valorVehiculo.setText("Valor del vehículo: " + oficinas.get(position).getValor_vehiculo());
+        tv_valorVehiculo.setText("Valor del vehículo: S/." + oficinas.get(position).getValor_vehiculo());
         tv_numPoliza.setText("Número de poliza: " + oficinas.get(position).getNpoliza() + "");
         tv_numPlaca.setText("Número de placa: " + oficinas.get(position).getIdVehiculo()+"");
         tv_ubicacion.setText("Ubicación: " + oficinas.get(position).getUbicacion());
